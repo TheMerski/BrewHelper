@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="RUBY_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="RailsFacetType" name="Ruby on Rails">
+      <configuration>
+        <RAILS_FACET_CONFIG_ID NAME="RAILS_FACET_SUPPORT_REMOVED" VALUE="false" />
+        <RAILS_FACET_CONFIG_ID NAME="RAILS_TESTS_SOURCES_PATCHED" VALUE="true" />
+        <RAILS_FACET_CONFIG_ID NAME="RAILS_FACET_APPLICATION_ROOT" VALUE="$MODULE_DIR$/../../model" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$/../../model">
+      <sourceFolder url="file://$MODULE_DIR$/../../model/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../model/spec" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/../../model/.bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../model/components" />
+      <excludeFolder url="file://$MODULE_DIR$/../../model/log" />
+      <excludeFolder url="file://$MODULE_DIR$/../../model/public/system" />
+      <excludeFolder url="file://$MODULE_DIR$/../../model/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/../../model/vendor/bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../model/vendor/cache" />
+    </content>
+    <orderEntry type="jdk" jdkName="ruby-2.5.3-p105" jdkType="RUBY_SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="RubyModuleProperties">
+    <option name="autoCreated" value="true" />
+  </component>
+</module>
