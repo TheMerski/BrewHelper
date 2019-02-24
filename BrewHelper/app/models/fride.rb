@@ -1,0 +1,2 @@
+class Fride < ApplicationRecord
+end

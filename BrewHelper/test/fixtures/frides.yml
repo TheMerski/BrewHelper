@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  f_id: 1
+  name: MyString
+  setTemperature: 9.99
+
+two:
+  f_id: 1
+  name: MyString
+  setTemperature: 9.99

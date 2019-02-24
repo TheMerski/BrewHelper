@@ -1,0 +1,2 @@
+module FridgeHelper
+end
