@@ -1,2 +1,0 @@
-class Fride < ApplicationRecord
-end
