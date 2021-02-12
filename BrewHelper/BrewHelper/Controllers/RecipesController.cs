@@ -13,25 +13,25 @@ namespace BrewHelper.Controllers
     [ApiController]
     public class RecipesController : ControllerBase
     {
-        private readonly RecipeContext _context;
+        private readonly RecipeModel recipeModel;
 
-        public RecipesController(RecipeContext context)
+        public RecipesController(RecipeModel recipeModel)
         {
-            _context = context;
+            this.recipeModel = recipeModel;
         }
 
         // GET: api/Recipes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Recipe>>> GetRecipes()
+        public async Task<ActionResult<IEnumerable<Recipe>>> GetAllRecipes()
         {
-            return await _context.Recipes.ToListAsync();
+            return await recipeModel.GetAll();
         }
 
         // GET: api/Recipes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Recipe>> GetRecipe(long id)
         {
-            var recipe = await _context.Recipes.FindAsync(id);
+            var recipe = await recipeModel.GetRecipeById(id);
 
             if (recipe == null)
             {
@@ -52,22 +52,9 @@ namespace BrewHelper.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(recipe).State = EntityState.Modified;
-
-            try
+            if (await recipeModel.UpdateRecipe(id, recipe) == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RecipeExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -79,31 +66,34 @@ namespace BrewHelper.Controllers
         [HttpPost]
         public async Task<ActionResult<Recipe>> PostRecipe(Recipe recipe)
         {
-            _context.Recipes.Add(recipe);
-            await _context.SaveChangesAsync();
+            if (ModelState.IsValid)
+            {
+                if (await recipeModel.AddRecipe(recipe) == null)
+                {
+                    return Conflict();
+                }
 
-            return CreatedAtAction("GetRecipe", new { id = recipe.Id }, recipe);
+                return CreatedAtAction("GetRecipe", new { id = recipe.Id }, recipe);
+            } else
+            {
+                return BadRequest();
+            }
+
         }
 
         // DELETE: api/Recipes/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Recipe>> DeleteRecipe(long id)
+        public async Task<ActionResult> DeleteRecipe(long id)
         {
-            var recipe = await _context.Recipes.FindAsync(id);
-            if (recipe == null)
+            bool removed = await recipeModel.DeleteRecipeById(id);
+            if (removed)
             {
-                return NotFound();
+                return Ok();
             }
 
-            _context.Recipes.Remove(recipe);
-            await _context.SaveChangesAsync();
-
-            return recipe;
+            return NotFound();
         }
 
-        private bool RecipeExists(long id)
-        {
-            return _context.Recipes.Any(e => e.Id == id);
-        }
+        
     }
 }
