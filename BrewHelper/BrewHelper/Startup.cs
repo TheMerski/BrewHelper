@@ -17,6 +17,7 @@ namespace BrewHelper
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,6 +30,8 @@ namespace BrewHelper
         {
             services.AddDbContext<RecipeContext>(opt =>
                                    opt.UseInMemoryDatabase("brewHelper"));
+
+            services.AddCors();
 
             services.AddOpenApiDocument(config =>
             {
@@ -48,7 +51,12 @@ namespace BrewHelper
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                
             }
+
+            app.UseCors(
+                    options => options.WithOrigins("https://localhost:3000").AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()
+                );
 
             app.UseHttpsRedirection();
 
