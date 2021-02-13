@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BrewHelper.Models;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace BrewHelper.Controllers
 {
@@ -13,25 +15,25 @@ namespace BrewHelper.Controllers
     [ApiController]
     public class IngredientsController : ControllerBase
     {
-        private readonly RecipeContext _context;
+        private readonly IngredientModel ingredientModel;
 
-        public IngredientsController(RecipeContext context)
+        public IngredientsController(IngredientModel ingredientModel)
         {
-            _context = context;
+            this.ingredientModel = ingredientModel;
         }
 
         // GET: api/Ingredients
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Ingredient>>> GetIngredients()
         {
-            return await _context.Ingredients.ToListAsync();
+            return await ingredientModel.GetAll();
         }
 
         // GET: api/Ingredients/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Ingredient>> GetIngredient(long id)
         {
-            var ingredient = await _context.Ingredients.FindAsync(id);
+            var ingredient = await ingredientModel.GetIngredientById(id);
 
             if (ingredient == null)
             {
@@ -52,22 +54,9 @@ namespace BrewHelper.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(ingredient).State = EntityState.Modified;
-
-            try
+            if (await ingredientModel.UpdateIngredient(id, ingredient) == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!IngredientExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -79,31 +68,33 @@ namespace BrewHelper.Controllers
         [HttpPost]
         public async Task<ActionResult<Ingredient>> PostIngredient(Ingredient ingredient)
         {
-            _context.Ingredients.Add(ingredient);
-            await _context.SaveChangesAsync();
+            if (ModelState.IsValid)
+            {
+                if (await ingredientModel.AddIngredient(ingredient) == null)
+                {
+                    return Conflict();
+                }
 
-            return CreatedAtAction("GetIngredient", new { id = ingredient.Id }, ingredient);
+                return CreatedAtAction("GetIngredient", new { id = ingredient.Id }, ingredient);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         // DELETE: api/Ingredients/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Ingredient>> DeleteIngredient(long id)
         {
-            var ingredient = await _context.Ingredients.FindAsync(id);
-            if (ingredient == null)
+            bool removed = await ingredientModel.DeleteIngredientById(id);
+            if (removed)
             {
-                return NotFound();
+                return Ok();
             }
 
-            _context.Ingredients.Remove(ingredient);
-            await _context.SaveChangesAsync();
-
-            return ingredient;
+            return NotFound();
         }
 
-        private bool IngredientExists(long id)
-        {
-            return _context.Ingredients.Any(e => e.Id == id);
-        }
     }
 }

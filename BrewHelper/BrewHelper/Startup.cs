@@ -30,8 +30,16 @@ namespace BrewHelper
             services.AddDbContext<RecipeContext>(opt =>
                                    opt.UseInMemoryDatabase("brewHelper"));
 
-            services.AddOpenApiDocument();
+            services.AddOpenApiDocument(config =>
+            {
+                config.GenerateEnumMappingDescription = true;
+            });
+
             services.AddControllers();
+
+            services.AddTransient<RecipeModel>();
+            services.AddTransient<IngredientModel>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
