@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BrewHelper.Models
 {
-    public class RecipeContext : DbContext
+    public class BrewhelperContext : DbContext
     {
-        public RecipeContext(DbContextOptions<RecipeContext> options): base(options)
+        public BrewhelperContext(DbContextOptions<BrewhelperContext> options): base(options)
         {
         }
         

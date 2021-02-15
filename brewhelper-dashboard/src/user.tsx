@@ -1,6 +1,6 @@
 import React from 'react';
 import { Datagrid, EmailField, List, TextField, UrlField } from 'react-admin';
-import MyUrlField from './brewHelperUrlField';
+import MyUrlField from './myUrlField';
 
 export function UserList(props: any) {
   return (

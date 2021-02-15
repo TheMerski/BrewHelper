@@ -8,14 +8,14 @@ namespace BrewHelper.Models
 {
     public class IngredientModel
     {
-        private RecipeContext context;
+        private BrewhelperContext context;
 
         public IngredientModel()
         {
 
         }
 
-        public IngredientModel(RecipeContext injectedIngredientContext)
+        public IngredientModel(BrewhelperContext injectedIngredientContext)
         {
             context = injectedIngredientContext;
         }

@@ -11,15 +11,15 @@ namespace BrewHelperTests.Model
 {
     public class RecipeModelTests : IDisposable
     {
-        private RecipeContext context;
+        private BrewhelperContext context;
 
         public RecipeModelTests()
         {
-            var options = new DbContextOptionsBuilder<RecipeContext>()
+            var options = new DbContextOptionsBuilder<BrewhelperContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .EnableSensitiveDataLogging()
                 .Options;
-            context = new RecipeContext(options);
+            context = new BrewhelperContext(options);
         }
 
         public void Dispose()

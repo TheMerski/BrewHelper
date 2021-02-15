@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader } from '@material-ui/core';
 export default function () {
   return (
     <Card>
-      <CardHeader title="Welcome to the administration" />
-      <CardContent>Lorem ipsum sic dolor amet...</CardContent>
+      <CardHeader title="Welcome to the BrewHelper administration" />
+      <CardContent>Brew some beer!</CardContent>
     </Card>
   );
 }

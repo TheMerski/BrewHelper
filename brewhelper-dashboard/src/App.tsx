@@ -13,6 +13,7 @@ import {
   IngredientEdit,
   IngredientList,
 } from './Entities/ingredients';
+import { RecipeEdit, RecipeList } from './Entities/Recipes';
 
 const App = () => (
   <Admin
@@ -33,6 +34,7 @@ const App = () => (
       edit={IngredientEdit}
       create={IngredientCreate}
     />
+    <Resource name="Recipes" list={RecipeList} edit={RecipeEdit} />
   </Admin>
 );
 

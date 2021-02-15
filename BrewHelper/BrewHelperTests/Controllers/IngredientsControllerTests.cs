@@ -127,9 +127,9 @@ namespace BrewHelperTests.Controllers
             Ingredient Ingredient = new Ingredient { Id = 5, Name = "Test" };
             long id = Ingredient.Id + 1;
 
-            IActionResult result = await controller.PutIngredient(id, Ingredient);
+            ActionResult<Ingredient> result = await controller.PutIngredient(id, Ingredient);
 
-            Assert.IsType<BadRequestResult>(result);
+            Assert.IsType<BadRequestResult>(result.Result);
         }
 
         [Fact]
@@ -141,9 +141,9 @@ namespace BrewHelperTests.Controllers
 
             IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
 
-            IActionResult result = await controller.PutIngredient(Ingredient.Id, Ingredient);
+            ActionResult<Ingredient> result = await controller.PutIngredient(Ingredient.Id, Ingredient);
 
-            Assert.IsType<NotFoundResult>(result);
+            Assert.IsType<NotFoundResult>(result.Result);
         }
 
         [Fact]
@@ -155,9 +155,10 @@ namespace BrewHelperTests.Controllers
 
             IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
 
-            IActionResult result = await controller.PutIngredient(Ingredient.Id, Ingredient);
+            ActionResult<Ingredient> result = await controller.PutIngredient(Ingredient.Id, Ingredient);
 
-            Assert.IsType<NoContentResult>(result);
+            Assert.Null(result.Result);
+            result.Value.Should().Be(Ingredient);
         }
     }
 }
