@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace BrewHelper.Models
         /// <summary>
         /// Recipe name
         /// </summary>
+        [Required]
         public string Name { get; set; }
         /// <summary>
         /// Recipe Description
@@ -52,7 +54,7 @@ namespace BrewHelper.Models
         /// <summary>
         /// Mash ingredients (weight in grams)
         /// </summary>
-        public Dictionary<Ingredient, int> MashIngredients { get; set; }
+        public List<RecipeIngredient> MashIngredients { get; set; }
         /// <summary>
         /// Steps for mashing phase
         /// </summary>
@@ -77,6 +79,7 @@ namespace BrewHelper.Models
         /// <summary>
         /// Step name
         /// </summary>
+        [Required]
         public string Name { get; set; }
         /// <summary>
         /// Step Description
@@ -93,6 +96,21 @@ namespace BrewHelper.Models
         /// <summary>
         /// Ingredients needed for step (weight in grams)
         /// </summary>
-        public Dictionary<Ingredient, int> Ingredients { get; set; }
+        public List<RecipeIngredient> Ingredients { get; set; }
+    }
+
+    public class RecipeIngredient
+    {
+        public long Id { get; set; }
+        /// <summary>
+        /// The ingredient
+        /// </summary>
+        [Required]
+        public Ingredient Ingredient { get; set; }
+        /// <summary>
+        /// The ammount needed (in grams)
+        /// </summary>
+        [Required]
+        public int Weight { get; set; }
     }
 }

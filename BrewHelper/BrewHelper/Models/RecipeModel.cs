@@ -36,7 +36,22 @@ namespace BrewHelper.Models
         /// <returns>Recipe with id or default</returns>
         public virtual async Task<Recipe> GetRecipeById(long id)
         {
-            return await context.Recipes.Where(r => r.Id == id).FirstOrDefaultAsync();
+            return await context.Recipes
+                .AsNoTracking()
+                .Include(r => r.BoilingSteps)
+                    .ThenInclude(s => s.Ingredients)
+                    .ThenInclude(i => i.Ingredient)
+                    .AsNoTracking()
+                .Include(r => r.MashSteps)
+                    .ThenInclude(s => s.Ingredients)
+                    .ThenInclude(i => i.Ingredient)
+                    .AsNoTracking()
+                .Include(r => r.YeastingSteps)
+                    .ThenInclude(s => s.Ingredients)
+                    .ThenInclude(i => i.Ingredient)
+                    .AsNoTracking()
+                .Where(r => r.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -63,8 +78,9 @@ namespace BrewHelper.Models
         /// <returns>The updated Recipe</returns>
         public virtual async Task<Recipe> UpdateRecipe(long id, Recipe recipe)
         {
-            context.Entry(recipe).State = EntityState.Modified;
-   
+            context.Entry(recipe).State = EntityState.Detached;
+            context.Update(recipe);
+
             try
             {
                 await context.SaveChangesAsync();

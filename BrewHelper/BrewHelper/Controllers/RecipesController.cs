@@ -14,10 +14,12 @@ namespace BrewHelper.Controllers
     public class RecipesController : ControllerBase
     {
         private readonly RecipeModel recipeModel;
+        private readonly IngredientModel ingredientModel;
 
-        public RecipesController(RecipeModel recipeModel)
+        public RecipesController(RecipeModel recipeModel, IngredientModel ingredientModel)
         {
             this.recipeModel = recipeModel;
+            this.ingredientModel = ingredientModel;
         }
 
         // GET: api/Recipes
@@ -66,6 +68,7 @@ namespace BrewHelper.Controllers
         [HttpPost]
         public async Task<ActionResult<Recipe>> PostRecipe(Recipe recipe)
         {
+
             if (ModelState.IsValid)
             {
                 if (await recipeModel.AddRecipe(recipe) == null)

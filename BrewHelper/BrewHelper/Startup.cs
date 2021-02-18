@@ -51,7 +51,13 @@ namespace BrewHelper
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                
+
+                using var serviceScope = app.ApplicationServices
+                            .GetRequiredService<IServiceScopeFactory>()
+                            .CreateScope();
+                var service = serviceScope.ServiceProvider;
+
+                TestDataSeeder.Seed(service);
             }
 
             app.UseCors(
