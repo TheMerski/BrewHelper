@@ -68,7 +68,6 @@ namespace BrewHelper.Models
         /// <returns>The updated Recipe</returns>
         public virtual async Task<Recipe> UpdateRecipe(long id, Recipe recipe)
         {
-
             Dictionary<long, Ingredient> ingredients = new Dictionary<long, Ingredient>();
             recipe.Steps.ForEach(rs =>
             {
@@ -80,12 +79,14 @@ namespace BrewHelper.Models
                     }
                     else
                     {
-                        ingredients[ri.Ingredient.Id] = ri.Ingredient;
+                        ingredients[ri.Ingredient.Id] = context.Ingredients.Find(ri.Ingredient.Id);
+                        ri.Ingredient = ingredients[ri.Ingredient.Id];
                     }
                 });
             });
-            context.Attach(recipe);
-            context.Recipes.Update(recipe);
+            Recipe dbRecipe = await GetRecipeById(recipe.Id);
+            dbRecipe.Steps = recipe.Steps;
+            context.Entry(dbRecipe).CurrentValues.SetValues(recipe);
 
             try
             {
