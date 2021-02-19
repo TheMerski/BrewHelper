@@ -17,7 +17,6 @@ namespace BrewHelper
 {
     public class Startup
     {
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,8 +27,10 @@ namespace BrewHelper
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connection = Configuration.GetConnectionString("Dev");
+
             services.AddDbContext<BrewhelperContext>(opt =>
-                                   opt.UseInMemoryDatabase("brewHelper"));
+                                           opt.UseSqlServer(connection));
 
             services.AddCors();
 

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BrewHelper.Models
@@ -56,21 +58,13 @@ namespace BrewHelper.Models
         /// </summary>
         public List<RecipeIngredient> MashIngredients { get; set; }
         /// <summary>
-        /// Steps for mashing phase
+        /// Steps for recipe
         /// </summary>
-        public List<RecipeStep> MashSteps { get; set; }
+        public List<RecipeStep> Steps { get; set; }
         /// <summary>
         /// Rinse water before boiling
         /// </summary>
         public double RinseWater { get; set; }
-        /// <summary>
-        /// Steps for boiling
-        /// </summary>
-        public List<RecipeStep> BoilingSteps { get; set; }
-        /// <summary>
-        /// Steps for yeasting
-        /// </summary>
-        public List<RecipeStep> YeastingSteps { get; set; }
     }
 
     public class RecipeStep
@@ -97,8 +91,26 @@ namespace BrewHelper.Models
         /// Ingredients needed for step (weight in grams)
         /// </summary>
         public List<RecipeIngredient> Ingredients { get; set; }
+        /// <summary>
+        /// Type of the step
+        /// </summary>
+        /// 
+        public StepType Type { get; set; }
+        /// <summary>
+        /// The recipe the step belongs to
+        /// </summary>
+        [JsonIgnore]
+        public Recipe Recipe { get; set; }
+
+        public enum StepType
+        {
+            Mashing,
+            Boiling,
+            Yeasting,
+        }
     }
 
+    [Owned]
     public class RecipeIngredient
     {
         public long Id { get; set; }

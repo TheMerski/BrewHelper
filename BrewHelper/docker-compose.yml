@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "BrewHelperDev1!"
+
+  brewhelper:
+    image: ${DOCKER_REGISTRY-}brewhelper
+    build:
+      context: .
+      dockerfile: BrewHelper/Dockerfile
+    depends_on:
+      - db

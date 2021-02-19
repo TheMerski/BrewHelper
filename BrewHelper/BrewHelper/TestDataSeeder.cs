@@ -47,11 +47,13 @@ namespace BrewHelper
             var recipes = new List<Recipe>
             {
                 new Recipe { Name = "Test recipe", AlcoholPercentage = 2, 
-                    BoilingSteps = new List<RecipeStep> {new RecipeStep {Name = "Boiling", Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 200 } } } },
+                    Steps = new List<RecipeStep> {
+                        new RecipeStep { Name = "Boiling", Type = RecipeStep.StepType.Boiling, Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 200 } } } ,
+                        new RecipeStep { Name = "Mash", Type = RecipeStep.StepType.Mashing, Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 10000 } } },
+                        new RecipeStep { Name = "Yeast", Type = RecipeStep.StepType.Yeasting, Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 10000 } } }
+                    },
                     Description = "Test recipe",
                     EBC = 10, IBU = 10, EndSG = 1050, StartSG = 1080, ReadyAfter = 20, MashWater = 20, RinseWater = 27, Yield = 20,
-                    MashSteps = new List<RecipeStep> {new RecipeStep { Name = "Mash", Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 10000 } } } },
-                    YeastingSteps = new List<RecipeStep> {new RecipeStep { Name = "yeasting...", Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 20 } } } },
                 }
             };
 
