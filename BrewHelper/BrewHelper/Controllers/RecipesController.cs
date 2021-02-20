@@ -24,14 +24,14 @@ namespace BrewHelper.Controllers
 
         // GET: api/Recipes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Recipe>>> GetAllRecipes()
+        public async Task<ActionResult<IEnumerable<RecipeDTO>>> GetAllRecipes()
         {
             return await recipeModel.GetAll();
         }
 
         // GET: api/Recipes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Recipe>> GetRecipe(long id)
+        public async Task<ActionResult<RecipeDTO>> GetRecipe(long id)
         {
             var recipe = await recipeModel.GetRecipeById(id);
 
@@ -47,7 +47,7 @@ namespace BrewHelper.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<ActionResult<Recipe>> PutRecipe(long id, Recipe recipe)
+        public async Task<ActionResult<RecipeDTO>> PutRecipe(long id, RecipeDTO recipe)
         {
             if (id != recipe.Id)
             {
@@ -66,7 +66,7 @@ namespace BrewHelper.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Recipe>> PostRecipe(Recipe recipe)
+        public async Task<ActionResult<RecipeDTO>> PostRecipe(RecipeDTO recipe)
         {
 
             if (ModelState.IsValid)

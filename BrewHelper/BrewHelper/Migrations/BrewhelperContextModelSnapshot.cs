@@ -51,6 +51,9 @@ namespace BrewHelper.Migrations
                     b.Property<double>("AlcoholPercentage")
                         .HasColumnType("float");
 
+                    b.Property<long?>("BoilingId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -66,12 +69,15 @@ namespace BrewHelper.Migrations
                     b.Property<double>("MashWater")
                         .HasColumnType("float");
 
+                    b.Property<long?>("MashingId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ReadyAfter")
-                        .HasColumnType("int");
+                    b.Property<long>("ReadyAfter")
+                        .HasColumnType("bigint");
 
                     b.Property<double>("RinseWater")
                         .HasColumnType("float");
@@ -79,10 +85,19 @@ namespace BrewHelper.Migrations
                     b.Property<int>("StartSG")
                         .HasColumnType("int");
 
+                    b.Property<long?>("YeastingId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Yield")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BoilingId");
+
+                    b.HasIndex("MashingId");
+
+                    b.HasIndex("YeastingId");
 
                     b.ToTable("Recipes");
                 });
@@ -97,75 +112,40 @@ namespace BrewHelper.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("RecipeId")
-                        .HasColumnType("bigint");
-
                     b.Property<double?>("Temperature")
                         .HasColumnType("float");
 
-                    b.Property<int>("Time")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<long>("Time")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RecipeId");
 
                     b.ToTable("RecipeSteps");
                 });
 
             modelBuilder.Entity("BrewHelper.Models.Recipe", b =>
                 {
-                    b.OwnsMany("BrewHelper.Models.RecipeIngredient", "MashIngredients", b1 =>
-                        {
-                            b1.Property<long>("RecipeId")
-                                .HasColumnType("bigint");
+                    b.HasOne("BrewHelper.Models.RecipeStep", "Boiling")
+                        .WithMany()
+                        .HasForeignKey("BoilingId");
 
-                            b1.Property<long>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("bigint")
-                                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.HasOne("BrewHelper.Models.RecipeStep", "Mashing")
+                        .WithMany()
+                        .HasForeignKey("MashingId");
 
-                            b1.Property<long>("IngredientId")
-                                .HasColumnType("bigint");
+                    b.HasOne("BrewHelper.Models.RecipeStep", "Yeasting")
+                        .WithMany()
+                        .HasForeignKey("YeastingId");
 
-                            b1.Property<int>("Weight")
-                                .HasColumnType("int");
+                    b.Navigation("Boiling");
 
-                            b1.HasKey("RecipeId", "Id");
+                    b.Navigation("Mashing");
 
-                            b1.HasIndex("IngredientId");
-
-                            b1.ToTable("Recipes_MashIngredients");
-
-                            b1.HasOne("BrewHelper.Models.Ingredient", "Ingredient")
-                                .WithMany()
-                                .HasForeignKey("IngredientId")
-                                .OnDelete(DeleteBehavior.Cascade)
-                                .IsRequired();
-
-                            b1.WithOwner()
-                                .HasForeignKey("RecipeId");
-
-                            b1.Navigation("Ingredient");
-                        });
-
-                    b.Navigation("MashIngredients");
+                    b.Navigation("Yeasting");
                 });
 
             modelBuilder.Entity("BrewHelper.Models.RecipeStep", b =>
                 {
-                    b.HasOne("BrewHelper.Models.Recipe", "Recipe")
-                        .WithMany("Steps")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.OwnsMany("BrewHelper.Models.RecipeIngredient", "Ingredients", b1 =>
                         {
                             b1.Property<long>("RecipeStepId")
@@ -175,6 +155,9 @@ namespace BrewHelper.Migrations
                                 .ValueGeneratedOnAdd()
                                 .HasColumnType("bigint")
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                            b1.Property<long>("AddAfter")
+                                .HasColumnType("bigint");
 
                             b1.Property<long>("IngredientId")
                                 .HasColumnType("bigint");
@@ -186,7 +169,7 @@ namespace BrewHelper.Migrations
 
                             b1.HasIndex("IngredientId");
 
-                            b1.ToTable("RecipeSteps_Ingredients");
+                            b1.ToTable("RecipeIngredient");
 
                             b1.HasOne("BrewHelper.Models.Ingredient", "Ingredient")
                                 .WithMany()
@@ -201,13 +184,6 @@ namespace BrewHelper.Migrations
                         });
 
                     b.Navigation("Ingredients");
-
-                    b.Navigation("Recipe");
-                });
-
-            modelBuilder.Entity("BrewHelper.Models.Recipe", b =>
-                {
-                    b.Navigation("Steps");
                 });
 #pragma warning restore 612, 618
         }

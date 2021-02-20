@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import * as React from 'react';
 import { Card, CardContent, CardHeader } from '@material-ui/core';
 

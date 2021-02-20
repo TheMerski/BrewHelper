@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,10 +22,6 @@ namespace BrewHelper.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Recipe>()
-                .HasMany(r => r.Steps)
-                .WithOne(RecipeStep => RecipeStep.Recipe)
-                .OnDelete(DeleteBehavior.Cascade);
         }
 
 

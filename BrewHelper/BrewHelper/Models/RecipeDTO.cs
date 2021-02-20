@@ -8,8 +8,32 @@ using System.Threading.Tasks;
 
 namespace BrewHelper.Models
 {
-    public class Recipe
+    public class RecipeDTO
     {
+        public RecipeDTO()
+        {
+
+        }
+
+        public RecipeDTO(Recipe recipe)
+        {
+            Id = recipe.Id;
+            Name = recipe.Name;
+            Description = recipe.Description;
+            StartSG = recipe.StartSG;
+            EndSG = recipe.EndSG;
+            Yield = recipe.Yield;
+            ReadyAfter = recipe.ReadyAfter;
+            AlcoholPercentage = recipe.AlcoholPercentage;
+            IBU = recipe.IBU;
+            EBC = recipe.EBC;
+            MashWater = recipe.MashWater;
+            RinseWater = recipe.RinseWater;
+            if (recipe.Mashing != null) Mashing = new RecipeStepDTO(recipe.Mashing);
+            if (recipe.Boiling != null) Boiling = new RecipeStepDTO(recipe.Boiling);
+            if (recipe.Yeasting != null) Yeasting = new RecipeStepDTO(recipe.Yeasting);
+        }
+
         public long Id { get; set; }
         /// <summary>
         /// Recipe name
@@ -60,21 +84,39 @@ namespace BrewHelper.Models
         /// Mashing Step for recipe
         /// </summary>
         [Required]
-        public RecipeStep Mashing { get; set; }
+        public RecipeStepDTO Mashing { get; set; }
         /// <summary>
         /// Boiling Step for recipe
         /// </summary>
         [Required]
-        public RecipeStep Boiling { get; set; }        
+        public RecipeStepDTO Boiling { get; set; }        
         /// <summary>
         /// Yeasting Step for recipe
         /// </summary>
         [Required]
-        public RecipeStep Yeasting { get; set; }
+        public RecipeStepDTO Yeasting { get; set; }
     }
 
-    public class RecipeStep
+    public class RecipeStepDTO
     {
+        public RecipeStepDTO()
+        {
+
+        }
+        public RecipeStepDTO(RecipeStep step)
+        {
+            Id = step.Id;
+            Description = step.Description;
+            Time = step.Time;
+            if (step.Ingredients != null)
+            {
+                Ingredients = new List<RecipeIngredientDTO>();
+                step.Ingredients.ForEach(i =>
+                {
+                    Ingredients.Add(new RecipeIngredientDTO(i));
+                });
+            }
+        }
         public long Id { get; set; }
         /// <summary>
         /// Step Description
@@ -91,7 +133,7 @@ namespace BrewHelper.Models
         /// <summary>
         /// Ingredients needed for step (weight in grams)
         /// </summary>
-        public List<RecipeIngredient> Ingredients { get; set; }
+        public List<RecipeIngredientDTO> Ingredients { get; set; }
         ///// <summary>
         ///// The recipe the step belongs to
         ///// </summary>
@@ -100,14 +142,25 @@ namespace BrewHelper.Models
     }
 
     [Owned]
-    public class RecipeIngredient
+    public class RecipeIngredientDTO
     {
+        public RecipeIngredientDTO()
+        {
+
+        }
+        public RecipeIngredientDTO(RecipeIngredient rIngredient)
+        {
+            Id = rIngredient.Id;
+            IngredientId = rIngredient.Ingredient.Id;
+            Weight = rIngredient.Weight;
+            AddAfter = rIngredient.AddAfter;
+        }
         public long Id { get; set; }
         /// <summary>
         /// The ingredient
         /// </summary>
         [Required]
-        public Ingredient Ingredient { get; set; }
+        public long IngredientId { get; set; }
         /// <summary>
         /// The ammount needed (in grams)
         /// </summary>
