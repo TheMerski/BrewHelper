@@ -59,7 +59,7 @@ namespace BrewHelper
                             .CreateScope();
                 var service = serviceScope.ServiceProvider;
 
-                TestDataSeeder.Seed(service);
+                InitialDataSeeder.Seed(service);
             }
 
             app.UseCors(

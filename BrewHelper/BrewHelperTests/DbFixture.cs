@@ -1,4 +1,5 @@
-﻿using BrewHelper.Models;
+﻿using BrewHelper;
+using BrewHelper.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,7 @@ namespace BrewHelperTests
             _dbContext = new BrewhelperContext(builder.Options);
 
             _dbContext.Database.Migrate();
+            TestDataSeeder.Seed(_dbContext);
         }
 
         public void Dispose()

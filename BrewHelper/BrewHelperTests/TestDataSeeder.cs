@@ -10,12 +10,8 @@ namespace BrewHelper
 {
     public class TestDataSeeder
     {
-        public static void Seed(IServiceProvider serviceProvider)
+        public static void Seed(BrewhelperContext context)
         {
-            using var context = new BrewhelperContext(
-                      serviceProvider
-                      .GetRequiredService<DbContextOptions<BrewhelperContext>>());
-
             SeedIngredients(context);
             SeedRecipes(context);
         }
@@ -42,6 +38,10 @@ namespace BrewHelper
         {
             if (context.Recipes.Any()) { return; }
             Ingredient testIngredient = new Ingredient { Name = "Test", Description = "test", Type = Ingredient.IngredientType.Hop };
+            Ingredient testIngredient2 = new Ingredient { Name = "Test2", Description = "test2", Type = Ingredient.IngredientType.Herb };
+            Ingredient testIngredient3 = new Ingredient { Name = "Test3", Description = "test3", Type = Ingredient.IngredientType.Malt };
+            Ingredient testIngredient4 = new Ingredient { Name = "Test4", Description = "test4", Type = Ingredient.IngredientType.Sugar };
+            Ingredient testIngredient5 = new Ingredient { Name = "Test5", Description = "test5", Type = Ingredient.IngredientType.Yeast };
             context.Ingredients.Add(testIngredient);
 
             var recipes = new List<Recipe>
@@ -51,6 +51,13 @@ namespace BrewHelper
                     Boiling = new RecipeStep {  Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 200 } } },
                     Yeasting = new RecipeStep { Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 10000 } } },
                     Description = "Test recipe",
+                    EBC = 10, IBU = 10, EndSG = 1050, StartSG = 1080, ReadyAfter =20, MashWater = 20, RinseWater = 27, Yield = 20,
+                },
+                new Recipe { Name = "Test recipe 2", AlcoholPercentage = 2,
+                    Mashing = new RecipeStep {  Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient2, Weight = 10000 }, new RecipeIngredient { Ingredient = testIngredient5, Weight = 20 } } },
+                    Boiling = new RecipeStep {  Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient3, Weight = 200 } } },
+                    Yeasting = new RecipeStep { Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient4, Weight = 10000 } } },
+                    Description = "Test recipe 2",
                     EBC = 10, IBU = 10, EndSG = 1050, StartSG = 1080, ReadyAfter =20, MashWater = 20, RinseWater = 27, Yield = 20,
                 }
             };

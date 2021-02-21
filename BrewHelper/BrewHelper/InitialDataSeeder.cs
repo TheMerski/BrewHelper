@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BrewHelper
 {
-    public class TestDataSeeder
+    public class InitialDataSeeder
     {
         public static void Seed(IServiceProvider serviceProvider)
         {

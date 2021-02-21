@@ -71,12 +71,13 @@ namespace BrewHelper.Controllers
 
             if (ModelState.IsValid)
             {
-                if (await recipeModel.AddRecipe(recipe) == null)
+                Recipe addedRecipe = await recipeModel.AddRecipe(recipe);
+                if (addedRecipe == null)
                 {
                     return Conflict();
                 }
 
-                return CreatedAtAction("GetRecipe", new { id = recipe.Id }, recipe);
+                return CreatedAtAction("GetRecipe", new { id = addedRecipe.Id }, addedRecipe);
             } else
             {
                 return BadRequest();

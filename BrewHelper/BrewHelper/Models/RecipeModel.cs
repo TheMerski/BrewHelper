@@ -56,7 +56,7 @@ namespace BrewHelper.Models
         /// </summary>
         /// <param name="recipeDTO">The recipe to add</param>
         /// <returns>The recipe or null</returns>
-        public virtual async Task<RecipeDTO> AddRecipe(RecipeDTO recipeDTO)
+        public virtual async Task<Recipe> AddRecipe(RecipeDTO recipeDTO)
         {
             if (recipeDTO != null && !await context.Recipes.Where(r => r.Name.Equals(recipeDTO.Name)).AnyAsync())
             {
@@ -64,7 +64,7 @@ namespace BrewHelper.Models
                 SetDTOValues(recipeDTO, recipe);
                 await context.Recipes.AddAsync(recipe);
                 await context.SaveChangesAsync();
-                return recipeDTO;
+                return recipe;
             }
 
             return null;
@@ -91,6 +91,11 @@ namespace BrewHelper.Models
                 .Where(r => r.Id == recipeDTO.Id)
                 .FirstOrDefault();
 
+            if (recipe == null)
+            {
+                return null;
+            }
+
             SetDTOValues(recipeDTO, recipe);
 
             try
@@ -99,14 +104,7 @@ namespace BrewHelper.Models
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await RecipeExists(id))
-                {
-                    return null;
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
             return recipeDTO;
         }
@@ -148,13 +146,20 @@ namespace BrewHelper.Models
         /// <param name="step">Recipe step to match ingrecdients for</param>
         private void MatchDTORecipeStepIngredients(Dictionary<long, Ingredient> ingredientsDict, RecipeStep step, RecipeStepDTO dto)
         {
-            step.Ingredients = dto.Ingredients.Select(ri => new RecipeIngredient()
+            if (step.Ingredients == null)
             {
-                Id = ri.Id,
-                AddAfter = ri.AddAfter,
-                Ingredient = findIngredientById(ingredientsDict, ri.IngredientId),
-                Weight = ri.Weight
-            }).ToList();
+                step.Ingredients = new List<RecipeIngredient>();
+            }
+            if (dto.Ingredients != null)
+            {
+                step.Ingredients = dto.Ingredients.Select(ri => new RecipeIngredient()
+                {
+                    Id = ri.Id,
+                    AddAfter = ri.AddAfter,
+                    Ingredient = findIngredientById(ingredientsDict, ri.IngredientId),
+                    Weight = ri.Weight
+                }).ToList();
+            }
         }
 
         private void SetDTOValues(RecipeDTO dto, Recipe recipe)
@@ -163,20 +168,33 @@ namespace BrewHelper.Models
 
             context.Entry(recipe).CurrentValues.SetValues(dto);
 
+            if (recipe.Mashing == null)
+            {
+                recipe.Mashing = new RecipeStep();
+            }
             context.Entry(recipe.Mashing).CurrentValues.SetValues(dto.Mashing);
             MatchDTORecipeStepIngredients(ingredients, recipe.Mashing, dto.Mashing);
             //context.Entry(recipe.Mashing.Ingredients).CurrentValues.SetValues(dto.Mashing.Ingredients);
 
+            if (recipe.Boiling == null)
+            {
+                recipe.Boiling = new RecipeStep();
+            }
             context.Entry(recipe.Boiling).CurrentValues.SetValues(dto.Boiling);
             MatchDTORecipeStepIngredients(ingredients, recipe.Boiling, dto.Boiling);
             //context.Entry(recipe.Boiling.Ingredients).CurrentValues.SetValues(dto.Boiling.Ingredients);
 
+            if (recipe.Yeasting == null)
+            {
+                recipe.Yeasting = new RecipeStep();
+            }
             context.Entry(recipe.Yeasting).CurrentValues.SetValues(dto.Yeasting);
             MatchDTORecipeStepIngredients(ingredients, recipe.Yeasting, dto.Yeasting);
             //context.Entry(recipe.Yeasting.Ingredients).CurrentValues.SetValues(dto.Yeasting.Ingredients);
         }
 
-        private Ingredient findIngredientById(Dictionary<long, Ingredient> ingredientsDict, long id) {
+        private Ingredient findIngredientById(Dictionary<long, Ingredient> ingredientsDict, long id)
+        {
             if (!ingredientsDict.ContainsKey(id))
             {
                 ingredientsDict[id] = context.Ingredients.Find(id);
