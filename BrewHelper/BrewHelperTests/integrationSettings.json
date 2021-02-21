@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "SQL": "Server=localhost,1433;Database=BrewHelperTest;User=sa;Password=BrewHelperDev1!;"
+  }
+}

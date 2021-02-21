@@ -1,11 +1,24 @@
-﻿version: "3.9"
+version: '3.4'
+
+
+networks:
+  brewhelper-network:
+
 services:
-    db:
-        image: "mcr.microsoft.com/mssql/server"
-        expose:  
-            - 1433
-        ports:
-            - "1433:1433"
-        environment:
-            SA_PASSWORD: "BrewHelperDev1!"
-            ACCEPT_EULA: "Y"
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "BrewHelperDev1!"
+    ports:
+      - "1433:1433"
+    networks:
+      - brewhelper-network
+
+#  brewhelper:
+#    image: ${DOCKER_REGISTRY-}brewhelper
+#    build:
+#      context: .
+#      dockerfile: BrewHelper/Dockerfile
+#    depends_on:
+#      - db

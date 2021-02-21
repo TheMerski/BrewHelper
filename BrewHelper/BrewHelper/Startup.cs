@@ -27,7 +27,8 @@ namespace BrewHelper
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("Dev");
+            string connection = Configuration.GetConnectionString("SQL");
+            Console.WriteLine(connection);
 
             services.AddDbContext<BrewhelperContext>(opt =>
                                            opt.UseSqlServer(connection));

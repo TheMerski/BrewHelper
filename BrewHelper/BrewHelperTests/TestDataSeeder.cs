@@ -41,16 +41,17 @@ namespace BrewHelper
         private static void SeedRecipes(BrewhelperContext context)
         {
             if (context.Recipes.Any()) { return; }
-            Ingredient testIngredient = context.Ingredients.First();
+            Ingredient testIngredient = new Ingredient { Name = "Test", Description = "test", Type = Ingredient.IngredientType.Hop };
+            context.Ingredients.Add(testIngredient);
 
             var recipes = new List<Recipe>
             {
-                new Recipe { Name = "Test recipe", AlcoholPercentage = 2, 
-                    BoilingSteps = new List<RecipeStep> {new RecipeStep {Name = "Boiling", Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 200 } } } },
+                new Recipe { Name = "Test recipe", AlcoholPercentage = 2,
+                    Mashing = new RecipeStep {  Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 10000 } } },
+                    Boiling = new RecipeStep {  Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 200 } } },
+                    Yeasting = new RecipeStep { Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 10000 } } },
                     Description = "Test recipe",
-                    EBC = 10, IBU = 10, EndSG = 1050, StartSG = 1080, ReadyAfter = 20, MashWater = 20, RinseWater = 27, Yield = 20,
-                    MashSteps = new List<RecipeStep> {new RecipeStep { Name = "Mash", Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 10000 } } } },
-                    YeastingSteps = new List<RecipeStep> {new RecipeStep { Name = "yeasting...", Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = testIngredient, Weight = 20 } } } },
+                    EBC = 10, IBU = 10, EndSG = 1050, StartSG = 1080, ReadyAfter =20, MashWater = 20, RinseWater = 27, Yield = 20,
                 }
             };
 

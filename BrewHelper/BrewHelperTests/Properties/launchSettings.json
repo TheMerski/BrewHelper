@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "BrewHelperTests": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

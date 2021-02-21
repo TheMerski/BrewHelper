@@ -1,11 +1,19 @@
 version: '3.4'
 
+
+networks:
+  brewhelper-network:
+
 services:
   db:
     image: "mcr.microsoft.com/mssql/server"
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "BrewHelperDev1!"
+    ports:
+      - "1433:1433"
+    networks:
+      - brewhelper-network
 
   brewhelper:
     image: ${DOCKER_REGISTRY-}brewhelper
@@ -14,3 +22,6 @@ services:
       dockerfile: BrewHelper/Dockerfile
     depends_on:
       - db
+    networks:
+      - brewhelper-network
+    entrypoint: bash wait_for_it.sh db:1433 -t 0 -- dotnet BrewHelper.dll
