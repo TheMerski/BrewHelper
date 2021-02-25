@@ -10,155 +10,187 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace BrewHelperTests.Controllers
 {
-    public class IngredientsControllerTests : IDisposable
+    public class IngredientsControllerTests : IntegrationTest
     {
-        private Mock<IngredientModel> IngredientModelMock;
+        public IngredientsControllerTests(BrewHelperWebApplicationFactory fixture)
+      : base(fixture) { }
 
-        public IngredientsControllerTests()
+        [Fact]
+        public async Task Get_Should_Retrieve_Ingredients()
         {
-            IngredientModelMock = new Mock<IngredientModel>();
-        }
+            var response = await _client.GetAsync("/api/Ingredients");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        public void Dispose()
-        {
-            IngredientModelMock.Reset();
+            var Ingredients = JsonConvert.DeserializeObject<Ingredient[]>(await response.Content.ReadAsStringAsync());
+            Ingredients.Should().NotBeEmpty();
         }
 
         [Fact]
-        public async Task GetAll_Ingredients_Test()
+        public async Task Get_Should_Retrieve_Ingredient()
         {
-            List<Ingredient> Ingredients = new List<Ingredient>
+            var response = await _client.GetAsync("/api/Ingredients/1");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Ingredient = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
+            Ingredient.Should().BeOfType<Ingredient>();
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_NotFound()
+        {
+            var response = await _client.GetAsync("/api/Ingredients/99999999");
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_BadRequest()
+        {
+            var response = await _client.GetAsync("/api/Ingredients/Test");
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task Put_Should_Update_Ingredient()
+        {
+            var IngredientResponse = await _client.GetAsync("/api/Ingredients/1");
+            Ingredient Ingredient = JsonConvert.DeserializeObject<Ingredient>(await IngredientResponse.Content.ReadAsStringAsync());
+
+            string newDesc = "This is a new description";
+            string newName = "This is a new name";
+
+            Ingredient.Description = newDesc;
+            Ingredient.Name = newName;
+            Ingredient.Type = Ingredient.IngredientType.Sugar;
+
+            var json = JsonConvert.SerializeObject(Ingredient);
+            var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
+
+            var response = await _client.PutAsync("/api/Ingredients/1", stringContent);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            Ingredient returnedIngredient = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
+
+            returnedIngredient.Should().BeOfType<Ingredient>();
+
+            returnedIngredient.Description.Should().Be(newDesc);
+            returnedIngredient.Name.Should().Be(newName);
+            returnedIngredient.Type.Should().Be(Ingredient.IngredientType.Sugar);
+        }
+
+        [Fact]
+        public async Task Put_Should_Return_BadRequest()
+        {
+            var IngredientResponse = await _client.GetAsync("/api/Ingredients/1");
+            Ingredient Ingredient = JsonConvert.DeserializeObject<Ingredient>(await IngredientResponse.Content.ReadAsStringAsync());
+
+            Ingredient.Description = "new";
+
+            var json = JsonConvert.SerializeObject(Ingredient);
+            var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
+
+            var response = await _client.PutAsync("/api/Ingredients/2", stringContent);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task Put_Should_Return_NotFound()
+        {
+            var IngredientResponse = await _client.GetAsync("/api/Ingredients/1");
+            Ingredient Ingredient = JsonConvert.DeserializeObject<Ingredient>(await IngredientResponse.Content.ReadAsStringAsync());
+
+            Ingredient.Id = long.MaxValue;
+
+            var json = JsonConvert.SerializeObject(Ingredient);
+            var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
+
+            var response = await _client.PutAsync($"/api/Ingredients/{long.MaxValue}", stringContent);
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        [Fact]
+        public async Task Post_Should_Return_Created()
+        {
+            Ingredient newIngredient = new Ingredient
             {
-                new Ingredient { Id = 2, Name = "TestName" },
-                new Ingredient { Id = 3, Name = "TestName2" },
+                Name = "new Test Ingredient",
+                Description = "new test Ingredient 2",
+                Type = Ingredient.IngredientType.Malt
             };
-            IngredientModelMock.Setup(m => m.GetAll()).Returns(Task.FromResult<List<Ingredient>>(Ingredients));
-            IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
 
-            var result = await controller.GetIngredients();
-            Assert.NotEmpty(result.Value);
+            var json = JsonConvert.SerializeObject(newIngredient);
+            var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
+
+            var response = await _client.PostAsync($"/api/Ingredients", stringContent);
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            Ingredient ing = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
+            ing.Name.Should().Be(newIngredient.Name);
+            ing.Type.Should().Be(newIngredient.Type);
+            ing.Id.Should().NotBe(0);
         }
 
         [Fact]
-        public async Task GetAll_Empty_Test()
+        public async Task Post_Should_Return_Conflict()
         {
-            List<Ingredient> Ingredients = new List<Ingredient>();
-            IngredientModelMock.Setup(m => m.GetAll()).Returns(Task.FromResult<List<Ingredient>>(Ingredients));
-            IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
+            var res = await _client.GetAsync("/api/Ingredients/1");
+            Ingredient ing = JsonConvert.DeserializeObject<Ingredient>(await res.Content.ReadAsStringAsync());
 
-            var result = await controller.GetIngredients();
-            Assert.Empty(result.Value);
-        }
+            Ingredient newIngredient = new Ingredient
+            {
+                Name = ing.Name,
+                Description = "new test Ingredient 2",
+                Type = Ingredient.IngredientType.Malt
+            };
 
+            var json = JsonConvert.SerializeObject(newIngredient);
+            var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-        [Fact]
-        public async Task GetById_Ingredient_Test()
-        {
-            int id = 4;
-            Ingredient Ingredient = new Ingredient { Id = id, Name = "TestName" };
-            IngredientModelMock.Setup(m => m.GetIngredientById(id)).Returns(Task.FromResult<Ingredient>(Ingredient));
-            IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
-
-            var result = await controller.GetIngredient(id);
-            Assert.Same(Ingredient, result.Value);
+            var response = await _client.PostAsync($"/api/Ingredients", stringContent);
+            response.StatusCode.Should().Be(HttpStatusCode.Conflict);
         }
 
         [Fact]
-        public async Task GetById_Null_Test()
+        public async Task Post_NoName_Should_Return_BadRequest()
         {
-            int id = 4;
-            Ingredient Ingredient = null;
-            IngredientModelMock.Setup(m => m.GetIngredientById(id)).Returns(Task.FromResult<Ingredient>(Ingredient));
-            IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
+            Ingredient newIngredient = new Ingredient
+            {
+                Description = "new test Ingredient 2",
+                Type = Ingredient.IngredientType.Malt
+            };
 
-            var result = await controller.GetIngredient(id);
-            Assert.IsType<NotFoundResult>(result.Result);
-        }
+            var json = JsonConvert.SerializeObject(newIngredient);
+            var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-
-        [Fact]
-        public async Task CreateAsync_BadModelState_Test()
-        {
-            IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
-            controller.ModelState.AddModelError("test", "test");
-
-            ActionResult<Ingredient> result = await controller.PostIngredient(new Ingredient());
-
-            Assert.IsType<BadRequestResult>(result.Result);
+            var response = await _client.PostAsync($"/api/Ingredients", stringContent);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
-        public async Task CreateAsync_NameExists_Test()
+        public async Task Delete_Should_Return_Delete()
         {
-            string testname = "Testname";
+            Ingredient newIngredient = new Ingredient
+            {
+                Name = "delete Test Ingredient",
+                Description = "delete test Ingredient 2",
+                Type = Ingredient.IngredientType.Malt
+            };
 
-            IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
+            var json = JsonConvert.SerializeObject(newIngredient);
+            var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            ActionResult<Ingredient> result = await controller.PostIngredient(new Ingredient { Id = 0, Name = testname });
+            var response = await _client.PostAsync("/api/Ingredients", stringContent);
+            Ingredient ing = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
 
-            Assert.IsType<ConflictResult>(result.Result);
-        }
+            var deleteResponse = await _client.DeleteAsync($"/api/Ingredients/{ing.Id}");
+            deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        [Fact]
-        public async Task CreateAsync_Created_Test()
-        {
-            Ingredient createdIngredient = new Ingredient
-            { Id = 2, Name = "Name" };
-            IngredientModelMock.Setup(m => m.AddIngredient(createdIngredient))
-                .Returns(Task.FromResult<Ingredient>(createdIngredient));
-
-            IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
-
-            ActionResult<Ingredient> result = await controller.PostIngredient(createdIngredient);
-
-            Assert.IsType<CreatedAtActionResult>(result.Result);
-        }
-
-        [Fact]
-        public async Task UpdateIngredient_BadRequest_Test()
-        {
-            IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
-            Ingredient Ingredient = new Ingredient { Id = 5, Name = "Test" };
-            long id = Ingredient.Id + 1;
-
-            ActionResult<Ingredient> result = await controller.PutIngredient(id, Ingredient);
-
-            Assert.IsType<BadRequestResult>(result.Result);
-        }
-
-        [Fact]
-        public async Task UpdateIngredient_NotFound_Test()
-        {
-            Ingredient Ingredient = new Ingredient { Id = 5, Name = "Test" };
-            IngredientModelMock.Setup(m => m.UpdateIngredient(Ingredient.Id, Ingredient))
-                .Returns(Task.FromResult<Ingredient>(null));
-
-            IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
-
-            ActionResult<Ingredient> result = await controller.PutIngredient(Ingredient.Id, Ingredient);
-
-            Assert.IsType<NotFoundResult>(result.Result);
-        }
-
-        [Fact]
-        public async Task UpdateIngredient_Updated_Test()
-        {
-            Ingredient Ingredient = new Ingredient { Id = 5, Name = "Test" };
-            IngredientModelMock.Setup(m => m.UpdateIngredient(Ingredient.Id, Ingredient))
-                .Returns(Task.FromResult<Ingredient>(Ingredient));
-
-            IngredientsController controller = new IngredientsController(IngredientModelMock.Object);
-
-            ActionResult<Ingredient> result = await controller.PutIngredient(Ingredient.Id, Ingredient);
-
-            Assert.Null(result.Result);
-            result.Value.Should().Be(Ingredient);
+            var doubleDeleteResponse = await _client.DeleteAsync($"/api/Ingredients/{ing.Id}");
+            doubleDeleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }
 }

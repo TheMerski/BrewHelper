@@ -26,6 +26,7 @@ namespace BrewHelper.Models
         /// The type of ingredient
         /// </summary>
         [JsonConverter(typeof(JsonStringEnumConverter))]
+        [Required]
         public IngredientType Type { get; set; }
 
 
