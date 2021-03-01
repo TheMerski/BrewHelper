@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using BrewHelper.Models;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
+using BrewHelper.DTO;
+using System.Threading;
 
 namespace BrewHelper.Controllers
 {
@@ -24,9 +26,20 @@ namespace BrewHelper.Controllers
 
         // GET: api/Ingredients
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Ingredient>>> GetIngredients()
+        [ProducesResponseType(typeof(GetIngredientListResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetIngredients(
+            [FromQuery] UrlQueryParameters urlQueryParameters,
+            CancellationToken cancellationToken)
         {
-            return await ingredientModel.GetAll();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var ingredients = await ingredientModel.GetByPageAsync(urlQueryParameters.Limit, urlQueryParameters.Page, cancellationToken);
+
+            return Ok(ingredients);
         }
 
         // GET: api/Ingredients/5
@@ -97,4 +110,6 @@ namespace BrewHelper.Controllers
         }
 
     }
+
+    public record UrlQueryParameters(int Limit = 50, int Page = 1);
 }

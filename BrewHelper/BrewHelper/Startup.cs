@@ -30,6 +30,7 @@ namespace BrewHelper
             string connection = Configuration.GetConnectionString("SQL");
             Console.WriteLine(connection);
 
+            services.AddTransient<BrewhelperContext>();
             services.AddDbContext<BrewhelperContext>(opt =>
                                            opt.UseSqlServer(connection));
 

@@ -26,8 +26,8 @@ namespace BrewHelperTests
 
             builder.UseSqlServer(ConnString);
             _dbContext = new BrewhelperContext(builder.Options);
-
             _dbContext.Database.Migrate();
+
             TestDataSeeder.Seed(_dbContext);
         }
 

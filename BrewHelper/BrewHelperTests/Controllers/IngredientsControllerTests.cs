@@ -1,4 +1,5 @@
 using BrewHelper.Controllers;
+using BrewHelper.DTO;
 using BrewHelper.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -28,8 +29,57 @@ namespace BrewHelperTests.Controllers
             var response = await _client.GetAsync("/api/Ingredients");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<Ingredient[]>(await response.Content.ReadAsStringAsync());
-            Ingredients.Should().NotBeEmpty();
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDto>(await response.Content.ReadAsStringAsync());
+            Ingredients.Items.Should().NotBeEmpty();
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Limit_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?limit=2");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDto>(await response.Content.ReadAsStringAsync());
+            Ingredients.Items.Count.Should().Be(2);
+            Ingredients.TotalPages.Should().BeGreaterThan(1);
+            Ingredients.TotalItems.Should().BeGreaterThan(2);
+        }
+
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Pages_Ingredients()
+        {
+            var response1 = await _client.GetAsync("/api/Ingredients?limit=1&Page=1");
+            response1.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var IngredientsPage1 = JsonConvert.DeserializeObject<GetIngredientListResponseDto>(await response1.Content.ReadAsStringAsync());
+            IngredientsPage1.Items.Count.Should().Be(1);
+            IngredientsPage1.CurrentPage.Should().Be(1);
+            Ingredient ing1 = IngredientsPage1.Items.First();
+
+            var response2 = await _client.GetAsync("/api/Ingredients?limit=1&Page=2");
+            response2.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var IngredientsPage2 = JsonConvert.DeserializeObject<GetIngredientListResponseDto>(await response2.Content.ReadAsStringAsync());
+            IngredientsPage2.Items.Count.Should().Be(1);
+            IngredientsPage2.CurrentPage.Should().Be(2);
+            Ingredient ing2 = IngredientsPage2.Items.First();
+
+            Assert.NotEqual<Ingredient>(ing1, ing2);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_BadRequest_Pages_Ingredients()
+        {
+            var response1 = await _client.GetAsync("/api/Ingredients?Page=dsa");
+            response1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_BadRequest_Limit_Ingredients()
+        {
+            var response1 = await _client.GetAsync("/api/Ingredients?limit=dsa");
+            response1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]

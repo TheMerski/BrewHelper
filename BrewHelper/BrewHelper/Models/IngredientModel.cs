@@ -1,19 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BrewHelper.DTO;
+using BrewHelper.Extensions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BrewHelper.Models
 {
     public class IngredientModel
     {
-        private BrewhelperContext context;
-
-        public IngredientModel()
-        {
-
-        }
+        private readonly BrewhelperContext context;
 
         public IngredientModel(BrewhelperContext injectedIngredientContext)
         {
@@ -27,6 +25,23 @@ namespace BrewHelper.Models
         public virtual async Task<List<Ingredient>> GetAll()
         {
             return await context.Ingredients.ToListAsync();
+        }
+
+        /// <summary>
+        /// Get Ingredients by page
+        /// </summary>
+        /// <returns>A page with Ingredients</returns>
+        public async Task<GetIngredientListResponseDto> GetByPageAsync(int limit, int page, CancellationToken cancellationToken)
+        {
+            var ingredients = await context.Ingredients.AsNoTracking().OrderBy(i => i.Name).PaginateAsync(page, limit, cancellationToken);
+
+            return new GetIngredientListResponseDto
+            {
+                CurrentPage = ingredients.CurrentPage,
+                TotalItems = ingredients.TotalItems,
+                TotalPages = ingredients.TotalPages,
+                Items = ingredients.Items
+            };
         }
 
         /// <summary>
