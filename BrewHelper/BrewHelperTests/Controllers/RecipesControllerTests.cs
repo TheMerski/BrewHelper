@@ -1,4 +1,5 @@
 ﻿using BrewHelper.Controllers;
+using BrewHelper.DTO;
 using BrewHelper.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
@@ -28,12 +29,60 @@ namespace BrewHelperTests.Controllers
             var response = await _client.GetAsync("/api/Recipes");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var recipes = JsonConvert.DeserializeObject<RecipeDTO[]>(await response.Content.ReadAsStringAsync());
-            recipes.Should().NotBeEmpty();
+            var recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            recipes.Items.Should().NotBeEmpty();
             //Related values should be null on multiple
-            recipes[0].Mashing.Should().BeNull();
-            recipes[0].Boiling.Should().BeNull();
-            recipes[0].Yeasting.Should().BeNull();
+            recipes.Items[0].Mashing.Should().BeNull();
+            recipes.Items[0].Boiling.Should().BeNull();
+            recipes.Items[0].Yeasting.Should().BeNull();
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Limit_Recipes()
+        {
+            var response = await _client.GetAsync("/api/Recipes?limit=1");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            Recipes.Items.Count.Should().Be(1);
+            Recipes.TotalPages.Should().BeGreaterThan(1);
+            Recipes.TotalItems.Should().BeGreaterThan(1);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Pages_Recipes()
+        {
+            var response1 = await _client.GetAsync("/api/Recipes?limit=1&Page=1");
+            response1.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var RecipesPage1 = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response1.Content.ReadAsStringAsync());
+            RecipesPage1.Items.Count.Should().Be(1);
+            RecipesPage1.CurrentPage.Should().Be(1);
+            RecipeDTO r1 = RecipesPage1.Items.First();
+
+            var response2 = await _client.GetAsync("/api/Recipes?limit=1&Page=2");
+            response2.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var RecipesPage2 = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response2.Content.ReadAsStringAsync());
+            RecipesPage2.Items.Count.Should().Be(1);
+            RecipesPage2.CurrentPage.Should().Be(2);
+            RecipeDTO r2 = RecipesPage2.Items.First();
+
+            Assert.NotEqual<RecipeDTO>(r1, r2);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_BadRequest_Pages_Recipes()
+        {
+            var response1 = await _client.GetAsync("/api/Recipes?Page=dsa");
+            response1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_BadRequest_Limit_Recipes()
+        {
+            var response1 = await _client.GetAsync("/api/Recipes?limit=dsa");
+            response1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]

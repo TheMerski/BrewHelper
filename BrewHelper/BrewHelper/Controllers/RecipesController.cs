@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BrewHelper.Models;
+using BrewHelper.DTO;
+using System.Threading;
 
 namespace BrewHelper.Controllers
 {
@@ -24,9 +26,20 @@ namespace BrewHelper.Controllers
 
         // GET: api/Recipes
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RecipeDTO>>> GetAllRecipes()
+        [ProducesResponseType(typeof(GetRecipeListResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAllRecipes(
+            [FromQuery] UrlQueryParameters urlQueryParameters,
+            CancellationToken cancellationToken)
         {
-            return await recipeModel.GetAll();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var recipes = await recipeModel.GetByPageAsync(urlQueryParameters.Limit, urlQueryParameters.Page, cancellationToken);
+
+            return Ok(recipes);
         }
 
         // GET: api/Recipes/5
@@ -98,6 +111,7 @@ namespace BrewHelper.Controllers
             return NotFound();
         }
 
-        
+        public record UrlQueryParameters(int Limit = 50, int Page = 1);
+
     }
 }

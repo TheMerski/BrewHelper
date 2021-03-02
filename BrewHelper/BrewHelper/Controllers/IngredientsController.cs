@@ -26,7 +26,7 @@ namespace BrewHelper.Controllers
 
         // GET: api/Ingredients
         [HttpGet]
-        [ProducesResponseType(typeof(GetIngredientListResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetIngredientListResponseDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetIngredients(
             [FromQuery] UrlQueryParameters urlQueryParameters,

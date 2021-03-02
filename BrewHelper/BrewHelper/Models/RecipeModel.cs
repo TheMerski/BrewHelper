@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BrewHelper.DTO;
+using BrewHelper.Extensions;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BrewHelper.Models
@@ -30,6 +33,23 @@ namespace BrewHelper.Models
         }
 
         /// <summary>
+        /// Get Ingredients by page
+        /// </summary>
+        /// <returns>A page with Ingredients</returns>
+        public async Task<GetRecipeListResponseDTO> GetByPageAsync(int limit, int page, CancellationToken cancellationToken)
+        {
+            var recipes = await context.Recipes.AsNoTracking().OrderBy(i => i.Name).PaginateAsync(page, limit, cancellationToken);
+
+            return new GetRecipeListResponseDTO
+            {
+                CurrentPage = recipes.CurrentPage,
+                TotalItems = recipes.TotalItems,
+                TotalPages = recipes.TotalPages,
+                Items = recipes.Items.Select(r => new RecipeDTO(r)).ToList()
+            };
+        }
+
+        /// <summary>
         /// Get Recipe by Id 
         /// </summary>
         /// <param name="id">The id of the recipe to get</param>
@@ -50,6 +70,8 @@ namespace BrewHelper.Models
                 .Select(r => new RecipeDTO(r))
                 .FirstOrDefaultAsync();
         }
+
+        
 
         /// <summary>
         /// Add a recipe

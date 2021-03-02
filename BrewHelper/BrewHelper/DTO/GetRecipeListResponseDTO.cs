@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BrewHelper.DTO
 {
-    public record GetIngredientListResponseDTO
+    public record GetRecipeListResponseDTO
     {
         public int CurrentPage { get; init; }
 
@@ -14,6 +14,6 @@ namespace BrewHelper.DTO
 
         public int TotalPages { get; init; }
 
-        public List<Ingredient> Items { get; init; }
+        public List<RecipeDTO> Items { get; init; }
     }
 }

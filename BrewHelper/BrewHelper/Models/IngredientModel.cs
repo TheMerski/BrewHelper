@@ -31,11 +31,11 @@ namespace BrewHelper.Models
         /// Get Ingredients by page
         /// </summary>
         /// <returns>A page with Ingredients</returns>
-        public async Task<GetIngredientListResponseDto> GetByPageAsync(int limit, int page, CancellationToken cancellationToken)
+        public async Task<GetIngredientListResponseDTO> GetByPageAsync(int limit, int page, CancellationToken cancellationToken)
         {
             var ingredients = await context.Ingredients.AsNoTracking().OrderBy(i => i.Name).PaginateAsync(page, limit, cancellationToken);
 
-            return new GetIngredientListResponseDto
+            return new GetIngredientListResponseDTO
             {
                 CurrentPage = ingredients.CurrentPage,
                 TotalItems = ingredients.TotalItems,

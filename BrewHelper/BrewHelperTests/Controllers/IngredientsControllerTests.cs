@@ -29,7 +29,7 @@ namespace BrewHelperTests.Controllers
             var response = await _client.GetAsync("/api/Ingredients");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDto>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Should().NotBeEmpty();
         }
 
@@ -39,7 +39,7 @@ namespace BrewHelperTests.Controllers
             var response = await _client.GetAsync("/api/Ingredients?limit=2");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDto>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Count.Should().Be(2);
             Ingredients.TotalPages.Should().BeGreaterThan(1);
             Ingredients.TotalItems.Should().BeGreaterThan(2);
@@ -52,7 +52,7 @@ namespace BrewHelperTests.Controllers
             var response1 = await _client.GetAsync("/api/Ingredients?limit=1&Page=1");
             response1.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var IngredientsPage1 = JsonConvert.DeserializeObject<GetIngredientListResponseDto>(await response1.Content.ReadAsStringAsync());
+            var IngredientsPage1 = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response1.Content.ReadAsStringAsync());
             IngredientsPage1.Items.Count.Should().Be(1);
             IngredientsPage1.CurrentPage.Should().Be(1);
             Ingredient ing1 = IngredientsPage1.Items.First();
@@ -60,7 +60,7 @@ namespace BrewHelperTests.Controllers
             var response2 = await _client.GetAsync("/api/Ingredients?limit=1&Page=2");
             response2.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var IngredientsPage2 = JsonConvert.DeserializeObject<GetIngredientListResponseDto>(await response2.Content.ReadAsStringAsync());
+            var IngredientsPage2 = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response2.Content.ReadAsStringAsync());
             IngredientsPage2.Items.Count.Should().Be(1);
             IngredientsPage2.CurrentPage.Should().Be(2);
             Ingredient ing2 = IngredientsPage2.Items.First();
