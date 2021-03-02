@@ -7,7 +7,7 @@ import PostIcon from '@material-ui/icons/Book';
 import UserIcon from '@material-ui/icons/Group';
 import Dashboard from './Dashboard';
 import authProvider from './authProvider';
-import devDataProvider from './DataProvider/devDataProvider';
+import devDataProvider from './DataProvider/BrewHelperDataProvider';
 import {
   IngredientCreate,
   IngredientEdit,
