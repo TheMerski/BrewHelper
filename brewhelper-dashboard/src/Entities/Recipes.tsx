@@ -1,17 +1,17 @@
 import React from 'react';
 import {
-	List,
-	Datagrid,
-	TextField,
-	Edit,
-	NumberInput,
-	SimpleForm,
-	TextInput,
-	ArrayInput,
-	SimpleFormIterator,
-	SelectInput,
-	ReferenceInput,
-	Create,
+  List,
+  Datagrid,
+  TextField,
+  Edit,
+  NumberInput,
+  SimpleForm,
+  TextInput,
+  ArrayInput,
+  SimpleFormIterator,
+  SelectInput,
+  ReferenceInput,
+  Create,
 } from 'react-admin';
 
 export const RecipeList = (props: any) => (
