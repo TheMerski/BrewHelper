@@ -1,6 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { fetchUtils } from 'react-admin';
 import { stringify } from 'query-string';
+import { CreateIngredientQueryFilter } from '../models/Ingredient';
 
 const apiUrl = 'https://localhost:5001/api';
 const httpClient = fetchUtils.fetchJson;
@@ -12,9 +13,15 @@ export default {
     const query = {
       sort: JSON.stringify([field, order]),
       range: JSON.stringify([(page - 1) * perPage, page * perPage - 1]),
-      //filter: JSON.stringify(params.filter),
     };
-    const url = `${apiUrl}/${resource}?${stringify(query)}`;
+
+    let filters = '';
+    if (resource === 'Ingredients')
+      filters = CreateIngredientQueryFilter(params.filter);
+
+    const url = `${apiUrl}/${resource}?${stringify(query)}${filters}`;
+
+    console.log(url);
 
     return httpClient(url).then(({ headers, json }) => ({
       data: json.items,

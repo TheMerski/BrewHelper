@@ -83,6 +83,46 @@ namespace BrewHelperTests.Controllers
         }
 
         [Fact]
+        public async Task Get_Should_Retrieve_Name_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?Name=Hop");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            Ingredients.Items.Should().NotBeEmpty();
+            Ingredients.Items.First().Name.Should().Be("Hop");
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Type_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?Types=Hop");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            Ingredients.Items.Should().NotBeEmpty();
+            Ingredients.Items.First().Type.Should().Be(Ingredient.IngredientType.Hop);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Types_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?Types=Hop&Types=Herb");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            Ingredients.Items.Should().NotBeEmpty();
+            Ingredients.Items.Count.Should().BeGreaterOrEqualTo(2);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Type_BadRequest_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?Types=Blabla");
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
         public async Task Get_Should_Retrieve_Ingredient()
         {
             var response = await _client.GetAsync("/api/Ingredients/1");
