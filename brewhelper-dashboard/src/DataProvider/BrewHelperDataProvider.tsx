@@ -2,6 +2,7 @@
 import { fetchUtils } from 'react-admin';
 import { stringify } from 'query-string';
 import { CreateIngredientQueryFilter } from '../models/Ingredient';
+import { CreateRecipeQueryFilter } from '../models/Recipe';
 
 const apiUrl = 'https://localhost:5001/api';
 const httpClient = fetchUtils.fetchJson;
@@ -18,6 +19,8 @@ export default {
     let filters = '';
     if (resource === 'Ingredients')
       filters = CreateIngredientQueryFilter(params.filter);
+    if (resource === 'Recipes')
+      filters = CreateRecipeQueryFilter(params.filter);
 
     const url = `${apiUrl}/${resource}?${stringify(query)}${filters}`;
 
@@ -39,6 +42,7 @@ export default {
       filter: JSON.stringify({ id: params.ids }),
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
+    console.log(url);
     return httpClient(url).then(({ json }) => ({ data: json }));
   },
 

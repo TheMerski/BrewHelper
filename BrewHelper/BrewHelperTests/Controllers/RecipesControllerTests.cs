@@ -1,4 +1,5 @@
-﻿using BrewHelper.Controllers;
+﻿using BrewHelper;
+using BrewHelper.Controllers;
 using BrewHelper.DTO;
 using BrewHelper.Models;
 using FluentAssertions;
@@ -47,6 +48,18 @@ namespace BrewHelperTests.Controllers
             Recipes.Items.Count.Should().Be(1);
             Recipes.TotalPages.Should().BeGreaterThan(1);
             Recipes.TotalItems.Should().BeGreaterThan(1);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Name_Recipes()
+        {
+            string name = TestDataSeeder.Recipes.First().Name;
+            var response = await _client.GetAsync($"/api/Recipes?Name={name}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            Recipes.Items.Count.Should().BeGreaterOrEqualTo(1);
+            Recipes.Items.First().Name.Should().Contain(name);
         }
 
         [Fact]

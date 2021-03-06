@@ -12,14 +12,25 @@ import {
   SelectInput,
   ReferenceInput,
   Create,
+  Filter,
+  AutocompleteInput,
 } from 'react-admin';
 
+
+function RecipeFilter(props: any) {
+  return (
+    <Filter {...props}>
+      <TextInput label="Search" source="Name" alwaysOn />
+    </Filter>
+  );
+}
+
 export const RecipeList = (props: any) => (
-	<List {...props}>
-		<Datagrid rowClick="edit">
-			<TextField source="name" />
-		</Datagrid>
-	</List>
+  <List filters={<RecipeFilter />} {...props}>
+    <Datagrid rowClick="edit">
+      <TextField source="name" />
+    </Datagrid>
+  </List>
 );
 
 export const RecipeEdit = (props: any) => (
@@ -77,7 +88,7 @@ function recipeStepEditFields(source: string, time: string) {
             source="ingredientId"
             reference="Ingredients"
           >
-            <SelectInput optionText="name" />
+            <AutocompleteInput optionText="name" />
           </ReferenceInput>
           <NumberInput source="weight" label="Weight (g)" />
           <NumberInput source="addAfter" label={`Add after (${time})`} />
