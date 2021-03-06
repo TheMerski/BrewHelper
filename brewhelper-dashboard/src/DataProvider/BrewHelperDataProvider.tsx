@@ -24,8 +24,6 @@ export default {
 
     const url = `${apiUrl}/${resource}?${stringify(query)}${filters}`;
 
-    console.log(url);
-
     return httpClient(url).then(({ headers, json }) => ({
       data: json.items,
       total: json.totalItems,
@@ -38,12 +36,12 @@ export default {
     })),
 
   getMany: (resource: any, params: any) => {
-    const query = {
-      filter: JSON.stringify({ id: params.ids }),
-    };
-    const url = `${apiUrl}/${resource}?${stringify(query)}`;
-    console.log(url);
-    return httpClient(url).then(({ json }) => ({ data: json }));
+    let query = '';
+    for (let id of params.ids) {
+      query += `&Id=${id}`;
+    }
+    const url = `${apiUrl}/${resource}?${query}`;
+    return httpClient(url).then(({ json }) => ({ data: json.items }));
   },
 
   getManyReference: (resource: any, params: any) => {

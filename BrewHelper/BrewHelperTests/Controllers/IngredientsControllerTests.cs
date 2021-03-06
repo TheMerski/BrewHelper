@@ -123,6 +123,38 @@ namespace BrewHelperTests.Controllers
         }
 
         [Fact]
+        public async Task Get_Should_Retrieve_Id_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?Id=1");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            Ingredients.Items.Should().NotBeEmpty();
+            Ingredients.Items.Count.Should().Be(1);
+            Ingredients.TotalItems.Should().Be(1);
+            Ingredients.Items.First().Id.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Ids_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?Id=1&Id=2");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            Ingredients.Items.Should().NotBeEmpty();
+            Ingredients.Items.Count.Should().Be(2);
+            Ingredients.TotalItems.Should().Be(2);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Id_BadRequest_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?Id=Blabla");
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
         public async Task Get_Should_Retrieve_Ingredient()
         {
             var response = await _client.GetAsync("/api/Ingredients/1");

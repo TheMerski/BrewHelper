@@ -36,12 +36,15 @@ namespace BrewHelper.Models
         /// Get Ingredients by page
         /// </summary>
         /// <returns>A page with Ingredients</returns>
-        public async Task<GetRecipeListResponseDTO> GetByPageAsync(int limit, int page, string name, CancellationToken cancellationToken)
+        public async Task<GetRecipeListResponseDTO> GetByPageAsync(int limit, int page, string name, long[] ids, CancellationToken cancellationToken)
         {
             var query = context.Recipes.AsNoTracking();
 
             if (name != null)
                 query = query.Where(r => r.Name.ToUpper().Contains(name.ToUpper()));
+
+            if (ids != null && ids.Length > 0)
+                query = query.Where(i => ids.Contains(i.Id));
 
             var recipes = await query.OrderBy(i => i.Name).PaginateAsync(page, limit, cancellationToken);
 
