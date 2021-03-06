@@ -9,13 +9,15 @@ import {
   TextInput,
   ArrayInput,
   SimpleFormIterator,
-  SelectInput,
   ReferenceInput,
   Create,
   Filter,
   AutocompleteInput,
 } from 'react-admin';
 
+const RecipeTitle: React.FC<{ record?: any }> = ({ record = {} }) => {
+  return <span>Recipe: {record ? `"${record.name}"` : ''}</span>;
+};
 
 function RecipeFilter(props: any) {
   return (
@@ -34,7 +36,9 @@ export const RecipeList = (props: any) => (
 );
 
 export const RecipeEdit = (props: any) => (
-	<Edit {...props}>{recipeEditFields}</Edit>
+  <Edit title={<RecipeTitle />} {...props}>
+    {recipeEditFields}
+  </Edit>
 );
 
 export const RecipeCreate = (props: any) => (

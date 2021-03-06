@@ -25,7 +25,7 @@ const typeChoices = [
 ];
 
 const IngredientTitle: React.FC<{ record?: any }> = ({ record = {} }) => {
-  return <span>Ingredient {record ? `"${record.name}"` : ''}</span>;
+  return <span>Ingredient: {record ? `"${record.name}"` : ''}</span>;
 };
 
 function IngredientFilter(props: any) {
