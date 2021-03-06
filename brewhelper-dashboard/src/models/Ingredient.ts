@@ -27,5 +27,8 @@ export function CreateIngredientQueryFilter(filter: any): string {
       if (type != null) filterQuery += `&Types=${type}`;
     }
   }
+  if (typeof filter.InStock != undefined && filter.InStock != null) {
+    filterQuery += `&InStock=${filter.InStock}`;
+  }
   return filterQuery;
 }

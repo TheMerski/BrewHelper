@@ -33,9 +33,12 @@ namespace BrewHelper.Models
         /// <param name="limit">Page limit</param>
         /// <param name="page">Page number</param>
         /// <param name="name">name search</param>
+        /// <param name="ids">array of id's the Ingredient should be in</param>
+        /// <param name="types">The types the Ingredient should be in</param>
+        /// <param name="inStock">Wether the ingredient is in stock</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<GetIngredientListResponseDTO> GetByPageAsync(int limit, int page, string name, long[] ids, Ingredient.IngredientType[] types, CancellationToken cancellationToken)
+        public async Task<GetIngredientListResponseDTO> GetByPageAsync(int limit, int page, string name, long[] ids, Ingredient.IngredientType[] types, bool? inStock, CancellationToken cancellationToken)
         {
             var query = context.Ingredients.AsNoTracking();
 
@@ -44,6 +47,9 @@ namespace BrewHelper.Models
 
             if (ids != null && ids.Length > 0)
                 query = query.Where(i => ids.Contains(i.Id));
+
+            if (inStock != null)
+                query = query.Where(i => i.InStock > 0 == inStock);
 
             if (types != null && types.Length > 0)
             {

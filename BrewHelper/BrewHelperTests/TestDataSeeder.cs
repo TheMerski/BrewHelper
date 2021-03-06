@@ -12,11 +12,11 @@ namespace BrewHelper
     {
         public static List<Ingredient> Ingredients = new List<Ingredient>
             {
-                new Ingredient {Name= "Hop", Description = "Hopping", Type = Ingredient.IngredientType.Hop},
+                new Ingredient {Name= "Hop", Description = "Hopping", Type = Ingredient.IngredientType.Hop, InStock = 200},
                 new Ingredient {Name= "Herb", Description = "Herb description", Type = Ingredient.IngredientType.Herb},
-                new Ingredient {Name= "white malt", Description = "Malt description", Type = Ingredient.IngredientType.Malt},
+                new Ingredient {Name= "white malt", Description = "Malt description", Type = Ingredient.IngredientType.Malt, InStock = 5000},
                 new Ingredient {Name= "white sugar", Description = "Sugar description", Type = Ingredient.IngredientType.Sugar},
-                new Ingredient {Name= "Yeast", Description = "Yeast description", Type = Ingredient.IngredientType.Yeast},
+                new Ingredient {Name= "Yeast", Description = "Yeast description", Type = Ingredient.IngredientType.Yeast, InStock = 2},
                 new Ingredient { Name = "Test", Description = "test", Type = Ingredient.IngredientType.Hop }
             };
 

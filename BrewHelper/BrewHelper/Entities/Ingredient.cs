@@ -23,6 +23,11 @@ namespace BrewHelper.Models
         public string Description { get; set; }
 
         /// <summary>
+        /// Ammount in stock (g)
+        /// </summary>
+        public long InStock { get; set; }
+
+        /// <summary>
         /// The type of ingredient
         /// </summary>
         [JsonConverter(typeof(JsonStringEnumConverter))]

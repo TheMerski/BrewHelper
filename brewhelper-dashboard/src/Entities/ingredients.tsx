@@ -13,6 +13,9 @@ import {
   ReferenceInput,
   SelectInput,
   AutocompleteArrayInput,
+  NumberInput,
+  NumberField,
+  BooleanInput,
 } from 'react-admin';
 import { IngredientType } from '../models/Ingredient';
 
@@ -33,6 +36,7 @@ function IngredientFilter(props: any) {
     <Filter {...props}>
       <TextInput label="Search" source="Name" alwaysOn />
       <AutocompleteArrayInput source="type" choices={typeChoices} />
+      <BooleanInput source="InStock" />
     </Filter>
   );
 }
@@ -42,6 +46,7 @@ export const IngredientList = (props: any) => (
     <Datagrid rowClick="edit">
       <TextField source="name" />
       <TextField source="type" />
+      <NumberField source="inStock" />
     </Datagrid>
   </List>
 );
@@ -60,6 +65,7 @@ const ingredientEditForm = (
   <SimpleForm>
     <TextInput source="name" validate={[required()]} />
     <TextInput source="description" />
+    <NumberInput source="inStock" />
     <AutocompleteInput
       source="type"
       choices={typeChoices}

@@ -1,3 +1,4 @@
+using BrewHelper;
 using BrewHelper.Controllers;
 using BrewHelper.DTO;
 using BrewHelper.Models;
@@ -151,6 +152,37 @@ namespace BrewHelperTests.Controllers
         public async Task Get_Should_Retrieve_Id_BadRequest_Ingredients()
         {
             var response = await _client.GetAsync("/api/Ingredients?Id=Blabla");
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_InStock_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?InStock=true");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            Ingredients.Items.Should().NotBeEmpty();
+            Ingredients.Items.Count.Should().BeGreaterThan(1);
+            Ingredients.Items.ForEach(i => i.InStock.Should().BeGreaterOrEqualTo(1));
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_Instock_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?InStock=false");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            Ingredients.Items.Should().NotBeEmpty();
+            Ingredients.Items.Count.Should().BeGreaterThan(1);
+            Ingredients.Items.ForEach(i => i.InStock.Should().Be(0));
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_InStock_BadRequest_Ingredients()
+        {
+            var response = await _client.GetAsync("/api/Ingredients?InStock=Blabla");
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
