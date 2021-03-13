@@ -6,7 +6,7 @@ import { PostCreate, PostEdit, PostList } from './posts';
 import PostIcon from '@material-ui/icons/Book';
 import UserIcon from '@material-ui/icons/Group';
 import Dashboard from './Dashboard';
-import authProvider from './authProvider';
+import authProvider from './DataProvider/authProvider';
 import devDataProvider from './DataProvider/BrewHelperDataProvider';
 import {
   IngredientCreate,

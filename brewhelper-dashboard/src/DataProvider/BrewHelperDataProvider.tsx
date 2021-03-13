@@ -5,7 +5,15 @@ import { CreateIngredientQueryFilter } from '../models/Ingredient';
 import { CreateRecipeQueryFilter } from '../models/Recipe';
 
 const apiUrl = 'https://localhost:5001/api';
-const httpClient = fetchUtils.fetchJson;
+
+const httpClient = (apiUrl: string, options: any = {}) => {
+  if (!options.headers) {
+    options.headers = new Headers({ Accept: 'application/json' });
+  }
+  const { token } = JSON.parse(localStorage.getItem('auth')!);
+  options.headers.set('Authorization', `Bearer ${token}`);
+  return fetchUtils.fetchJson(apiUrl, options);
+};
 
 export default {
   getList: (resource: any, params: any) => {

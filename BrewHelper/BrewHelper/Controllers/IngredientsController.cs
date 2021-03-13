@@ -10,9 +10,11 @@ using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using BrewHelper.DTO;
 using System.Threading;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BrewHelper.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class IngredientsController : ControllerBase
