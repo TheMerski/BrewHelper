@@ -27,7 +27,7 @@ namespace BrewHelper.Authentication
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
             var user = await userManager.FindByNameAsync(model.Username);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
@@ -55,7 +55,7 @@ namespace BrewHelper.Authentication
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                     );
 
-                return Ok(new
+                return Ok(new LoginResponse
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo
@@ -66,7 +66,7 @@ namespace BrewHelper.Authentication
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if (userExists != null)
@@ -84,6 +84,5 @@ namespace BrewHelper.Authentication
 
             return Ok(new AuthenticationResponse { Status = "Success", Message = "User created successfully!" });
         }
-
     }
 }

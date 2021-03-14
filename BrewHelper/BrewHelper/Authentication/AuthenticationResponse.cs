@@ -10,4 +10,10 @@ namespace BrewHelper.Authentication
         public string Status { get; set; }
         public string Message { get; set; }
     }
+
+    public class LoginResponse
+    {
+        public string token { get; set; }
+        public DateTime expiration { get; set; }
+    }
 }
