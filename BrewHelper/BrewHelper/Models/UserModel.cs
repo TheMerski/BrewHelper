@@ -37,10 +37,42 @@ namespace BrewHelper.Models
                 CurrentPage = users.CurrentPage,
                 TotalItems = users.TotalItems,
                 TotalPages = users.TotalPages,
-                Items = users.Items.Select(u => new UserDTO { Username = u.UserName, Email = u.Email, Roles = GetUserRoles(u).Result}).ToList()
+                Items = users.Items.Select(u => ToDTO(u).Result).ToList()
             };
         }
 
+        /// <summary>
+        /// Get a user by id
+        /// </summary>
+        /// <param name="id">Id of the user</param>
+        /// <returns>The UserDTO or null</returns>
+        public async Task<UserDTO> GetById(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                return await ToDTO(user);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Update a user
+        /// </summary>
+        /// <param name="dto">UserDTO of the user to update</param>
+        /// <returns>Updated UserDTO or null</returns>
+        public async Task<UserDTO> UpdateUser(UserDTO dto)
+        {
+            var user = await userManager.FindByIdAsync(dto.Id);
+            user.UserName = dto.Username;
+            user.Email = dto.Email;
+            var result = await userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return await UpdateUserRoles(dto);
+            }
+            return null;
+        }
 
         /// <summary>
         /// Create a user with Roles
@@ -64,7 +96,7 @@ namespace BrewHelper.Models
                 if (!register.Roles.Contains(ApplicationRoles.User))
                     register.Roles.Add(ApplicationRoles.User);
                 await userManager.AddToRolesAsync(user, register.Roles.Select(r => r.ToString()).ToArray());
-                return new UserDTO { Username = user.UserName, Email = user.Email, Roles = register.Roles };
+                return await ToDTO(user);
             }
 
             return null;
@@ -85,13 +117,33 @@ namespace BrewHelper.Models
             return new UserDTO { Username = user.Username, Email = user.Email, Roles = roles };
         }
 
-
+        /// <summary>
+        /// Check if user exists
+        /// </summary>
+        /// <param name="username">Username of the user</param>
+        /// <returns>true if exists</returns>
         public async Task<bool> UserExists(string username)
         {
             var userExists = await userManager.FindByNameAsync(username);
             return userExists != null;
         }
 
+        /// <summary>
+        /// Transform ApplicationUser to UserDTO
+        /// </summary>
+        /// <param name="user">ApplicationUser to transform</param>
+        /// <returns>UserDTO for user</returns>
+        private async Task<UserDTO> ToDTO(ApplicationUser user)
+        {
+            List<ApplicationRoles> roles = await GetUserRoles(user);
+            return new UserDTO { Id = user.Id, Email = user.Email, Username = user.UserName, Roles = roles };
+        }
+
+        /// <summary>
+        /// Get the ApplicationRoles for a user
+        /// </summary>
+        /// <param name="user">ApplicationUser to get roles for</param>
+        /// <returns>List of ApplicationRoles of user</returns>
         private async Task<List<ApplicationRoles>> GetUserRoles(ApplicationUser user)
         {
             IList<string> userRoles = await userManager.GetRolesAsync(user);

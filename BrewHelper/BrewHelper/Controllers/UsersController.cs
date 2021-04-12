@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace BrewHelper.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [AuthorizeRoles(RoleEnum = ApplicationRoles.Admin | ApplicationRoles.User)]
     [ApiController]
     public class UsersController : Controller
     {
@@ -32,7 +32,7 @@ namespace BrewHelper.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(GenericListResponseDTO<UserDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAllRecipes(
+        public async Task<IActionResult> GetAllUsers(
             [FromQuery] UrlQueryParameters urlQueryParameters,
             CancellationToken cancellationToken)
         {
@@ -44,6 +44,40 @@ namespace BrewHelper.Controllers
             var users = await userModel.GetByPageAsync(urlQueryParameters.Limit, urlQueryParameters.Page, cancellationToken);
 
             return Ok(users);
+        }
+
+        // GET: api/Users/1
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserDTO>> GetUser(string id)
+        {
+            var user = await userModel.GetById(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        // PUT: api/Users/1
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPut("{id}")]
+        public async Task<ActionResult<RecipeDTO>> PutUser(string id, UserDTO user)
+        {
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            UserDTO updated = await userModel.UpdateUser(user);
+            if (updated == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updated);
         }
 
         [HttpPost]

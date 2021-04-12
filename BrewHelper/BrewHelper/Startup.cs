@@ -103,11 +103,12 @@ namespace BrewHelper
 
             services.AddTransient<RecipeModel>();
             services.AddTransient<IngredientModel>();
+            services.AddTransient<UserModel>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -128,14 +129,15 @@ namespace BrewHelper
                 app.UseCors("CorsPolicy");
             }
 
-            AuthenticationDbInitializer.SeedAdmin(userManager);
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            AuthenticationDbInitializer.SeedRoles(roleManager);
+            AuthenticationDbInitializer.SeedAdmin(userManager);
 
             app.UseEndpoints(endpoints =>
             {

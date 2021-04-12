@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BrewHelper.Authentication
@@ -17,7 +18,6 @@ namespace BrewHelper.Authentication
 
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
-
         public List<ApplicationRoles> Roles { get; set; }
     }
 }
