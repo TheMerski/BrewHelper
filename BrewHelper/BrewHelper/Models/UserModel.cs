@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -57,6 +58,22 @@ namespace BrewHelper.Models
         }
 
         /// <summary>
+        /// Delete a user by id
+        /// </summary>
+        /// <param name="id">Id of the user to delete</param>
+        /// <returns>true if deleted, false if not found</returns>
+        public async Task<bool> DeleteById(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                await userManager.DeleteAsync(user);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Update a user
         /// </summary>
         /// <param name="dto">UserDTO of the user to update</param>
@@ -100,6 +117,17 @@ namespace BrewHelper.Models
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Get the Id of the current user
+        /// </summary>
+        /// <param name="principal">Current user principal</param>
+        /// <returns>Id of current user</returns>
+        public async Task<string> GetCurrentUserId(ClaimsPrincipal principal)
+        {
+            ApplicationUser user = await userManager.FindByNameAsync(principal.Identity.Name);
+            return user.Id;
         }
 
         /// <summary>

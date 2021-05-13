@@ -9,13 +9,14 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace BrewHelper.Controllers
 {
     [Route("api/[controller]")]
-    [AuthorizeRoles(RoleEnum = ApplicationRoles.Admin | ApplicationRoles.User)]
+    [AuthorizeRoles(RoleEnum = ApplicationRoles.Admin)]
     [ApiController]
     public class UsersController : Controller
     {
@@ -94,6 +95,26 @@ namespace BrewHelper.Controllers
             {
                 return BadRequest();
             }
+        }
+
+        // DELETE: api/Users/1
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUser(string id)
+        {
+            string currentUserId = await userModel.GetCurrentUserId(User) ;
+            if (currentUserId != id)
+            {
+                bool deleted = await userModel.DeleteById(id);
+
+                if (deleted)
+                {
+                    return Ok();
+                }
+
+                return NotFound();
+            }
+
+            return BadRequest();
         }
 
         public record UrlQueryParameters(int Limit = 50, int Page = 1);
