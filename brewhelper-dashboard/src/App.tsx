@@ -13,7 +13,7 @@ import {
   IngredientList,
 } from './Entities/ingredients';
 import { RecipeCreate, RecipeEdit, RecipeList } from './Entities/Recipes';
-import { UserEdit, UserList } from './Entities/Users';
+import { UserCreate, UserEdit, UserList } from './Entities/Users';
 
 const App = () => (
   <Admin
@@ -44,7 +44,7 @@ const App = () => (
       name="Users"
       list={UserList}
       edit={UserEdit}
-      //create={RecipeCreate}
+      create={UserCreate}
     />
   </Admin>
 );
