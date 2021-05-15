@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -26,37 +27,43 @@ namespace BrewHelperTests
         };
 
         protected readonly BrewHelperWebApplicationFactory _factory;
-        protected readonly HttpClient _client;
+        protected readonly HttpClient _adminClient;
+        protected readonly HttpClient _userClient;
         protected readonly IConfiguration _configuration;
-        protected string token = null;
+
+        protected readonly JsonSerializerOptions _serializeOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
         public IntegrationTest(BrewHelperWebApplicationFactory factory)
         {
             _factory = factory;
-            _client = _factory.CreateClient();
-            _client.DefaultRequestHeaders.Authorization =
-    new AuthenticationHeaderValue("Bearer", GetTokenAsync().Result);
+            _adminClient = _factory.CreateClient();
+            _adminClient.DefaultRequestHeaders.Authorization =
+    new AuthenticationHeaderValue("Bearer", GetTokenAsync("Admin", "BrewHelperAdmin1!").Result);
+
+
+            _userClient = _factory.CreateClient();
+            _userClient.DefaultRequestHeaders.Authorization =
+    new AuthenticationHeaderValue("Bearer", GetTokenAsync("User", "BrewHelperUser1!").Result);
             //_checkpoint.Reset(factory._dbFixture.ConnString).Wait();
         }
 
-        public async Task<string> GetTokenAsync()
+        public async Task<string> GetTokenAsync(string username, string password)
         {
-            if (token != null)
+
+            LoginDTO user = new LoginDTO
             {
-                return token;
-            }
-            LoginDTO admin = new LoginDTO
-            {
-                Username = "Admin",
-                Password = "BrewHelperAdm1n!"
+                Username = username,
+                Password = password
             };
-            var json = JsonConvert.SerializeObject(admin);
+            var json = JsonConvert.SerializeObject(user);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PostAsync($"/api/Authentication/login", stringContent);
+            var response = await _adminClient.PostAsync($"/api/Authentication/login", stringContent);
             var result = JsonConvert.DeserializeObject<LoginResponse>(await response.Content.ReadAsStringAsync());
-            token = result.token;
-            return token;
+            return result.token;
         }
     }
 }

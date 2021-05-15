@@ -81,6 +81,8 @@ namespace BrewHelper.Models
         public async Task<UserDTO> UpdateUser(UserDTO dto)
         {
             var user = await userManager.FindByIdAsync(dto.Id);
+            if (user == null)
+                return null;
             user.UserName = dto.Username;
             user.Email = dto.Email;
             var result = await userManager.UpdateAsync(user);
@@ -95,7 +97,7 @@ namespace BrewHelper.Models
         /// Create a user with Roles
         /// </summary>
         /// <param name="register">Registered user model</param>
-        /// <returns></returns>
+        /// <returns>The created UserDTO</returns>
         public async Task<UserDTO> CreateUser(RegisterDTO register)
         {
             if (await UserExists(register.Username)) return null;
@@ -110,6 +112,8 @@ namespace BrewHelper.Models
 
             if (result.Succeeded)
             {
+                if (register.Roles == null)
+                    register.Roles = new List<ApplicationRoles>();
                 if (!register.Roles.Contains(ApplicationRoles.User))
                     register.Roles.Add(ApplicationRoles.User);
                 await userManager.AddToRolesAsync(user, register.Roles.Select(r => r.ToString()).ToArray());
@@ -138,9 +142,21 @@ namespace BrewHelper.Models
         public async Task<UserDTO> UpdateUserRoles(UserDTO user)
         {
             if (!await UserExists(user.Username)) return null;
-
             var appUser = await userManager.FindByNameAsync(user.Username);
-            await userManager.AddToRolesAsync(appUser, user.Roles.Select(r => r.ToString()).ToArray());
+            List<ApplicationRoles> currentRoles = await GetUserRoles(appUser);
+            if (user.Roles.Count != currentRoles.Count || !user.Roles.All(currentRoles.Contains))
+            {
+                List<ApplicationRoles> newRoles = user.Roles.Where(r => !currentRoles.Contains(r)).ToList();
+                List<ApplicationRoles> removedRoles = currentRoles.Where(r => !user.Roles.Contains(r)).ToList();
+                if (newRoles.Count > 0)
+                {
+                    await userManager.AddToRolesAsync(appUser, newRoles.Select(r => r.ToString()).ToArray());
+                }
+                if (removedRoles.Count > 0)
+                {
+                    await userManager.RemoveFromRolesAsync(appUser, removedRoles.Select(r => r.ToString()).ToArray());
+                }
+            }
             List<ApplicationRoles> roles = await GetUserRoles(appUser);
             return new UserDTO { Username = user.Username, Email = user.Email, Roles = roles };
         }

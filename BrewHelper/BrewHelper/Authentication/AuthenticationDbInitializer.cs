@@ -38,5 +38,24 @@ namespace BrewHelper.Authentication
                 }
             }
         }
+
+        public static void SeedTestUsers(UserManager<ApplicationUser> userManager)
+        {
+            if (userManager.FindByNameAsync("User").Result == null)
+            {
+                ApplicationUser user = new ApplicationUser
+                {
+                    UserName = "User",
+                    Email = "user@brewhelper.nl",
+                };
+
+                IdentityResult result = userManager.CreateAsync(user, "BrewHelperUser1!").Result;
+
+                if (result.Succeeded)
+                {
+                    userManager.AddToRolesAsync(user, new string[] { ApplicationRoles.User.ToString() }).Wait();
+                }
+            }
+        }
     }
 }

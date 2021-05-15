@@ -25,9 +25,23 @@ namespace BrewHelperTests.Controllers
       : base(fixture) { }
 
         [Fact]
+        public async Task Get_Admin_Should_Retrieve_Recipes()
+        {
+            var response = await _adminClient.GetAsync("/api/Recipes");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            recipes.Items.Should().NotBeEmpty();
+            //Related values should be null on multiple
+            recipes.Items[0].Mashing.Should().BeNull();
+            recipes.Items[0].Boiling.Should().BeNull();
+            recipes.Items[0].Yeasting.Should().BeNull();
+        }
+
+        [Fact]
         public async Task Get_Should_Retrieve_Recipes()
         {
-            var response = await _client.GetAsync("/api/Recipes");
+            var response = await _userClient.GetAsync("/api/Recipes");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -41,7 +55,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Limit_Recipes()
         {
-            var response = await _client.GetAsync("/api/Recipes?limit=1");
+            var response = await _userClient.GetAsync("/api/Recipes?limit=1");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -54,7 +68,7 @@ namespace BrewHelperTests.Controllers
         public async Task Get_Should_Retrieve_Name_Recipes()
         {
             string name = TestDataSeeder.Recipes.First().Name;
-            var response = await _client.GetAsync($"/api/Recipes?Name={name}");
+            var response = await _userClient.GetAsync($"/api/Recipes?Name={name}");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -65,7 +79,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Id_Recipes()
         {
-            var response = await _client.GetAsync("/api/Recipes?Id=1");
+            var response = await _userClient.GetAsync("/api/Recipes?Id=1");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -78,7 +92,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Ids_Recipes()
         {
-            var response = await _client.GetAsync("/api/Recipes?Id=1&Id=2");
+            var response = await _userClient.GetAsync("/api/Recipes?Id=1&Id=2");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -90,14 +104,14 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Id_BadRequest_Recipes()
         {
-            var response = await _client.GetAsync("/api/Recipes?Id=Blabla");
+            var response = await _userClient.GetAsync("/api/Recipes?Id=Blabla");
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Get_Should_Retrieve_Pages_Recipes()
         {
-            var response1 = await _client.GetAsync("/api/Recipes?limit=1&Page=1");
+            var response1 = await _userClient.GetAsync("/api/Recipes?limit=1&Page=1");
             response1.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var RecipesPage1 = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response1.Content.ReadAsStringAsync());
@@ -105,7 +119,7 @@ namespace BrewHelperTests.Controllers
             RecipesPage1.CurrentPage.Should().Be(1);
             RecipeDTO r1 = RecipesPage1.Items.First();
 
-            var response2 = await _client.GetAsync("/api/Recipes?limit=1&Page=2");
+            var response2 = await _userClient.GetAsync("/api/Recipes?limit=1&Page=2");
             response2.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var RecipesPage2 = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response2.Content.ReadAsStringAsync());
@@ -119,21 +133,21 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_BadRequest_Pages_Recipes()
         {
-            var response1 = await _client.GetAsync("/api/Recipes?Page=dsa");
+            var response1 = await _userClient.GetAsync("/api/Recipes?Page=dsa");
             response1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Get_Should_Retrieve_BadRequest_Limit_Recipes()
         {
-            var response1 = await _client.GetAsync("/api/Recipes?limit=dsa");
+            var response1 = await _userClient.GetAsync("/api/Recipes?limit=dsa");
             response1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Get_Should_Retrieve_Recipe()
         {
-            var response = await _client.GetAsync("/api/Recipes/1");
+            var response = await _userClient.GetAsync("/api/Recipes/1");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var recipe = JsonConvert.DeserializeObject<RecipeDTO>(await response.Content.ReadAsStringAsync());
@@ -152,21 +166,21 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_NotFound()
         {
-            var response = await _client.GetAsync("/api/Recipes/99999999");
+            var response = await _userClient.GetAsync("/api/Recipes/99999999");
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
         public async Task Get_Should_Retrieve_BadRequest()
         {
-            var response = await _client.GetAsync("/api/Recipes/Test");
+            var response = await _userClient.GetAsync("/api/Recipes/Test");
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Put_Should_Update_Recipe()
         {
-            var recipeResponse = await _client.GetAsync("/api/Recipes/1");
+            var recipeResponse = await _userClient.GetAsync("/api/Recipes/1");
             RecipeDTO recipe = JsonConvert.DeserializeObject<RecipeDTO>(await recipeResponse.Content.ReadAsStringAsync());
 
             string newStepDescString = "This is a new description";
@@ -184,7 +198,7 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(recipe);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PutAsync("/api/Recipes/1", stringContent);
+            var response = await _userClient.PutAsync("/api/Recipes/1", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             RecipeDTO returnedRecipe = JsonConvert.DeserializeObject<RecipeDTO>(await response.Content.ReadAsStringAsync());
 
@@ -202,7 +216,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Put_Should_Return_BadRequest()
         {
-            var recipeResponse = await _client.GetAsync("/api/Recipes/1");
+            var recipeResponse = await _userClient.GetAsync("/api/Recipes/1");
             RecipeDTO recipe = JsonConvert.DeserializeObject<RecipeDTO>(await recipeResponse.Content.ReadAsStringAsync());
 
             recipe.Description = "new";
@@ -210,14 +224,14 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(recipe);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PutAsync("/api/Recipes/2", stringContent);
+            var response = await _userClient.PutAsync("/api/Recipes/2", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Put_Should_Return_NotFound()
         {
-            var recipeResponse = await _client.GetAsync("/api/Recipes/1");
+            var recipeResponse = await _userClient.GetAsync("/api/Recipes/1");
             RecipeDTO recipe = JsonConvert.DeserializeObject<RecipeDTO>(await recipeResponse.Content.ReadAsStringAsync());
 
             recipe.Id = long.MaxValue;
@@ -225,7 +239,7 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(recipe);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PutAsync($"/api/Recipes/{long.MaxValue}", stringContent);
+            var response = await _userClient.PutAsync($"/api/Recipes/{long.MaxValue}", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
@@ -253,7 +267,7 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(newRecipe);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PostAsync($"/api/Recipes", stringContent);
+            var response = await _userClient.PostAsync($"/api/Recipes", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             RecipeDTO recipe = JsonConvert.DeserializeObject<RecipeDTO>(await response.Content.ReadAsStringAsync());
             recipe.Name.Should().Be(newRecipe.Name);
@@ -287,7 +301,7 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(newRecipe);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PostAsync($"/api/Recipes", stringContent);
+            var response = await _userClient.PostAsync($"/api/Recipes", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.Conflict);
         }
 
@@ -314,7 +328,7 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(newRecipe);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PostAsync($"/api/Recipes", stringContent);
+            var response = await _userClient.PostAsync($"/api/Recipes", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
@@ -343,13 +357,13 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(newRecipe);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PostAsync("/api/Recipes", stringContent);
+            var response = await _userClient.PostAsync("/api/Recipes", stringContent);
             RecipeDTO recipe = JsonConvert.DeserializeObject<RecipeDTO>(await response.Content.ReadAsStringAsync());
 
-            var deleteResponse = await _client.DeleteAsync($"/api/Recipes/{recipe.Id}");
+            var deleteResponse = await _userClient.DeleteAsync($"/api/Recipes/{recipe.Id}");
             deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var doubleDeleteResponse = await _client.DeleteAsync($"/api/Recipes/{recipe.Id}");
+            var doubleDeleteResponse = await _userClient.DeleteAsync($"/api/Recipes/{recipe.Id}");
             doubleDeleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }

@@ -25,9 +25,19 @@ namespace BrewHelperTests.Controllers
       : base(fixture) { }
 
         [Fact]
+        public async Task Get_Admin_Should_Retrieve_Ingredients()
+        {
+            var response = await _adminClient.GetAsync("/api/Ingredients");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            Ingredients.Items.Should().NotBeEmpty();
+        }
+
+        [Fact]
         public async Task Get_Should_Retrieve_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients");
+            var response = await _userClient.GetAsync("/api/Ingredients");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -37,7 +47,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Limit_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?limit=2");
+            var response = await _userClient.GetAsync("/api/Ingredients?limit=2");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -50,7 +60,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Pages_Ingredients()
         {
-            var response1 = await _client.GetAsync("/api/Ingredients?limit=1&Page=1");
+            var response1 = await _userClient.GetAsync("/api/Ingredients?limit=1&Page=1");
             response1.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var IngredientsPage1 = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response1.Content.ReadAsStringAsync());
@@ -58,7 +68,7 @@ namespace BrewHelperTests.Controllers
             IngredientsPage1.CurrentPage.Should().Be(1);
             Ingredient ing1 = IngredientsPage1.Items.First();
 
-            var response2 = await _client.GetAsync("/api/Ingredients?limit=1&Page=2");
+            var response2 = await _userClient.GetAsync("/api/Ingredients?limit=1&Page=2");
             response2.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var IngredientsPage2 = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response2.Content.ReadAsStringAsync());
@@ -72,21 +82,21 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_BadRequest_Pages_Ingredients()
         {
-            var response1 = await _client.GetAsync("/api/Ingredients?Page=dsa");
+            var response1 = await _userClient.GetAsync("/api/Ingredients?Page=dsa");
             response1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Get_Should_Retrieve_BadRequest_Limit_Ingredients()
         {
-            var response1 = await _client.GetAsync("/api/Ingredients?limit=dsa");
+            var response1 = await _userClient.GetAsync("/api/Ingredients?limit=dsa");
             response1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Get_Should_Retrieve_Name_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?Name=Hop");
+            var response = await _userClient.GetAsync("/api/Ingredients?Name=Hop");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -97,7 +107,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Type_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?Types=Hop");
+            var response = await _userClient.GetAsync("/api/Ingredients?Types=Hop");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -108,7 +118,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Types_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?Types=Hop&Types=Herb");
+            var response = await _userClient.GetAsync("/api/Ingredients?Types=Hop&Types=Herb");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -119,14 +129,14 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Type_BadRequest_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?Types=Blabla");
+            var response = await _userClient.GetAsync("/api/Ingredients?Types=Blabla");
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Get_Should_Retrieve_Id_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?Id=1");
+            var response = await _userClient.GetAsync("/api/Ingredients?Id=1");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -139,7 +149,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Ids_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?Id=1&Id=2");
+            var response = await _userClient.GetAsync("/api/Ingredients?Id=1&Id=2");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -151,14 +161,14 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Id_BadRequest_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?Id=Blabla");
+            var response = await _userClient.GetAsync("/api/Ingredients?Id=Blabla");
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Get_Should_Retrieve_InStock_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?InStock=true");
+            var response = await _userClient.GetAsync("/api/Ingredients?InStock=true");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -170,7 +180,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_Instock_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?InStock=false");
+            var response = await _userClient.GetAsync("/api/Ingredients?InStock=false");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
@@ -182,14 +192,14 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_InStock_BadRequest_Ingredients()
         {
-            var response = await _client.GetAsync("/api/Ingredients?InStock=Blabla");
+            var response = await _userClient.GetAsync("/api/Ingredients?InStock=Blabla");
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Get_Should_Retrieve_Ingredient()
         {
-            var response = await _client.GetAsync("/api/Ingredients/1");
+            var response = await _userClient.GetAsync("/api/Ingredients/1");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var Ingredient = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
@@ -199,21 +209,21 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Get_Should_Retrieve_NotFound()
         {
-            var response = await _client.GetAsync("/api/Ingredients/99999999");
+            var response = await _userClient.GetAsync("/api/Ingredients/99999999");
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
         [Fact]
         public async Task Get_Should_Retrieve_BadRequest()
         {
-            var response = await _client.GetAsync("/api/Ingredients/Test");
+            var response = await _userClient.GetAsync("/api/Ingredients/Test");
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Put_Should_Update_Ingredient()
         {
-            var IngredientResponse = await _client.GetAsync("/api/Ingredients/1");
+            var IngredientResponse = await _userClient.GetAsync("/api/Ingredients/1");
             Ingredient Ingredient = JsonConvert.DeserializeObject<Ingredient>(await IngredientResponse.Content.ReadAsStringAsync());
 
             string newDesc = "This is a new description";
@@ -226,7 +236,7 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(Ingredient);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PutAsync("/api/Ingredients/1", stringContent);
+            var response = await _userClient.PutAsync("/api/Ingredients/1", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             Ingredient returnedIngredient = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
 
@@ -240,7 +250,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Put_Should_Return_BadRequest()
         {
-            var IngredientResponse = await _client.GetAsync("/api/Ingredients/1");
+            var IngredientResponse = await _userClient.GetAsync("/api/Ingredients/1");
             Ingredient Ingredient = JsonConvert.DeserializeObject<Ingredient>(await IngredientResponse.Content.ReadAsStringAsync());
 
             Ingredient.Description = "new";
@@ -248,14 +258,14 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(Ingredient);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PutAsync("/api/Ingredients/2", stringContent);
+            var response = await _userClient.PutAsync("/api/Ingredients/2", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
         public async Task Put_Should_Return_NotFound()
         {
-            var IngredientResponse = await _client.GetAsync("/api/Ingredients/1");
+            var IngredientResponse = await _userClient.GetAsync("/api/Ingredients/1");
             Ingredient Ingredient = JsonConvert.DeserializeObject<Ingredient>(await IngredientResponse.Content.ReadAsStringAsync());
 
             Ingredient.Id = long.MaxValue;
@@ -263,7 +273,7 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(Ingredient);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PutAsync($"/api/Ingredients/{long.MaxValue}", stringContent);
+            var response = await _userClient.PutAsync($"/api/Ingredients/{long.MaxValue}", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
@@ -280,7 +290,7 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(newIngredient);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PostAsync($"/api/Ingredients", stringContent);
+            var response = await _userClient.PostAsync($"/api/Ingredients", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.Created);
             Ingredient ing = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
             ing.Name.Should().Be(newIngredient.Name);
@@ -291,7 +301,7 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Post_Should_Return_Conflict()
         {
-            var res = await _client.GetAsync("/api/Ingredients/1");
+            var res = await _userClient.GetAsync("/api/Ingredients/1");
             Ingredient ing = JsonConvert.DeserializeObject<Ingredient>(await res.Content.ReadAsStringAsync());
 
             Ingredient newIngredient = new Ingredient
@@ -304,7 +314,7 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(newIngredient);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PostAsync($"/api/Ingredients", stringContent);
+            var response = await _userClient.PostAsync($"/api/Ingredients", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.Conflict);
         }
 
@@ -320,7 +330,7 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(newIngredient);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PostAsync($"/api/Ingredients", stringContent);
+            var response = await _userClient.PostAsync($"/api/Ingredients", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
@@ -337,13 +347,13 @@ namespace BrewHelperTests.Controllers
             var json = JsonConvert.SerializeObject(newIngredient);
             var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _client.PostAsync("/api/Ingredients", stringContent);
+            var response = await _userClient.PostAsync("/api/Ingredients", stringContent);
             Ingredient ing = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
 
-            var deleteResponse = await _client.DeleteAsync($"/api/Ingredients/{ing.Id}");
+            var deleteResponse = await _userClient.DeleteAsync($"/api/Ingredients/{ing.Id}");
             deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var doubleDeleteResponse = await _client.DeleteAsync($"/api/Ingredients/{ing.Id}");
+            var doubleDeleteResponse = await _userClient.DeleteAsync($"/api/Ingredients/{ing.Id}");
             doubleDeleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
     }

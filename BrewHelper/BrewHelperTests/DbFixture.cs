@@ -1,4 +1,5 @@
 ﻿using BrewHelper;
+using BrewHelper.Authentication;
 using BrewHelper.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,20 +14,29 @@ namespace BrewHelperTests
     public class DbFixture : IDisposable
     {
         private readonly BrewhelperContext _dbContext;
+        private readonly AuthenticationDbContext _authDbContext;
         public readonly string TestDbName = $"BrewHelperTest-{Guid.NewGuid()}";
+        public readonly string TestAuthDbName = $"BrewHelperTestUsers-{Guid.NewGuid()}";
         public readonly string ConnString;
+        public readonly string AuthConnString;
 
         private bool _disposed;
 
         public DbFixture()
         {
             ConnString = $"Server=localhost,1433;Database={TestDbName};User=sa;Password=BrewHelperDev1!;";
+            AuthConnString = $"Server=localhost,1433;Database={TestAuthDbName};User=sa;Password=BrewHelperDev1!;";
 
             var builder = new DbContextOptionsBuilder<BrewhelperContext>();
+            var userBuilder = new DbContextOptionsBuilder<AuthenticationDbContext>();
 
             builder.UseSqlServer(ConnString);
             _dbContext = new BrewhelperContext(builder.Options);
             _dbContext.Database.Migrate();
+
+            userBuilder.UseSqlServer(AuthConnString);
+            _authDbContext = new AuthenticationDbContext(userBuilder.Options);
+            _authDbContext.Database.Migrate();
 
             TestDataSeeder.Seed(_dbContext);
         }

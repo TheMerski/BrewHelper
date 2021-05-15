@@ -26,6 +26,7 @@ namespace BrewHelper
 
         public IConfiguration Configuration { get; }
 
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -123,7 +124,7 @@ namespace BrewHelper
 
 
                 InitialDataSeeder.Seed(service);
-            }
+            } 
             else
             {
                 app.UseCors("CorsPolicy");
@@ -147,6 +148,11 @@ namespace BrewHelper
             app.UseOpenApi(); // serve OpenAPI/Swagger documents
             app.UseSwaggerUi3(); // serve Swagger UI
             app.UseReDoc(); // serve ReDoc UI
+
+            if (env.IsEnvironment("Test"))
+            {
+                AuthenticationDbInitializer.SeedTestUsers(userManager);
+            }
         }
     }
 }

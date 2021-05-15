@@ -31,7 +31,9 @@ namespace BrewHelperTests
                 config.AddInMemoryCollection(new[]
                 {
                     new KeyValuePair<string, string>(
-                        "ConnectionStrings:SQL", _dbFixture.ConnString)
+                        "ConnectionStrings:SQL", _dbFixture.ConnString),
+                    new KeyValuePair<string, string>(
+                        "ConnectionStrings:Authentication", _dbFixture.AuthConnString)
                 });
             });
         }

@@ -82,19 +82,20 @@ namespace BrewHelper.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] RegisterDTO model)
+        public async Task<ActionResult<UserDTO>> Create([FromBody] RegisterDTO model)
         {
             if (await userModel.UserExists(model.Username))
                 return Conflict();
 
             if (ModelState.IsValid)
             {
-                return Ok(await userModel.CreateUser(model));
+                UserDTO created = await userModel.CreateUser(model);
+                if (created != null)
+                {
+                    return Created("GetUser", created);
+                }
             }
-            else
-            {
-                return BadRequest();
-            }
+            return BadRequest();
         }
 
         // DELETE: api/Users/1
