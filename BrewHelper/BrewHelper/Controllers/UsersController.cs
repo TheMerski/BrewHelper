@@ -65,7 +65,7 @@ namespace BrewHelper.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<ActionResult<RecipeDTO>> PutUser(string id, UserDTO user)
+        public async Task<ActionResult<UserDTO>> PutUser(string id, UserDTO user)
         {
             if (id != user.Id)
             {

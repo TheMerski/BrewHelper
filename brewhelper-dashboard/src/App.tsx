@@ -21,32 +21,37 @@ const App = () => (
     authProvider={authProvider}
     dataProvider={devDataProvider}
   >
-    {/* <Resource
+    {(permissions: string[]) => [
+      <Resource
+        name="Ingredients"
+        list={IngredientList}
+        edit={IngredientEdit}
+        create={IngredientCreate}
+      />,
+      <Resource
+        name="Recipes"
+        list={RecipeList}
+        edit={RecipeEdit}
+        create={RecipeCreate}
+      />,
+      permissions.includes('Admin') ? (
+        <Resource
+          name="Users"
+          list={UserList}
+          edit={UserEdit}
+          create={UserCreate}
+        />
+      ) : null,
+    ]}
+  </Admin>
+);
+
+export default App;
+
+/* <Resource
       name="posts"
       list={PostList}
       edit={PostEdit}
       create={PostCreate}
       icon={PostIcon}
-    /> */}
-    <Resource
-      name="Ingredients"
-      list={IngredientList}
-      edit={IngredientEdit}
-      create={IngredientCreate}
-    />
-    <Resource
-      name="Recipes"
-      list={RecipeList}
-      edit={RecipeEdit}
-      create={RecipeCreate}
-    />
-    <Resource
-      name="Users"
-      list={UserList}
-      edit={UserEdit}
-      create={UserCreate}
-    />
-  </Admin>
-);
-
-export default App;
+    /> */

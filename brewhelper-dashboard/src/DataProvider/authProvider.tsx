@@ -1,5 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
-
+import jwt_decode from 'jwt-decode';
 const apiUrl = 'https://localhost:5001/api';
 
 export default {
@@ -21,7 +21,14 @@ export default {
         return response.json();
       })
       .then((auth: Auth) => {
+        const decodedToken = jwt_decode(auth.token) as any;
         localStorage.setItem('auth', JSON.stringify(auth));
+        localStorage.setItem(
+          'permissions',
+          decodedToken[
+            'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+          ]
+        );
       })
       .catch((err) => {
         throw new Error(err.message);
@@ -31,6 +38,7 @@ export default {
   // called when the user clicks on the logout button
   logout: () => {
     localStorage.removeItem('auth');
+    localStorage.removeItem('permissions');
     return Promise.resolve();
   },
 
@@ -38,6 +46,7 @@ export default {
   checkError: (response: any) => {
     if (response.status === 401 || response.status === 403) {
       localStorage.removeItem('auth');
+      localStorage.removeItem('permissions');
       return Promise.reject();
     }
     return Promise.resolve();
@@ -47,7 +56,15 @@ export default {
     return localStorage.getItem('auth') ? Promise.resolve() : Promise.reject();
   },
   // called when the user navigates to a new location, to check for permissions / roles
-  getPermissions: () => Promise.resolve(),
+  getPermissions: () => {
+    const roles = localStorage.getItem('permissions')?.split(',');
+    if (roles != null) {
+      return Promise.resolve(roles);
+    } else {
+      return Promise.reject();
+    }
+    //return roles ? Promise.resolve(roles) : Promise.reject();
+  },
 };
 
 export interface Auth {
