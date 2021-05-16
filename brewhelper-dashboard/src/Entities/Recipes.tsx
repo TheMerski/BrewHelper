@@ -97,10 +97,7 @@ function recipeStepEditFields(source: string, time: string) {
           >
             <AutocompleteInput optionText="name" />
           </ReferenceInput>
-          <>
-            <NumberInput source="weight" label="Weight (g)" />
-            
-          </>
+          <NumberInput source="weight" label="Weight (g)" />
           <NumberInput source="addAfter" label={`Add after (${time})`} />
         </SimpleFormIterator>
       </ArrayInput>

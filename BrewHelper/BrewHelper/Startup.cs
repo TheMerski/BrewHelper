@@ -33,9 +33,6 @@ namespace BrewHelper
             string connection = Configuration.GetConnectionString("SQL");
             string authenticationConnection = Configuration.GetConnectionString("Authentication");
 
-            Console.WriteLine(connection);
-            Console.WriteLine(authenticationConnection);
-
             services.AddTransient<BrewhelperContext>();
             services.AddDbContext<BrewhelperContext>(opt =>
                                            opt.UseSqlServer(connection));
@@ -81,7 +78,7 @@ namespace BrewHelper
                     .AllowCredentials());
 
                 options.AddPolicy("DevPolicy", builder =>
-                    builder.WithOrigins("http://localhost:5000")
+                    builder.WithOrigins(new string[] { "http://localhost:3000", "http://localhost:5000" })
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials());
