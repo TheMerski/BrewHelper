@@ -110,4 +110,16 @@ export default {
       body: JSON.stringify(params.data),
     }).then(({ json }) => ({ data: json }));
   },
+
+  updatePassword: ({ CurrentPassword, NewPassword }: any) => {
+    return httpClient(`${apiUrl}/Profile/updatePassword`, {
+      method: 'POST',
+      body: JSON.stringify({ CurrentPassword, NewPassword }),
+    }).then((res) => {
+      if (res.status === 200) {
+        return Promise.resolve({ data: true });
+      }
+      return Promise.reject();
+    });
+  },
 };

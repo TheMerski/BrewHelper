@@ -22,6 +22,7 @@ import {
   required,
   minLength,
 } from 'react-admin';
+import { validatePassword } from '../validators/PasswordValidation';
 
 const UserTitle: React.FC<{ record?: any }> = ({ record = {} }) => {
   return <span>User: {record ? `"${record.username}"` : ''}</span>;
@@ -62,22 +63,7 @@ export const UserEdit = (props: any) => (
   </Edit>
 );
 
-const passwordValidation = (value: string) => {
-  if (!/[a-z]/.test(value)) {
-    return 'Password must contain at least one lowercase letter';
-  }
-  if (!/[A-Z]/.test(value)) {
-    return 'Password must contain at least one uppercase letter';
-  }
-  if (!/[0-9]/.test(value)) {
-    return 'Password must contain at least one number';
-  }
-  if (!/[^a-zA-Z\d\s:]/.test(value)) {
-    return 'Password must contain at least one non alphanumeric character';
-  }
-  return undefined;
-};
-const validatePassword = [required(), minLength(6), passwordValidation];
+
 
 export const UserCreate = (props: any) => (
   <Create {...props}>
