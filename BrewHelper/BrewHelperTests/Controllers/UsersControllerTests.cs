@@ -435,28 +435,5 @@ namespace BrewHelperTests.Controllers
             var response = await _adminClient.DeleteAsync($"/api/Users/{admin.Id}");
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
-
-        //[Fact]
-        //public async Task Delete_Should_Return_Delete()
-        //{
-        //    Ingredient newIngredient = new Ingredient
-        //    {
-        //        Name = "delete Test Ingredient",
-        //        Description = "delete test Ingredient 2",
-        //        Type = Ingredient.IngredientType.Malt
-        //    };
-
-        //    var json = JsonConvert.SerializeObject(newIngredient);
-        //    var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
-
-        //    var response = await _userClient.PostAsync("/api/Ingredients", stringContent);
-        //    Ingredient ing = JsonSerializer.Deserialize<Ingredient>(await response.Content.ReadAsStringAsync());
-
-        //    var deleteResponse = await _userClient.DeleteAsync($"/api/Ingredients/{ing.Id}");
-        //    deleteResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-
-        //    var doubleDeleteResponse = await _userClient.DeleteAsync($"/api/Ingredients/{ing.Id}");
-        //    doubleDeleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
-        //}
     }
 }
