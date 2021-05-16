@@ -10,8 +10,6 @@ import {
   Create,
   required,
   Filter,
-  ReferenceInput,
-  SelectInput,
   AutocompleteArrayInput,
   NumberInput,
   NumberField,

@@ -5,7 +5,6 @@ import {
   TextField,
   Edit,
   NumberInput,
-  SimpleForm,
   TextInput,
   ArrayInput,
   SimpleFormIterator,
@@ -13,8 +12,6 @@ import {
   Create,
   Filter,
   AutocompleteInput,
-  NumberField,
-  ReferenceField,
   TabbedForm,
   FormTab,
 } from 'react-admin';

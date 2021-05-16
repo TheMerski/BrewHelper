@@ -1,7 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
 import jwt_decode from 'jwt-decode';
-import { Logout } from 'ra-ui-materialui';
-import { AuthProvider } from 'react-admin';
 const apiUrl = 'https://localhost:5001/api';
 
 export default {

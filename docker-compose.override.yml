@@ -6,6 +6,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
       - ConnectionStrings__SQL=Server=db;Database=BrewHelper;User=sa;Password=BrewHelperDev1!;
+      - ConnectionStrings__Authentication=Server=db;Database=BrewHelperUsers;User=sa;Password=BrewHelperDev1!;
     ports:
       - "80"
       - "443"

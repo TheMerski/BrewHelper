@@ -2,22 +2,25 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 5001
+EXPOSE 5002
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
-COPY ["BrewHelper/BrewHelper.csproj", "BrewHelper/"]
-RUN dotnet restore "BrewHelper/BrewHelper.csproj"
+
+COPY *.csproj ./
+RUN dotnet restore
+
 COPY . .
-WORKDIR "/src/BrewHelper"
-RUN dotnet build "BrewHelper.csproj" -c Release -o /app/build
+RUN dotnet build -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "BrewHelper.csproj" -c Release -o /app/publish
+RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN apt-get update && apt-get install -y \
+  curl
 RUN curl https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh > wait_for_it.sh
 ENTRYPOINT ["dotnet", "BrewHelper.dll"]

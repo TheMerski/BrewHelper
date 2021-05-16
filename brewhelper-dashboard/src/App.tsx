@@ -1,10 +1,6 @@
 // in src/App.js
-import * as React from 'react';
 import { Route } from 'react-router';
-import { Admin, Resource, ListGuesser, EditGuesser } from 'react-admin';
-import { PostCreate, PostEdit, PostList } from './example/posts';
-import PostIcon from '@material-ui/icons/Book';
-import UserIcon from '@material-ui/icons/Group';
+import { Admin, Resource } from 'react-admin';
 import Dashboard from './Dashboard';
 import authProvider from './DataProvider/authProvider';
 import devDataProvider from './DataProvider/BrewHelperDataProvider';

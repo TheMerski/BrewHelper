@@ -4,23 +4,12 @@ import {
   Datagrid,
   TextField,
   Edit,
-  NumberInput,
   SimpleForm,
   TextInput,
-  ArrayInput,
-  SimpleFormIterator,
-  ReferenceInput,
   Create,
   Filter,
-  AutocompleteInput,
-  NumberField,
-  ReferenceField,
-  TabbedForm,
-  FormTab,
   SelectArrayInput,
   EmailField,
-  required,
-  minLength,
 } from 'react-admin';
 import { validatePassword } from '../validators/PasswordValidation';
 

@@ -1,17 +1,11 @@
-import { bool } from 'prop-types';
-import React, { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
-  FileInput,
-  TextInput,
   SimpleForm,
-  required,
-  useAuthProvider,
   useDataProvider,
   useNotify,
   SaveContextProvider,
   PasswordInput,
 } from 'react-admin';
-import { DataProvider } from 'react-admin';
 import { validatePassword } from './validators/PasswordValidation';
 
 export const ProfileEdit = ({ staticContext, ...props }: any) => {
