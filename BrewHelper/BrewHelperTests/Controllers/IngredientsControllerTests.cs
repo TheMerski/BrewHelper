@@ -25,6 +25,13 @@ namespace BrewHelperTests.Controllers
       : base(fixture) { }
 
         [Fact]
+        public async Task Unauthorized_Get_Should_Be_Unauthorized()
+        {
+            var response = await _unauthorizedClient.GetAsync("/api/Ingredients");
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
+        [Fact]
         public async Task Get_Admin_Should_Retrieve_Ingredients()
         {
             var response = await _adminClient.GetAsync("/api/Ingredients");

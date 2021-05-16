@@ -42,6 +42,12 @@ namespace BrewHelperTests.Controllers
             newUser.Roles.Count().Should().BeGreaterThan(1);
         }
 
+        [Fact]
+        public async Task Unauthorized_Get_Should_Be_Unauthorized()
+        {
+            var response = await _unauthorizedClient.GetAsync("/api/Users");
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
 
         [Fact]
         public async Task User_Get_Should_Be_Forbidden()
