@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import jwt_decode from 'jwt-decode';
-const apiUrl = 'https://localhost:5001/api';
+const apiUrl = '/api';
 
 export default {
   // called when the user attempts to log in

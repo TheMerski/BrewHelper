@@ -4,7 +4,7 @@ import { stringify } from 'query-string';
 import { CreateIngredientQueryFilter } from '../models/Ingredient';
 import { CreateRecipeQueryFilter } from '../models/Recipe';
 
-const apiUrl = 'https://localhost:5001/api';
+const apiUrl = '/api';
 
 const httpClient = (apiUrl: string, options: any = {}) => {
   if (!options.headers) {
