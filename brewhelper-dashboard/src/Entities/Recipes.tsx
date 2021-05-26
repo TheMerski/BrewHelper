@@ -15,6 +15,7 @@ import {
   TabbedForm,
   FormTab,
 } from 'react-admin';
+import { Ingredient } from '../models/Ingredient';
 
 const RecipeTitle: React.FC<{ record?: any }> = ({ record = {} }) => {
   return <span>Recipe: {record ? `"${record.name}"` : ''}</span>;
@@ -48,6 +49,23 @@ export const RecipeCreate = (props: any) => (
 
 const IngredientFilter = (filter: string) => {
   return { Name: filter };
+};
+
+const IngredientOptionText = (choice: any) => (
+  <span style={{ color: choice.record.inStock > 0 ? 'black' : 'grey' }}>
+    {choice.record.name} ({choice.record.inStock} g)
+  </span>
+);
+
+const IngredientOptionInputText = (choice: Ingredient | any) =>
+  `${choice.name} (${choice.inStock} g)`;
+
+const IngredientOptionOptions = (choice: Ingredient | any) => {
+  return { color: 'secondary' };
+};
+
+const IngredientOptionMatch = (filter: string, choice: any) => {
+  return true;
 };
 
 const recipeEditFields = (
@@ -99,10 +117,14 @@ function recipeStepEditFields(source: string, time: string) {
             reference="Ingredients"
             filterToQuery={IngredientFilter}
           >
-            <AutocompleteInput optionText="name" />
+            <AutocompleteInput
+              optionText={<IngredientOptionText />}
+              inputText={IngredientOptionInputText}
+              matchSuggestion={IngredientOptionMatch}
+            />
           </ReferenceInput>
-          <NumberInput source="weight" label="Weight (g)" />
-          <NumberInput source="addAfter" label={`Add after (${time})`} />
+          <NumberInput source="weight" label="Weight (g)" required  />
+          <NumberInput source="addAfter" label={`Add after (${time})`} defaultValue='0' required/>
         </SimpleFormIterator>
       </ArrayInput>
     </>
