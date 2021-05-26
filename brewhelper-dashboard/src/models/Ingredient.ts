@@ -3,6 +3,7 @@ export interface Ingredient {
   name: string;
   description?: string;
   type: IngredientType;
+  inStock: number;
 }
 
 export enum IngredientType {
