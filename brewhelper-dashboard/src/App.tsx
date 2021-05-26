@@ -22,7 +22,7 @@ const App = () => (
     customRoutes={[
       <Route key="my-profile" path="/my-profile" component={ProfileEdit} />,
     ]}
-    appLayout={MyLayout}
+    layout={MyLayout}
   >
     {(permissions: string[]) => [
       <Resource

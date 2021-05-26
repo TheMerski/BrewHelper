@@ -46,6 +46,9 @@ export const RecipeCreate = (props: any) => (
 	<Create {...props}>{recipeEditFields}</Create>
 );
 
+const IngredientFilter = (filter: string) => {
+  return { Name: filter };
+};
 
 const recipeEditFields = (
   <TabbedForm>
@@ -94,6 +97,7 @@ function recipeStepEditFields(source: string, time: string) {
             label="Ingredient"
             source="ingredientId"
             reference="Ingredients"
+            filterToQuery={IngredientFilter}
           >
             <AutocompleteInput optionText="name" />
           </ReferenceInput>
