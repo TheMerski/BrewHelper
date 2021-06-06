@@ -138,6 +138,31 @@ namespace BrewHelperTests.Controllers
         }
 
         [Fact]
+        public async Task Get_Should_Retrieve_inStock_Recipes()
+        {
+            string[] types = Enum.GetNames(typeof(Ingredient.IngredientType));
+            string instock = "";
+            foreach (string type in types)
+            {
+                instock += "&InStock=" + type;
+            }
+            instock = instock[1..];
+            var response = await _userClient.GetAsync($"/api/Recipes?{instock}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            recipes.Items.Should().NotBeEmpty();
+            foreach (RecipeDTO recipe in recipes.Items)
+            {
+                var res = await _userClient.GetAsync($"/api/Recipes/{recipe.Id}");
+                var fullRecipe = JsonConvert.DeserializeObject<RecipeDTO>(await res.Content.ReadAsStringAsync());
+                fullRecipe.Mashing.Ingredients.Should().OnlyContain(ri => ri.Weight <= ri.InStock);
+                fullRecipe.Boiling.Ingredients.Should().OnlyContain(ri => ri.Weight <= ri.InStock);
+                fullRecipe.Yeasting.Ingredients.Should().OnlyContain(ri => ri.Weight <= ri.InStock);
+            }
+        }
+
+        [Fact]
         public async Task Get_Should_Retrieve_BadRequest_Pages_Recipes()
         {
             var response1 = await _userClient.GetAsync("/api/Recipes?Page=dsa");
@@ -148,6 +173,13 @@ namespace BrewHelperTests.Controllers
         public async Task Get_Should_Retrieve_BadRequest_Limit_Recipes()
         {
             var response1 = await _userClient.GetAsync("/api/Recipes?limit=dsa");
+            response1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task Get_Should_Retrieve_BadRequest_inStock_Recipes()
+        {
+            var response1 = await _userClient.GetAsync("/api/Recipes?inStock=dsa");
             response1.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
@@ -282,6 +314,8 @@ namespace BrewHelperTests.Controllers
             recipe.Mashing.Should().NotBeNull();
             recipe.Boiling.Should().NotBeNull();
             recipe.Yeasting.Should().NotBeNull();
+
+            await _userClient.DeleteAsync($"/api/Recipes/{recipe.Id}");
         }
 
         [Fact]

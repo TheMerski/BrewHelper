@@ -39,7 +39,7 @@ namespace BrewHelper.Controllers
                 return BadRequest();
             }
 
-            var recipes = await recipeModel.GetByPageAsync(urlQueryParameters.Limit, urlQueryParameters.Page, urlQueryParameters.Name, urlQueryParameters.Id, cancellationToken);
+            var recipes = await recipeModel.GetByPageAsync(urlQueryParameters.Limit, urlQueryParameters.Page, urlQueryParameters.Name, urlQueryParameters.Id, urlQueryParameters.InStock, cancellationToken);
 
             return Ok(recipes);
         }
@@ -113,7 +113,7 @@ namespace BrewHelper.Controllers
             return NotFound();
         }
 
-        public record UrlQueryParameters(int Limit = 50, int Page = 1, string Name = null, long[] Id = null);
+        public record UrlQueryParameters(int Limit = 50, int Page = 1, string Name = null, long[] Id = null, Ingredient.IngredientType[] InStock = null);
 
     }
 }

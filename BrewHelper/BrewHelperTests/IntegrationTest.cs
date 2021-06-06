@@ -18,13 +18,7 @@ namespace BrewHelperTests
     [Collection("Database")]
     public abstract class IntegrationTest : IAsyncLifetime, IClassFixture<BrewHelperWebApplicationFactory>
     {
-        private readonly Checkpoint _checkpoint = new Checkpoint
-        {
-            SchemasToInclude = new[] {
-            "Recipes"
-            },
-            WithReseed = true
-        };
+        private readonly Checkpoint _checkpoint;
         private Dictionary<string, string> _userTokens;
 
 
@@ -45,9 +39,24 @@ namespace BrewHelperTests
             _adminClient = _factory.CreateClient();
             _userClient = _factory.CreateClient();
             _unauthorizedClient = _factory.CreateClient();
-
-            //_checkpoint.Reset(factory._dbFixture.ConnString).Wait();
+            _checkpoint = new Checkpoint
+            {
+                TablesToIgnore = new string[] {
+                 "AspNetRoleClaims",
+                 "AspNetUserClaims",
+                 "AspNetUserLogins",
+                 "AspNetUserRoles",
+                 "AspNetUserTokens",
+                 "AspNetRoles",
+                 "AspNetUsers"
+                }
+            };
         }
+
+        //public async Task ResetDB()
+        //{
+        //    await _checkpoint.Reset(_factory._dbFixture.ConnString);
+        //}
 
         public async Task<string> GetTokenAsync(string username, string password)
         {

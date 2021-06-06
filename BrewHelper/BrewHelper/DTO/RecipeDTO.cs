@@ -152,6 +152,7 @@ namespace BrewHelper.Models
         {
             Id = rIngredient.Id;
             IngredientId = rIngredient.Ingredient.Id;
+            InStock = rIngredient.Ingredient.InStock;
             Weight = rIngredient.Weight;
             AddAfter = rIngredient.AddAfter;
         }
@@ -161,6 +162,10 @@ namespace BrewHelper.Models
         /// </summary>
         [Required]
         public long IngredientId { get; set; }
+        /// <summary>
+        /// Ammount of ingredient in stock (in grams)
+        /// </summary>
+        public long InStock { get; set; }
         /// <summary>
         /// The ammount needed (in grams)
         /// </summary>
