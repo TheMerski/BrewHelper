@@ -14,8 +14,10 @@ import {
   AutocompleteInput,
   TabbedForm,
   FormTab,
+  AutocompleteArrayInput,
 } from 'react-admin';
 import { Ingredient } from '../models/Ingredient';
+import { IngredientTypeChoices } from './ingredients';
 
 const RecipeTitle: React.FC<{ record?: any }> = ({ record = {} }) => {
   return <span>Recipe: {record ? `"${record.name}"` : ''}</span>;
@@ -25,6 +27,10 @@ function RecipeFilter(props: any) {
   return (
     <Filter {...props}>
       <TextInput label="Search" source="Name" alwaysOn />
+      <AutocompleteArrayInput
+        source="InStock"
+        choices={IngredientTypeChoices}
+      />
     </Filter>
   );
 }

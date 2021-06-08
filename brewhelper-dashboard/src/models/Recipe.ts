@@ -34,11 +34,3 @@ export interface RecipeIngredient {
   ingredient: Ingredient;
   weight: number;
 }
-
-export function CreateRecipeQueryFilter(filter: any): string {
-  let filterQuery = '';
-  if (typeof filter.Name != undefined && filter.Name != null) {
-    filterQuery += `&Name=${filter.Name}`;
-  }
-  return filterQuery;
-}

@@ -1,8 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { fetchUtils } from 'react-admin';
 import { stringify } from 'query-string';
-import { CreateIngredientQueryFilter } from '../models/Ingredient';
-import { CreateRecipeQueryFilter } from '../models/Recipe';
 
 const apiUrl = '/api';
 
@@ -28,11 +26,7 @@ export default {
       Limit: perPage,
     };
 
-    let filters = '';
-    if (resource === 'Ingredients')
-      filters = CreateIngredientQueryFilter(params.filter);
-    if (resource === 'Recipes')
-      filters = CreateRecipeQueryFilter(params.filter);
+    let filters = CreateFilterQuery(params.filter);
 
     const url = `${apiUrl}/${resource}?${stringify(query)}${filters}`;
 
@@ -127,3 +121,17 @@ export default {
     });
   },
 };
+
+function CreateFilterQuery(filter: any): string {
+  let filterQuery = '';
+  Object.entries(filter).forEach(([key, value]) => {
+    if (Array.isArray(value)) {
+      for (let item of value) {
+        filterQuery += `&${key}=${item.toString()}`;
+      }
+    } else {
+      filterQuery += `&${key}=${value}`;
+    }
+  });
+  return filterQuery;
+}
