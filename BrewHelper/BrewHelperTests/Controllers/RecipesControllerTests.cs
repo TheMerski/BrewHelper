@@ -161,6 +161,40 @@ namespace BrewHelperTests.Controllers
                 fullRecipe.Yeasting.Ingredients.Should().OnlyContain(ri => ri.Weight <= ri.InStock);
             }
         }
+        
+
+        [Theory]
+        [MemberData(nameof(GetTypes))]
+        public async Task Get_Should_Retrieve_One_inStock_Recipes(string type)
+        {
+            string instock = $"InStock={type}";
+            var response = await _userClient.GetAsync($"/api/Recipes?{instock}");
+            var ingResponse = await _userClient.GetAsync($"/api/Ingredients?Types={type}");
+
+            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await ingResponse.Content.ReadAsStringAsync());
+            long[] maltIds = Ingredients.Items.Select(i => i.Id).ToArray();
+
+            var recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            recipes.Items.Should().NotBeEmpty();
+            foreach (RecipeDTO recipe in recipes.Items)
+            {
+                var res = await _userClient.GetAsync($"/api/Recipes/{recipe.Id}");
+                var fullRecipe = JsonConvert.DeserializeObject<RecipeDTO>(await res.Content.ReadAsStringAsync());
+                //Check if all type items are inStock if present
+                if (fullRecipe.Mashing.Ingredients.Where(i => maltIds.Contains(i.IngredientId)).Count() >= 1)
+                {
+                    fullRecipe.Mashing.Ingredients.Where(i => maltIds.Contains(i.IngredientId)).Should().OnlyContain(ri => ri.Weight <= ri.InStock);
+                }
+                if (fullRecipe.Boiling.Ingredients.Where(i => maltIds.Contains(i.IngredientId)).Count() >= 1)
+                {
+                    fullRecipe.Boiling.Ingredients.Where(i => maltIds.Contains(i.IngredientId)).Should().OnlyContain(ri => ri.Weight <= ri.InStock);
+                }
+                if (fullRecipe.Yeasting.Ingredients.Where(i => maltIds.Contains(i.IngredientId)).Count() >= 1)
+                {
+                    fullRecipe.Yeasting.Ingredients.Where(i => maltIds.Contains(i.IngredientId)).Should().OnlyContain(ri => ri.Weight <= ri.InStock);
+                }
+            }
+        }
 
         [Fact]
         public async Task Get_Should_Retrieve_BadRequest_Pages_Recipes()
@@ -406,6 +440,17 @@ namespace BrewHelperTests.Controllers
 
             var doubleDeleteResponse = await _userClient.DeleteAsync($"/api/Recipes/{recipe.Id}");
             doubleDeleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
+
+        public static IEnumerable<object[]> GetTypes()
+        {
+            string[] types = Enum.GetNames(typeof(Ingredient.IngredientType));
+            List<object[]> objects = new List<object[]>();
+            foreach (string type in types)
+            {
+                objects.Add(new object[] { type });
+            }
+            return objects;
         }
     }
 }
