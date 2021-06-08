@@ -12,6 +12,7 @@ import {
 import { RecipeCreate, RecipeEdit, RecipeList } from './Entities/Recipes';
 import { UserCreate, UserEdit, UserList } from './Entities/Users';
 import { ProfileEdit } from './Profile';
+import PersonIcon from '@material-ui/icons/Person';
 import MyLayout from './Layout';
 
 const App = () => (
@@ -43,6 +44,7 @@ const App = () => (
           list={UserList}
           edit={UserEdit}
           create={UserCreate}
+          icon={PersonIcon}
         />
       ) : null,
     ]}

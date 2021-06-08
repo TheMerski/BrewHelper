@@ -16,7 +16,6 @@ namespace BrewHelperTests
         private readonly BrewhelperContext _dbContext;
         private readonly AuthenticationDbContext _authDbContext;
         public readonly string TestDbName = $"BrewHelperTest-{Guid.NewGuid()}";
-        public readonly string TestAuthDbName = $"BrewHelperTestUsers-{Guid.NewGuid()}";
         public readonly string ConnString;
         public readonly string AuthConnString;
 
@@ -25,7 +24,6 @@ namespace BrewHelperTests
         public DbFixture()
         {
             ConnString = $"Server=localhost,1433;Database={TestDbName};User=sa;Password=BrewHelperDev1!;";
-            AuthConnString = $"Server=localhost,1433;Database={TestAuthDbName};User=sa;Password=BrewHelperDev1!;";
 
             var builder = new DbContextOptionsBuilder<BrewhelperContext>();
             var userBuilder = new DbContextOptionsBuilder<AuthenticationDbContext>();
@@ -34,7 +32,7 @@ namespace BrewHelperTests
             _dbContext = new BrewhelperContext(builder.Options);
             _dbContext.Database.Migrate();
 
-            userBuilder.UseSqlServer(AuthConnString);
+            userBuilder.UseSqlServer(ConnString);
             _authDbContext = new AuthenticationDbContext(userBuilder.Options);
             _authDbContext.Database.Migrate();
 

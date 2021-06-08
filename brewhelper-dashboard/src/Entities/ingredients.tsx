@@ -17,7 +17,7 @@ import {
 } from 'react-admin';
 import { IngredientType } from '../models/Ingredient';
 
-const typeChoices = [
+export const IngredientTypeChoices = [
   { id: IngredientType.MALT, name: 'Malt' },
   { id: IngredientType.SUGAR, name: 'Sugar' },
   { id: IngredientType.HOP, name: 'Hop' },
@@ -33,7 +33,7 @@ function IngredientFilter(props: any) {
   return (
     <Filter {...props}>
       <TextInput label="Search" source="Name" alwaysOn />
-      <AutocompleteArrayInput source="type" choices={typeChoices} />
+      <AutocompleteArrayInput source="Types" choices={IngredientTypeChoices} />
       <BooleanInput source="InStock" />
     </Filter>
   );
@@ -66,7 +66,7 @@ const ingredientEditForm = (
     <NumberInput source="inStock" />
     <AutocompleteInput
       source="type"
-      choices={typeChoices}
+      choices={IngredientTypeChoices}
       validate={[required()]}
     />
   </SimpleForm>

@@ -33,7 +33,7 @@ namespace BrewHelperTests
                     new KeyValuePair<string, string>(
                         "ConnectionStrings:SQL", _dbFixture.ConnString),
                     new KeyValuePair<string, string>(
-                        "ConnectionStrings:Authentication", _dbFixture.AuthConnString)
+                        "ConnectionStrings:Authentication", _dbFixture.ConnString)
                 });
             });
         }

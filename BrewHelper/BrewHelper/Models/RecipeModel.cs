@@ -36,7 +36,7 @@ namespace BrewHelper.Models
         /// Get Ingredients by page
         /// </summary>
         /// <returns>A page with Ingredients</returns>
-        public async Task<GetRecipeListResponseDTO> GetByPageAsync(int limit, int page, string name, long[] ids, CancellationToken cancellationToken)
+        public async Task<GetRecipeListResponseDTO> GetByPageAsync(int limit, int page, string name, long[] ids, Ingredient.IngredientType[] inStock, CancellationToken cancellationToken)
         {
             var query = context.Recipes.AsNoTracking();
 
@@ -45,6 +45,11 @@ namespace BrewHelper.Models
 
             if (ids != null && ids.Length > 0)
                 query = query.Where(i => ids.Contains(i.Id));
+
+            if (inStock != null)
+                query = query.Where(r => r.Mashing.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)))
+                            .Where(r => r.Boiling.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)))
+                            .Where(r => r.Yeasting.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)));
 
             var recipes = await query.OrderBy(i => i.Name).PaginateAsync(page, limit, cancellationToken);
 
