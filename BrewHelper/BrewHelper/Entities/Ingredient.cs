@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace BrewHelper.Models
+namespace BrewHelper.Entities
 {
     public class Ingredient
     {

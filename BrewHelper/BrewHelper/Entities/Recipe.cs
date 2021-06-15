@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace BrewHelper.Models
+namespace BrewHelper.Entities
 {
     public class Recipe
     {
@@ -95,8 +95,6 @@ namespace BrewHelper.Models
         ///// <summary>
         ///// The recipe the step belongs to
         ///// </summary>
-        //[JsonIgnore]
-        //public Recipe Recipe { get; set; }
     }
 
     [Owned]

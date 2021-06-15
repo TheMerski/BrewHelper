@@ -1,4 +1,5 @@
-﻿using BrewHelper.Models;
+﻿using BrewHelper.Entities;
+using BrewHelper.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

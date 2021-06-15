@@ -1,4 +1,5 @@
 ﻿using BrewHelper.DTO;
+using BrewHelper.Entities;
 using BrewHelper.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
