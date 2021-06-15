@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using BrewHelper.DTO;
 using System.Threading;
 using Microsoft.AspNetCore.Authorization;
+using BrewHelper.Entities;
 
 namespace BrewHelper.Controllers
 {

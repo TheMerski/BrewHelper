@@ -1,4 +1,5 @@
-﻿using BrewHelper.Models;
+﻿using BrewHelper.Entities;
+using BrewHelper.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;

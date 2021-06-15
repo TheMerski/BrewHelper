@@ -1,6 +1,7 @@
 using BrewHelper;
 using BrewHelper.Controllers;
 using BrewHelper.DTO;
+using BrewHelper.Entities;
 using BrewHelper.Models;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;

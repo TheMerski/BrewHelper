@@ -2,6 +2,7 @@
 using BrewHelper.Controllers;
 using BrewHelper.DTO;
 using BrewHelper.Models;
+using BrewHelper.Entities;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Testing;
