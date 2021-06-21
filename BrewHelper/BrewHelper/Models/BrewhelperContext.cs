@@ -21,6 +21,10 @@ namespace BrewHelper.Models
 
         public DbSet<RecipeStep> RecipeSteps { get; set; }
 
+        public DbSet<BrewLog> BrewLogs { get; set; }
+
+        public DbSet<StepLog> StepLogs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
         }

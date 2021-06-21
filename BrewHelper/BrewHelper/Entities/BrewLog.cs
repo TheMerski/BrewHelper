@@ -40,6 +40,18 @@ namespace BrewHelper.Entities
         /// </summary>
         public double? AlcoholPercentage { get; private set; }
         /// <summary>
+        /// Brew yield (L)
+        /// </summary>
+        public double? Yield { get; set; }
+        /// <summary>
+        /// IBU (bitterness)
+        /// </summary>
+        public double? IBU { get; set; }
+        /// <summary>
+        /// EBC
+        /// </summary>
+        public double? EBC { get; set; }
+        /// <summary>
         /// Mashing Log
         /// </summary>
         public StepLog MashingLog { get; set; }
