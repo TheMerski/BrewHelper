@@ -75,7 +75,7 @@ namespace BrewHelper.Models
             return log;
         }
 
-        public async Task<bool> StartNextStep(long id)
+        public async Task<BrewLog> StartNextStep(long id)
         {
             if (!await BrewLogExists(id))
             {
@@ -84,11 +84,11 @@ namespace BrewHelper.Models
             
             BrewLog log = await GetById(id);
             if (log.MashingLog != null && log.BoilingLog != null && log.YeastingLog != null)
-                return false;
+                return log;
 
             log.InitializeNextStep();
             await _context.SaveChangesAsync();
-            return true;
+            return log;
         }
 
         public async Task<BrewLog> Update(long id, BrewLog log)

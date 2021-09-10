@@ -384,5 +384,45 @@ namespace BrewHelperTests.Controllers
             var doubleDeleteResponse = await _userClient.DeleteAsync($"{endpoint}/{log.Id}");
             doubleDeleteResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
+        
+        [Fact]
+        public async Task Post_NextStep_Should_Create_NextSteps()
+        {
+            var logCreatedResponse = await _userClient.PostAsync($"{endpoint}?RecipeId=1", null);
+            logCreatedResponse.StatusCode.Should().Be(HttpStatusCode.Created);
+            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logCreatedResponse.Content.ReadAsStringAsync(), _serializeOptions);
+
+            log.MashingLog.Should().BeNull();
+            log.BoilingLog.Should().BeNull();
+            log.YeastingLog.Should().BeNull();
+            
+            var logNextStepResponse = await _userClient.PostAsync($"{endpoint}/{log.Id}/nextStep", null);
+            logNextStepResponse.StatusCode.Should().Be(HttpStatusCode.Created);
+            BrewLog mashLog = JsonSerializer.Deserialize<BrewLog>(await logNextStepResponse.Content.ReadAsStringAsync(), _serializeOptions);
+            mashLog.MashingLog.Should().NotBeNull();
+            mashLog.BoilingLog.Should().BeNull();
+            mashLog.YeastingLog.Should().BeNull();
+            
+            var logNextStepResponse2 = await _userClient.PostAsync($"{endpoint}/{log.Id}/nextStep", null);
+            logNextStepResponse2.StatusCode.Should().Be(HttpStatusCode.Created);
+            BrewLog boilLog = JsonSerializer.Deserialize<BrewLog>(await logNextStepResponse2.Content.ReadAsStringAsync(), _serializeOptions);
+            boilLog.MashingLog.Should().NotBeNull();
+            boilLog.BoilingLog.Should().NotBeNull();
+            boilLog.YeastingLog.Should().BeNull();
+            
+            var logNextStepResponse3 = await _userClient.PostAsync($"{endpoint}/{log.Id}/nextStep", null);
+            logNextStepResponse3.StatusCode.Should().Be(HttpStatusCode.Created);
+            BrewLog yeastLog = JsonSerializer.Deserialize<BrewLog>(await logNextStepResponse3.Content.ReadAsStringAsync(), _serializeOptions);
+            yeastLog.MashingLog.Should().NotBeNull();
+            yeastLog.BoilingLog.Should().NotBeNull();
+            yeastLog.YeastingLog.Should().NotBeNull();
+        }
+        
+        [Fact]
+        public async Task Post_NextStep_Should_Return_NotFound()
+        {
+            var logNextStepResponse = await _userClient.PostAsync($"{endpoint}/{long.MaxValue}/nextStep", null);
+            logNextStepResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
     }
 }

@@ -101,6 +101,25 @@ namespace BrewHelper.Controllers
             }
         }
         
+        // PUT: api/BrewLogs/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for
+        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [HttpPost("{id}/nextStep")]
+        public async Task<ActionResult<BrewLog>> StartNextBrewLogStep(long id)
+        {
+            BrewLog log;
+            try
+            {
+                log = await brewLogModel.StartNextStep(id);
+            }
+            catch (BrewLogNotFoundException e)
+            {
+                return NotFound();
+            }
+
+            return CreatedAtAction(nameof(GetBrewLog), new { id = log.Id }, log);
+        }
+        
         // DELETE: api/BrewLogs/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBrewLog(long id)

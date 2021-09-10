@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BrewHelper.Migrations
 {
     [DbContext(typeof(BrewhelperContext))]
-    [Migration("20210910154800_UpdatedBrewlogRequired")]
+    [Migration("20210910162843_UpdatedBrewlogRequired")]
     partial class UpdatedBrewlogRequired
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

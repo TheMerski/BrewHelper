@@ -37,8 +37,8 @@ namespace BrewHelper.Interfaces
         /// Initialize the next step for the log
         /// </summary>
         /// <param name="id">Id of the BrewLog to start next step for</param>
-        /// <returns>Bool indicating successful creation of next step</returns>
-        public Task<bool> StartNextStep(long id);
+        /// <returns>BrewLog with next step</returns>
+        public Task<BrewLog> StartNextStep(long id);
 
         /// <summary>
         /// Update a BrewLog
