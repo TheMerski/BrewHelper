@@ -41,7 +41,7 @@ namespace BrewHelper.Models
         /// <summary>
         /// Recipe Description
         /// </summary>
-        public string Description { get; set; } = null!;
+        public string? Description { get; set; }
 
         /// <summary>
         /// Expected start SG
@@ -82,20 +82,17 @@ namespace BrewHelper.Models
         /// <summary>
         /// Mashing Step for recipe
         /// </summary>
-        [Required]
-        public RecipeStepDTO Mashing { get; set; } = null!;
+        public RecipeStepDTO? Mashing { get; set; }
 
         /// <summary>
         /// Boiling Step for recipe
         /// </summary>
-        [Required]
-        public RecipeStepDTO Boiling { get; set; } = null!;
+        public RecipeStepDTO? Boiling { get; set; }
 
         /// <summary>
         /// Yeasting Step for recipe
         /// </summary>
-        [Required]
-        public RecipeStepDTO Yeasting { get; set; } = null!;
+        public RecipeStepDTO? Yeasting { get; set; }
     }
 
     public class RecipeStepDTO
@@ -129,7 +126,7 @@ namespace BrewHelper.Models
         /// <summary>
         /// Ingredients needed for step (weight in grams)
         /// </summary>
-        public List<RecipeIngredientDTO> Ingredients { get; set; }
+        public List<RecipeIngredientDTO>? Ingredients { get; set; }
         ///// <summary>
         ///// The recipe the step belongs to
         ///// </summary>

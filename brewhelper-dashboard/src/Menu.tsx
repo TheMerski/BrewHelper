@@ -6,6 +6,7 @@ function MyUserMenu(props: any) {
   return (
     <UserMenu {...props}>
       <MenuItemLink
+        {...props}
         to="/my-profile"
         primaryText="My Profile"
         leftIcon={<SettingsIcon />}

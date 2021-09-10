@@ -66,9 +66,9 @@ const IngredientOptionText = (choice: any) => (
 const IngredientOptionInputText = (choice: Ingredient | any) =>
   `${choice.name} (${choice.inStock} g)`;
 
-const IngredientOptionOptions = (choice: Ingredient | any) => {
-  return { color: 'secondary' };
-};
+// const IngredientOptionOptions = (choice: Ingredient | any) => {
+//   return { color: 'secondary' };
+// };
 
 const IngredientOptionMatch = (filter: string, choice: any) => {
   return true;
@@ -80,7 +80,7 @@ const recipeEditFields = (
       <TextInput source="name" required />
       <TextInput multiline fullWidth source="description" />
       <>
-        <NumberInput source="alcoholPercentage" />
+        <NumberInput source="alcoholPercentage" required />
         <NumberInput source="readyAfter" label="Ready after (days)" />
         <NumberInput source="yield" />
       </>
@@ -89,17 +89,23 @@ const recipeEditFields = (
         <NumberInput source="ebc" />
       </>
       <>
-        <NumberInput source="startSG" />
-        <NumberInput source="endSG" />
+        <NumberInput source="startSG" required />
+        <NumberInput source="endSG" required />
       </>
       <>
-        <NumberInput source="mashWater" />
-        <NumberInput source="rinseWater" />
+        <NumberInput source="mashWater" required />
+        <NumberInput source="rinseWater" required />
       </>
     </FormTab>
-    <FormTab label="Mashing">{recipeStepEditFields('mashing', 'minutes')}</FormTab>
-    <FormTab label="Boiling">{recipeStepEditFields('boiling', 'minutes')}</FormTab>
-    <FormTab label="Yeasting">{recipeStepEditFields('yeasting', 'days')}</FormTab>
+    <FormTab label="Mashing">
+      {recipeStepEditFields('mashing', 'minutes')}
+    </FormTab>
+    <FormTab label="Boiling">
+      {recipeStepEditFields('boiling', 'minutes')}
+    </FormTab>
+    <FormTab label="Yeasting">
+      {recipeStepEditFields('yeasting', 'days')}
+    </FormTab>
   </TabbedForm>
 );
 
