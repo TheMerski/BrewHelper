@@ -6,13 +6,6 @@ namespace BrewHelper.Entities
 {
     public class Recipe
     {
-        public Recipe()
-        {
-            Mashing = new RecipeStep();
-            Boiling = new RecipeStep();
-            Yeasting = new RecipeStep();
-        }
-        
         public long Id { get; set; }
         /// <summary>
         /// Recipe name
@@ -65,19 +58,19 @@ namespace BrewHelper.Entities
         /// Mashing Step for recipe
         /// </summary>
         [Required]
-        public RecipeStep Mashing { get; set; }
+        public RecipeStep? Mashing { get; set; }
 
         /// <summary>
         /// Boiling Step for recipe
         /// </summary>
         [Required]
-        public RecipeStep Boiling { get; set; }
+        public RecipeStep? Boiling { get; set; }
 
         /// <summary>
         /// Yeasting Step for recipe
         /// </summary>
         [Required]
-        public RecipeStep Yeasting { get; set; }
+        public RecipeStep? Yeasting { get; set; }
     }
 
     public class RecipeStep
@@ -98,7 +91,7 @@ namespace BrewHelper.Entities
         /// <summary>
         /// Ingredients needed for step (weight in grams)
         /// </summary>
-        public List<RecipeIngredient> Ingredients { get; set; }
+        public List<RecipeIngredient>? Ingredients { get; set; }
         ///// <summary>
         ///// The recipe the step belongs to
         ///// </summary>

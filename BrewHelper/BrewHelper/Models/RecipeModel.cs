@@ -42,9 +42,9 @@ namespace BrewHelper.Models
                 query = query.Where(i => ids.Contains(i.Id));
 
             if (inStock != null)
-                query = query.Where(r => r.Mashing.Ingredients != null && r.Mashing.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)))
-                            .Where(r => r.Boiling.Ingredients != null && r.Boiling.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)))
-                            .Where(r => r.Yeasting.Ingredients != null && r.Yeasting.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)));
+                query = query.Where(r => r.Mashing != null && r.Mashing.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)))
+                            .Where(r => r.Boiling != null && r.Boiling.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)))
+                            .Where(r => r.Yeasting != null && r.Yeasting.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)));
 
             var recipes = await query.OrderBy(i => i.Name).PaginateAsync(page, limit, cancellationToken);
 
@@ -68,13 +68,13 @@ namespace BrewHelper.Models
             var recipe = await context.Recipes
                 .Where(r => r.Id == id)
                 .Include(r => r.Mashing)
-                    .ThenInclude(s => s.Ingredients)
+                    .ThenInclude(s => s!.Ingredients)
                     .ThenInclude(i => i.Ingredient)
                 .Include(r => r.Boiling)
-                    .ThenInclude(s => s.Ingredients)
+                    .ThenInclude(s => s!.Ingredients)
                     .ThenInclude(i => i.Ingredient)
                 .Include(r => r.Yeasting)
-                    .ThenInclude(s => s.Ingredients)
+                    .ThenInclude(s => s!.Ingredients)
                     .ThenInclude(i => i.Ingredient)
                 .AsNoTracking()
                 .AsSplitQuery()
@@ -96,7 +96,12 @@ namespace BrewHelper.Models
         {
             if (recipeDTO != null && !await context.Recipes.Where(r => r.Name.Equals(recipeDTO.Name)).AnyAsync())
             {
-                Recipe recipe = new Recipe();
+                Recipe recipe = new Recipe
+                {
+                    Mashing = new RecipeStep(),
+                    Boiling = new RecipeStep(),
+                    Yeasting = new RecipeStep()
+                };
                 SetDTOValues(recipeDTO, recipe);
                 await context.Recipes.AddAsync(recipe);
                 await context.SaveChangesAsync();
@@ -118,13 +123,13 @@ namespace BrewHelper.Models
             Recipe? recipe = context.Recipes
                 .Where(r => r.Id == recipeDto.Id)
                 .Include(r => r.Mashing)
-                .ThenInclude(s => s.Ingredients)
+                .ThenInclude(s => s!.Ingredients)
                 .ThenInclude(i => i.Ingredient)
                 .Include(r => r.Boiling)
-                .ThenInclude(s => s.Ingredients)
+                .ThenInclude(s => s!.Ingredients)
                 .ThenInclude(i => i.Ingredient)
                 .Include(r => r.Yeasting)
-                .ThenInclude(s => s.Ingredients)
+                .ThenInclude(s => s!.Ingredients)
                 .ThenInclude(i => i.Ingredient)
                 .AsSplitQuery()
                 .AsNoTracking()
@@ -135,9 +140,7 @@ namespace BrewHelper.Models
                 return null;
             }
 
-            context.Attach(recipe);
             SetDTOValues(recipeDto, recipe);
-            context.Entry(recipe).State = EntityState.Modified;
 
             await context.SaveChangesAsync();
             return recipeDto;
@@ -179,8 +182,11 @@ namespace BrewHelper.Models
         /// <param name="ingredientsDict">Dictionary to store ingredients</param>
         /// <param name="step">Recipe step to match ingredients for</param>
         /// <param name="dto">Step dto</param>
-        private void MatchDTORecipeStepIngredients(Dictionary<long, Ingredient> ingredientsDict, RecipeStep step, RecipeStepDTO dto)
+        private void MatchDTORecipeStepIngredients(Dictionary<long, Ingredient> ingredientsDict, RecipeStep? step, RecipeStepDTO dto)
         {
+            if (step == null)
+                return;
+            
             if (step.Ingredients == null)
             {
                 step.Ingredients = new List<RecipeIngredient>();
