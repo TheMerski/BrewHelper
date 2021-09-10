@@ -1,11 +1,7 @@
 ﻿using BrewHelper.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace BrewHelper.Models
 {
@@ -30,9 +26,9 @@ namespace BrewHelper.Models
             EBC = recipe.EBC;
             MashWater = recipe.MashWater;
             RinseWater = recipe.RinseWater;
-            if (recipe.Mashing != null) Mashing = new RecipeStepDTO(recipe.Mashing);
-            if (recipe.Boiling != null) Boiling = new RecipeStepDTO(recipe.Boiling);
-            if (recipe.Yeasting != null) Yeasting = new RecipeStepDTO(recipe.Yeasting);
+            Mashing = new RecipeStepDTO(recipe.Mashing);
+            Boiling = new RecipeStepDTO(recipe.Boiling);
+            Yeasting = new RecipeStepDTO(recipe.Yeasting);
         }
 
         public long Id { get; set; }
@@ -40,11 +36,13 @@ namespace BrewHelper.Models
         /// Recipe name
         /// </summary>
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
+
         /// <summary>
         /// Recipe Description
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
+
         /// <summary>
         /// Expected start SG
         /// </summary>
@@ -85,44 +83,41 @@ namespace BrewHelper.Models
         /// Mashing Step for recipe
         /// </summary>
         [Required]
-        public RecipeStepDTO Mashing { get; set; }
+        public RecipeStepDTO Mashing { get; set; } = null!;
+
         /// <summary>
         /// Boiling Step for recipe
         /// </summary>
         [Required]
-        public RecipeStepDTO Boiling { get; set; }        
+        public RecipeStepDTO Boiling { get; set; } = null!;
+
         /// <summary>
         /// Yeasting Step for recipe
         /// </summary>
         [Required]
-        public RecipeStepDTO Yeasting { get; set; }
+        public RecipeStepDTO Yeasting { get; set; } = null!;
     }
 
     public class RecipeStepDTO
     {
         public RecipeStepDTO()
         {
-
+            Ingredients = new List<RecipeIngredientDTO>();
         }
         public RecipeStepDTO(RecipeStep step)
         {
             Id = step.Id;
             Description = step.Description;
             Time = step.Time;
+            Ingredients = new List<RecipeIngredientDTO>();
             if (step.Ingredients != null)
-            {
-                Ingredients = new List<RecipeIngredientDTO>();
-                step.Ingredients.ForEach(i =>
-                {
-                    Ingredients.Add(new RecipeIngredientDTO(i));
-                });
-            }
+                step.Ingredients.ForEach(i => { Ingredients.Add(new RecipeIngredientDTO(i)); });
         }
         public long Id { get; set; }
         /// <summary>
         /// Step Description
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
         /// <summary>
         /// Amount of time for step
         /// </summary>

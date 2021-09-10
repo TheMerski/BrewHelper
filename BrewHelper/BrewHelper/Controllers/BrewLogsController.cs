@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using BrewHelper.DTO;
@@ -88,7 +87,7 @@ namespace BrewHelper.Controllers
                 {
                     log = await brewLogModel.StartLog(RecipeId);
                 }
-                catch (RecipeNotFoundException e)
+                catch (RecipeNotFoundException)
                 {
                     return NotFound();
                 }
@@ -112,7 +111,7 @@ namespace BrewHelper.Controllers
             {
                 log = await brewLogModel.StartNextStep(id);
             }
-            catch (BrewLogNotFoundException e)
+            catch (BrewLogNotFoundException)
             {
                 return NotFound();
             }
@@ -133,6 +132,6 @@ namespace BrewHelper.Controllers
             return NotFound();
         }
 
-        public record UrlQueryParameters(int Limit = 50, int Page = 1, string Name = null, long[] Id = null);
+        public record UrlQueryParameters(int Limit = 50, int Page = 1, string? Name = null, long[]? Id = null);
     }
 }

@@ -2,13 +2,10 @@ using BrewHelper.Authentication;
 using BrewHelper.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BrewHelper
@@ -34,7 +31,7 @@ namespace BrewHelper
             {
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
-                logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+                logger.LogError(ex, "An error occurred while migrating or seeding the database");
 
                 throw;
             }
@@ -51,7 +48,7 @@ namespace BrewHelper
             {
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
-                logger.LogError(ex, "An error occurred while migrating or seeding the authentication database.");
+                logger.LogError(ex, "An error occurred while migrating or seeding the authentication database");
 
                 throw;
             }

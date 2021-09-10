@@ -1,13 +1,10 @@
-﻿using BrewHelper.Entities;
-using BrewHelper.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using BrewHelper.Entities;
+using BrewHelper.Models;
 
-namespace BrewHelper
+namespace BrewHelperTests
 {
     public static class TestDataSeeder
     {

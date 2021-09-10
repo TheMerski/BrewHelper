@@ -1,12 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace BrewHelperTests
@@ -14,11 +9,11 @@ namespace BrewHelperTests
     [Collection("Database")]
     public class BrewHelperWebApplicationFactory : WebApplicationFactory<BrewHelper.Startup>
     {
-        public readonly DbFixture _dbFixture;
+        public readonly DbFixture DbFixture;
 
         public BrewHelperWebApplicationFactory(DbFixture dbFixture)
         {
-            _dbFixture = dbFixture;
+            DbFixture = dbFixture;
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -31,9 +26,9 @@ namespace BrewHelperTests
                 config.AddInMemoryCollection(new[]
                 {
                     new KeyValuePair<string, string>(
-                        "ConnectionStrings:SQL", _dbFixture.ConnString),
+                        "ConnectionStrings:SQL", DbFixture.ConnString),
                     new KeyValuePair<string, string>(
-                        "ConnectionStrings:Authentication", _dbFixture.ConnString)
+                        "ConnectionStrings:Authentication", DbFixture.ConnString)
                 });
             });
         }

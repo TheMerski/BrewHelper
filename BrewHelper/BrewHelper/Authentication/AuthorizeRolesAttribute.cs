@@ -1,8 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BrewHelper.Authentication
 {
@@ -12,7 +8,7 @@ namespace BrewHelper.Authentication
         public ApplicationRoles RoleEnum
         {
             get { return roleEnum; }
-            set { roleEnum = value; base.Roles = value.ToString(); }
+            set { roleEnum = value; Roles = value.ToString(); }
         }
     }
 }

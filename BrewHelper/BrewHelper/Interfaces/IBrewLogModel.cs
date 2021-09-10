@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using BrewHelper.DTO;
@@ -16,7 +15,7 @@ namespace BrewHelper.Interfaces
         /// <param name="ids">Id's of logs to get</param>
         /// <param name="cancellationToken">CancellationToken</param>
         /// <returns>A page with BrewLogs</returns>
-        public Task<GenericListResponseDTO<BrewLog>> GetByPageAsync(int limit, int page, long[] ids,
+        public Task<GenericListResponseDTO<BrewLog>> GetByPageAsync(int limit, int page, long[]? ids,
             CancellationToken cancellationToken);
 
         /// <summary>
@@ -24,7 +23,7 @@ namespace BrewHelper.Interfaces
         /// </summary>
         /// <param name="id">Id of the BrewLog to get</param>
         /// <returns>The BrewLog or default</returns>
-        public Task<BrewLog> GetById(long id);
+        public Task<BrewLog?> GetById(long id);
 
         /// <summary>
         /// Start a new BrewLog from a recipe
@@ -46,7 +45,7 @@ namespace BrewHelper.Interfaces
         /// <param name="id">Id of the BrewLog to update</param>
         /// <param name="log">The updated BrewLog</param>
         /// <returns>The updated BrewLog from the db</returns>
-        public Task<BrewLog> Update(long id, BrewLog log);
+        public Task<BrewLog?> Update(long id, BrewLog log);
 
         /// <summary>
         /// Delete a BrewLog by id

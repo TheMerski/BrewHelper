@@ -1,12 +1,8 @@
 ﻿using BrewHelper;
-using BrewHelper.Controllers;
 using BrewHelper.DTO;
 using BrewHelper.Models;
 using BrewHelper.Entities;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Moq;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -38,7 +34,7 @@ namespace BrewHelperTests.Controllers
             var response = await _adminClient.GetAsync("/api/Recipes");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var recipes = JsonConvert.DeserializeObject<GenericListResponseDTO<RecipeDTO>>(await response.Content.ReadAsStringAsync());
             recipes.Items.Should().NotBeEmpty();
             //Related values should be null on multiple
             recipes.Items[0].Mashing.Should().BeNull();
@@ -52,7 +48,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Recipes");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var recipes = JsonConvert.DeserializeObject<GenericListResponseDTO<RecipeDTO>>(await response.Content.ReadAsStringAsync());
             recipes.Items.Should().NotBeEmpty();
             //Related values should be null on multiple
             recipes.Items[0].Mashing.Should().BeNull();
@@ -66,7 +62,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Recipes?limit=1");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Recipes = JsonConvert.DeserializeObject<GenericListResponseDTO<RecipeDTO>>(await response.Content.ReadAsStringAsync());
             Recipes.Items.Count.Should().Be(1);
             Recipes.TotalPages.Should().BeGreaterThan(1);
             Recipes.TotalItems.Should().BeGreaterThan(1);
@@ -79,7 +75,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync($"/api/Recipes?Name={name}");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Recipes = JsonConvert.DeserializeObject<GenericListResponseDTO<RecipeDTO>>(await response.Content.ReadAsStringAsync());
             Recipes.Items.Count.Should().BeGreaterOrEqualTo(1);
             Recipes.Items.First().Name.Should().Contain(name);
         }
@@ -90,7 +86,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Recipes?Id=1");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Recipes = JsonConvert.DeserializeObject<GenericListResponseDTO<RecipeDTO>>(await response.Content.ReadAsStringAsync());
             Recipes.Items.Should().NotBeEmpty();
             Recipes.Items.Count.Should().Be(1);
             Recipes.TotalItems.Should().Be(1);
@@ -103,7 +99,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Recipes?Id=1&Id=2");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Recipes = JsonConvert.DeserializeObject<GenericListResponseDTO<RecipeDTO>>(await response.Content.ReadAsStringAsync());
             Recipes.Items.Should().NotBeEmpty();
             Recipes.Items.Count.Should().Be(2);
             Recipes.TotalItems.Should().Be(2);
@@ -122,7 +118,7 @@ namespace BrewHelperTests.Controllers
             var response1 = await _userClient.GetAsync("/api/Recipes?limit=1&Page=1");
             response1.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var RecipesPage1 = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response1.Content.ReadAsStringAsync());
+            var RecipesPage1 = JsonConvert.DeserializeObject<GenericListResponseDTO<RecipeDTO>>(await response1.Content.ReadAsStringAsync());
             RecipesPage1.Items.Count.Should().Be(1);
             RecipesPage1.CurrentPage.Should().Be(1);
             RecipeDTO r1 = RecipesPage1.Items.First();
@@ -130,7 +126,7 @@ namespace BrewHelperTests.Controllers
             var response2 = await _userClient.GetAsync("/api/Recipes?limit=1&Page=2");
             response2.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var RecipesPage2 = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response2.Content.ReadAsStringAsync());
+            var RecipesPage2 = JsonConvert.DeserializeObject<GenericListResponseDTO<RecipeDTO>>(await response2.Content.ReadAsStringAsync());
             RecipesPage2.Items.Count.Should().Be(1);
             RecipesPage2.CurrentPage.Should().Be(2);
             RecipeDTO r2 = RecipesPage2.Items.First();
@@ -151,7 +147,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync($"/api/Recipes?{instock}");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var recipes = JsonConvert.DeserializeObject<GenericListResponseDTO<RecipeDTO>>(await response.Content.ReadAsStringAsync());
             recipes.Items.Should().NotBeEmpty();
             foreach (RecipeDTO recipe in recipes.Items)
             {
@@ -172,10 +168,10 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync($"/api/Recipes?{instock}");
             var ingResponse = await _userClient.GetAsync($"/api/Ingredients?Types={type}");
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await ingResponse.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await ingResponse.Content.ReadAsStringAsync());
             long[] maltIds = Ingredients.Items.Select(i => i.Id).ToArray();
 
-            var recipes = JsonConvert.DeserializeObject<GetRecipeListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var recipes = JsonConvert.DeserializeObject<GenericListResponseDTO<RecipeDTO>>(await response.Content.ReadAsStringAsync());
             recipes.Items.Should().NotBeEmpty();
             foreach (RecipeDTO recipe in recipes.Items)
             {

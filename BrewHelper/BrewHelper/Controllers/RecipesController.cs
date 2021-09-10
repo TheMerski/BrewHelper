@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using BrewHelper.Models;
 using BrewHelper.DTO;
 using System.Threading;
@@ -19,17 +15,15 @@ namespace BrewHelper.Controllers
     public class RecipesController : ControllerBase
     {
         private readonly RecipeModel recipeModel;
-        private readonly IngredientModel ingredientModel;
 
-        public RecipesController(RecipeModel recipeModel, IngredientModel ingredientModel)
+        public RecipesController(RecipeModel recipeModel)
         {
             this.recipeModel = recipeModel;
-            this.ingredientModel = ingredientModel;
         }
 
         // GET: api/Recipes
         [HttpGet]
-        [ProducesResponseType(typeof(GetRecipeListResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GenericListResponseDTO<RecipeDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllRecipes(
             [FromQuery] UrlQueryParameters urlQueryParameters,
@@ -82,12 +76,12 @@ namespace BrewHelper.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<RecipeDTO>> PostRecipe(RecipeDTO recipe)
+        public async Task<ActionResult<RecipeDTO>> PostRecipe(RecipeDTO? recipe)
         {
 
             if (ModelState.IsValid)
             {
-                Recipe addedRecipe = await recipeModel.AddRecipe(recipe);
+                var addedRecipe = await recipeModel.AddRecipe(recipe);
                 if (addedRecipe == null)
                 {
                     return Conflict();
@@ -114,7 +108,7 @@ namespace BrewHelper.Controllers
             return NotFound();
         }
 
-        public record UrlQueryParameters(int Limit = 50, int Page = 1, string Name = null, long[] Id = null, Ingredient.IngredientType[] InStock = null);
+        public record UrlQueryParameters(int Limit = 50, int Page = 1, string? Name = null, long[]? Id = null, Ingredient.IngredientType[]? InStock = null);
 
     }
 }

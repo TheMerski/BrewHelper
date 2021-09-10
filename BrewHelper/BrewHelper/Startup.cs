@@ -11,7 +11,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using NSwag;
 using NSwag.Generation.Processors.Security;
-using System;
 using System.Linq;
 using System.Text;
 using BrewHelper.Interfaces;

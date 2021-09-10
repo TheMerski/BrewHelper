@@ -14,10 +14,11 @@ namespace BrewHelper.Entities
         }
         
         public long Id { get; set; }
+        
         /// <summary>
         /// Recipe the brewing is based off
         /// </summary>
-        public Recipe Recipe { get; set; }
+        public Recipe? Recipe { get; set; }
         
         [Required(ErrorMessage = "Recipe is required")]
         [ForeignKey(nameof(Recipe))]
@@ -112,7 +113,7 @@ namespace BrewHelper.Entities
         /// <summary>
         /// End of mashing step
         /// </summary>
-        public DateTime? End { get; set; } = null;
+        public DateTime? End { get; set; }
         /// <summary>
         /// Mashing notes
         /// </summary>

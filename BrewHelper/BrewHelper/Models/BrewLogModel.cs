@@ -20,7 +20,7 @@ namespace BrewHelper.Models
             _context = injectedContext;
         }
 
-        public async Task<GenericListResponseDTO<BrewLog>> GetByPageAsync(int limit, int page, long[] ids, CancellationToken cancellationToken)
+        public async Task<GenericListResponseDTO<BrewLog>> GetByPageAsync(int limit, int page, long[]? ids, CancellationToken cancellationToken)
         {
             var query = _context.BrewLogs.AsNoTracking();
 
@@ -40,18 +40,18 @@ namespace BrewHelper.Models
             };
         }
 
-        public async Task<BrewLog> GetById(long id)
+        public async Task<BrewLog?> GetById(long id)
         {
             return await _context.BrewLogs
-                .Include(l => l.MashingLog).ThenInclude(sl => sl.PhMeasurements)
-                .Include(l => l.MashingLog).ThenInclude(sl => sl.SgMeasurements)
-                .Include(l => l.MashingLog).ThenInclude(sl => sl.TemperatureMeasurements)
-                .Include(l => l.BoilingLog).ThenInclude(sl => sl.PhMeasurements)
-                .Include(l => l.BoilingLog).ThenInclude(sl => sl.SgMeasurements)
-                .Include(l => l.BoilingLog).ThenInclude(sl => sl.TemperatureMeasurements)
-                .Include(l => l.YeastingLog).ThenInclude(sl => sl.PhMeasurements)
-                .Include(l => l.YeastingLog).ThenInclude(sl => sl.SgMeasurements)
-                .Include(l => l.YeastingLog).ThenInclude(sl => sl.TemperatureMeasurements)
+                .Include(l => l.MashingLog).ThenInclude(sl => sl!.PhMeasurements)
+                .Include(l => l.MashingLog).ThenInclude(sl => sl!.SgMeasurements)
+                .Include(l => l.MashingLog).ThenInclude(sl => sl!.TemperatureMeasurements)
+                .Include(l => l.BoilingLog).ThenInclude(sl => sl!.PhMeasurements)
+                .Include(l => l.BoilingLog).ThenInclude(sl => sl!.SgMeasurements)
+                .Include(l => l.BoilingLog).ThenInclude(sl => sl!.TemperatureMeasurements)
+                .Include(l => l.YeastingLog).ThenInclude(sl => sl!.PhMeasurements)
+                .Include(l => l.YeastingLog).ThenInclude(sl => sl!.SgMeasurements)
+                .Include(l => l.YeastingLog).ThenInclude(sl => sl!.TemperatureMeasurements)
                 .Where(l => l.Id == id)
                 .FirstOrDefaultAsync();
         }
@@ -77,12 +77,13 @@ namespace BrewHelper.Models
 
         public async Task<BrewLog> StartNextStep(long id)
         {
-            if (!await BrewLogExists(id))
+            var log = await GetById(id);
+
+            if (log == null)
             {
                 throw new BrewLogNotFoundException();
             }
             
-            BrewLog log = await GetById(id);
             if (log.MashingLog != null && log.BoilingLog != null && log.YeastingLog != null)
                 return log;
 
@@ -91,7 +92,7 @@ namespace BrewHelper.Models
             return log;
         }
 
-        public async Task<BrewLog> Update(long id, BrewLog log)
+        public async Task<BrewLog?> Update(long id, BrewLog log)
         {
             if (log.MashingLog?.Id <= 0) log.MashingLog = null;
             if (log.BoilingLog?.Id <= 0) log.BoilingLog = null;

@@ -6,6 +6,8 @@
     <IsPackable>false</IsPackable>
 
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

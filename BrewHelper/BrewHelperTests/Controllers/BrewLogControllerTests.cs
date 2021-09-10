@@ -115,20 +115,20 @@ namespace BrewHelperTests.Controllers
             var response1 = await _userClient.GetAsync($"{endpoint}?limit=1&Page=1");
             response1.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var LogsPage1 = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(await response1.Content.ReadAsStringAsync(), _serializeOptions);
-            LogsPage1.Items.Count.Should().Be(1);
-            LogsPage1.CurrentPage.Should().Be(1);
-            BrewLog l1 = LogsPage1.Items.First();
+            var logsPage1 = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(await response1.Content.ReadAsStringAsync(), _serializeOptions);
+            logsPage1.Items.Count.Should().Be(1);
+            logsPage1.CurrentPage.Should().Be(1);
+            BrewLog l1 = logsPage1.Items.First();
 
             var response2 = await _userClient.GetAsync($"{endpoint}?limit=1&Page=2");
             response2.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var LogsPage2 = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(await response2.Content.ReadAsStringAsync(), _serializeOptions);
-            LogsPage2.Items.Count.Should().Be(1);
-            LogsPage2.CurrentPage.Should().Be(2);
-            BrewLog l2 = LogsPage2.Items.First();
-
-            Assert.NotEqual<BrewLog>(l1, l2);
+            var logsPage2 = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(await response2.Content.ReadAsStringAsync(), _serializeOptions);
+            logsPage2.Items.Count.Should().Be(1);
+            logsPage2.CurrentPage.Should().Be(2);
+            BrewLog l2 = logsPage2.Items.First();
+            
+            Assert.NotEqual(l1, l2);
         }
         
         [Fact]

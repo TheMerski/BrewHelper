@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace BrewHelper.Entities
 {
@@ -15,11 +11,13 @@ namespace BrewHelper.Entities
         /// Recipe name
         /// </summary>
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
+
         /// <summary>
         /// Recipe Description
         /// </summary>
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
+
         /// <summary>
         /// Expected start SG
         /// </summary>
@@ -60,17 +58,19 @@ namespace BrewHelper.Entities
         /// Mashing Step for recipe
         /// </summary>
         [Required]
-        public RecipeStep Mashing { get; set; }
+        public RecipeStep Mashing { get; set; } = null!;
+
         /// <summary>
         /// Boiling Step for recipe
         /// </summary>
         [Required]
-        public RecipeStep Boiling { get; set; }        
+        public RecipeStep Boiling { get; set; } = null!;
+
         /// <summary>
         /// Yeasting Step for recipe
         /// </summary>
         [Required]
-        public RecipeStep Yeasting { get; set; }
+        public RecipeStep Yeasting { get; set; } = null!;
     }
 
     public class RecipeStep
@@ -79,7 +79,7 @@ namespace BrewHelper.Entities
         /// <summary>
         /// Step Description
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
         /// <summary>
         /// Amount of time for step
         /// </summary>
@@ -91,7 +91,7 @@ namespace BrewHelper.Entities
         /// <summary>
         /// Ingredients needed for step (weight in grams)
         /// </summary>
-        public List<RecipeIngredient> Ingredients { get; set; }
+        public List<RecipeIngredient>? Ingredients { get; set; }
         ///// <summary>
         ///// The recipe the step belongs to
         ///// </summary>
@@ -105,7 +105,8 @@ namespace BrewHelper.Entities
         /// The ingredient
         /// </summary>
         [Required]
-        public Ingredient Ingredient { get; set; }
+        public Ingredient Ingredient { get; set; } = null!;
+
         /// <summary>
         /// The ammount needed (in grams)
         /// </summary>

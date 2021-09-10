@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BrewHelper.Authentication
 {
@@ -12,8 +8,9 @@ namespace BrewHelper.Authentication
     public class UpdatePasswordDTO
     {
         [Required(ErrorMessage = "Current Password is required")]
-        public string CurrentPassword { get; set; }
+        public string CurrentPassword { get; set; } = null!;
+
         [Required(ErrorMessage = "New Password is required")]
-        public string NewPassword { get; set; }
+        public string NewPassword { get; set; } = null!;
     }
 }

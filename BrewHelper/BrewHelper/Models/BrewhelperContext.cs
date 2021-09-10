@@ -1,11 +1,5 @@
 ﻿using BrewHelper.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BrewHelper.Models
 {
@@ -15,15 +9,15 @@ namespace BrewHelper.Models
         {
         }
 
-        public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; } = null!;
 
-        public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<Recipe> Recipes { get; set; } = null!;
 
-        public DbSet<RecipeStep> RecipeSteps { get; set; }
+        public DbSet<RecipeStep> RecipeSteps { get; set; } = null!;
 
-        public DbSet<BrewLog> BrewLogs { get; set; }
+        public DbSet<BrewLog> BrewLogs { get; set; } = null!;
 
-        public DbSet<StepLog> StepLogs { get; set; }
+        public DbSet<StepLog> StepLogs { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
