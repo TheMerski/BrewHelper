@@ -112,7 +112,6 @@ namespace BrewHelper.Controllers
             return NotFound();
         }
 
+        public record UrlQueryParameters(int Limit = 50, int Page = 1, string Name = null, long[] Id = null, Ingredient.IngredientType[] Types = null, bool? InStock = null);
     }
-
-    public record UrlQueryParameters(int Limit = 50, int Page = 1, string Name = null, long[] Id = null, Ingredient.IngredientType[] Types = null, bool? InStock = null);
 }

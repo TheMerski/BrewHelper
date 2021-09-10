@@ -35,8 +35,9 @@ namespace BrewHelperTests.Controllers
             var response = await _adminClient.GetAsync(endpoint);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var logs = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(
-                await response.Content.ReadAsStringAsync());
+            var json = await response.Content.ReadAsStringAsync();
+            var logs = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(json, _serializeOptions);
+            
             logs.Should().NotBeNull();
             logs?.Items.Should().NotBeEmpty();
             logs?.Items[0].MashingLog.Should().BeNull();
@@ -51,7 +52,7 @@ namespace BrewHelperTests.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             var logs = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(
-                await response.Content.ReadAsStringAsync());
+                await response.Content.ReadAsStringAsync(), _serializeOptions);
             logs.Should().NotBeNull();
             logs?.Items.Should().NotBeEmpty();
             
@@ -68,7 +69,7 @@ namespace BrewHelperTests.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             
             var logs = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(
-                await response.Content.ReadAsStringAsync());
+                await response.Content.ReadAsStringAsync(), _serializeOptions);
             logs.Items.Count.Should().Be(1);
             logs.TotalItems.Should().BeGreaterThan(1);
             logs.TotalPages.Should().BeGreaterThan(1);
@@ -81,7 +82,7 @@ namespace BrewHelperTests.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             
             var logs = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(
-                await response.Content.ReadAsStringAsync());
+                await response.Content.ReadAsStringAsync(), _serializeOptions);
             logs.Items.Should().NotBeEmpty();
             logs.Items.Count.Should().Be(1);
             logs.TotalItems.Should().Be(1);
@@ -95,7 +96,7 @@ namespace BrewHelperTests.Controllers
             response.StatusCode.Should().Be(HttpStatusCode.OK);
             
             var logs = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(
-                await response.Content.ReadAsStringAsync());
+                await response.Content.ReadAsStringAsync(), _serializeOptions);
             logs.Items.Should().NotBeEmpty();
             logs.Items.Count.Should().Be(2);
             logs.TotalItems.Should().Be(2);
@@ -114,7 +115,7 @@ namespace BrewHelperTests.Controllers
             var response1 = await _userClient.GetAsync($"{endpoint}?limit=1&Page=1");
             response1.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var LogsPage1 = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(await response1.Content.ReadAsStringAsync());
+            var LogsPage1 = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(await response1.Content.ReadAsStringAsync(), _serializeOptions);
             LogsPage1.Items.Count.Should().Be(1);
             LogsPage1.CurrentPage.Should().Be(1);
             BrewLog l1 = LogsPage1.Items.First();
@@ -122,7 +123,7 @@ namespace BrewHelperTests.Controllers
             var response2 = await _userClient.GetAsync($"{endpoint}?limit=1&Page=2");
             response2.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var LogsPage2 = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(await response2.Content.ReadAsStringAsync());
+            var LogsPage2 = JsonSerializer.Deserialize<GenericListResponseDTO<BrewLog>>(await response2.Content.ReadAsStringAsync(), _serializeOptions);
             LogsPage2.Items.Count.Should().Be(1);
             LogsPage2.CurrentPage.Should().Be(2);
             BrewLog l2 = LogsPage2.Items.First();
@@ -150,10 +151,11 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync($"{endpoint}/1");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var log = JsonSerializer.Deserialize<BrewLog>(await response.Content.ReadAsStringAsync());
+            var log = JsonSerializer.Deserialize<BrewLog>(await response.Content.ReadAsStringAsync(), _serializeOptions);
             log.Should().BeOfType<BrewLog>();
             
             // Related values should not be null on single
+            log.Recipe.Should().BeNull();
             log.MashingLog.Should().NotBeNull();
             log.BoilingLog.Should().NotBeNull();
             log.YeastingLog.Should().NotBeNull();
@@ -191,7 +193,7 @@ namespace BrewHelperTests.Controllers
         public async Task Put_Should_Update_Log()
         {
             var logResponse = await _userClient.GetAsync($"{endpoint}/3");
-            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logResponse.Content.ReadAsStringAsync());
+            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logResponse.Content.ReadAsStringAsync(), _serializeOptions);
 
             string newNotes = "This is the new note";
             int sg = 1052;
@@ -204,7 +206,7 @@ namespace BrewHelperTests.Controllers
 
             var response = await _userClient.PutAsync($"{endpoint}/3", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            BrewLog returnedLog = JsonSerializer.Deserialize<BrewLog>(await response.Content.ReadAsStringAsync());
+            BrewLog returnedLog = JsonSerializer.Deserialize<BrewLog>(await response.Content.ReadAsStringAsync(), _serializeOptions);
             returnedLog.Should().BeOfType<BrewLog>();
             returnedLog.Notes.Should().Be(newNotes);
             returnedLog.EndSG.Should().Be(sg);
@@ -213,11 +215,11 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Put_Should_Not_Update_Step_Log()
         {
-            var logResponse = await _userClient.GetAsync($"{endpoint}/3");
-            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logResponse.Content.ReadAsStringAsync());
+            var logResponse = await _userClient.GetAsync($"{endpoint}/1");
+            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logResponse.Content.ReadAsStringAsync(), _serializeOptions);
 
             string newNotes = "This is the new note";
-            DateTime now = new DateTime();
+            DateTime now = DateTime.UtcNow;
 
             log.MashingLog.Notes = newNotes;
             log.MashingLog.Start = now;
@@ -226,19 +228,43 @@ namespace BrewHelperTests.Controllers
             log.YeastingLog.Notes = newNotes;
             log.YeastingLog.Start = now;
 
-            var json = JsonSerializer.Serialize(log);
+            var json = JsonSerializer.Serialize(log, _serializeOptions);
             var stringContent = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
 
-            var response = await _userClient.PutAsync($"{endpoint}/3", stringContent);
+            var response = await _userClient.PutAsync($"{endpoint}/1", stringContent);
             response.StatusCode.Should().Be(HttpStatusCode.OK);
-            BrewLog returnedLog = JsonSerializer.Deserialize<BrewLog>(await response.Content.ReadAsStringAsync());
+            BrewLog returnedLog = JsonSerializer.Deserialize<BrewLog>(await response.Content.ReadAsStringAsync(), _serializeOptions);
             returnedLog.Should().BeOfType<BrewLog>();
+            returnedLog.Should().NotBeNull();
             returnedLog.MashingLog.Notes.Should().NotBe(newNotes);
             returnedLog.MashingLog.Start.Should().NotBe(now);
             returnedLog.BoilingLog.Notes.Should().NotBe(newNotes);
             returnedLog.BoilingLog.Start.Should().NotBe(now);
             returnedLog.YeastingLog.Notes.Should().NotBe(newNotes);
             returnedLog.YeastingLog.Start.Should().NotBe(now);
+        }
+        
+        [Fact]
+        public async Task Put_Should_Not_Add_Step_Log()
+        {
+            var logResponse = await _userClient.GetAsync($"{endpoint}/4");
+            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logResponse.Content.ReadAsStringAsync(), _serializeOptions);
+            
+            log.MashingLog = new StepLog();
+            log.BoilingLog = new StepLog();
+            log.YeastingLog = new StepLog();
+
+            var json = JsonSerializer.Serialize(log, _serializeOptions);
+            var stringContent = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
+
+            var response = await _userClient.PutAsync($"{endpoint}/4", stringContent);
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            BrewLog returnedLog = JsonSerializer.Deserialize<BrewLog>(await response.Content.ReadAsStringAsync(), _serializeOptions);
+            returnedLog.Should().BeOfType<BrewLog>();
+            returnedLog.Should().NotBeNull();
+            returnedLog.MashingLog.Should().BeNull();
+            returnedLog.BoilingLog.Should().BeNull();
+            returnedLog.YeastingLog.Should().BeNull();
         }
         
         // [Fact]
@@ -297,7 +323,7 @@ namespace BrewHelperTests.Controllers
         public async Task Put_Should_Return_BadRequest()
         {
             var logResponse = await _userClient.GetAsync($"{endpoint}/3");
-            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logResponse.Content.ReadAsStringAsync());
+            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logResponse.Content.ReadAsStringAsync(), _serializeOptions);
 
             string newNotes = "This is the new note";
 
@@ -314,11 +340,12 @@ namespace BrewHelperTests.Controllers
         public async Task Put_Should_Return_NotFound()
         {
             var logResponse = await _userClient.GetAsync($"{endpoint}/1");
-            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logResponse.Content.ReadAsStringAsync());
+            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logResponse.Content.ReadAsStringAsync(), _serializeOptions);
 
             string newNotes = "This is the new note";
 
             log.Notes = newNotes;
+            log.Id = long.MaxValue;
 
             var json = JsonSerializer.Serialize(log);
             var stringContent = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
@@ -330,9 +357,9 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Post_Should_Return_Created()
         {
-            var logCreatedResponse = await _userClient.PostAsync($"{endpoint}", new StringContent("1"));
+            var logCreatedResponse = await _userClient.PostAsync($"{endpoint}?RecipeId=1", null);
             logCreatedResponse.StatusCode.Should().Be(HttpStatusCode.Created);
-            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logCreatedResponse.Content.ReadAsStringAsync());
+            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logCreatedResponse.Content.ReadAsStringAsync(), _serializeOptions);
             log.Should().NotBeNull();
             log?.Recipe.Id.Should().Be(1);
         }
@@ -347,8 +374,8 @@ namespace BrewHelperTests.Controllers
         [Fact]
         public async Task Delete_Should_Return_Delete()
         {
-            var logCreatedResponse = await _userClient.PostAsync($"{endpoint}", new StringContent("1"));
-            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logCreatedResponse.Content.ReadAsStringAsync());
+            var logCreatedResponse = await _userClient.PostAsync($"{endpoint}?RecipeId=1", null);
+            BrewLog log = JsonSerializer.Deserialize<BrewLog>(await logCreatedResponse.Content.ReadAsStringAsync(), _serializeOptions);
             log.Should().NotBeNull();
             
             var deleteResponse = await _userClient.DeleteAsync($"{endpoint}/{log.Id}");

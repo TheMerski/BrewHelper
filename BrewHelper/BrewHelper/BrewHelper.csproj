@@ -5,6 +5,7 @@
     <UserSecretsId>402dd4be-a098-4bf2-95e3-2d0b76cdc4af</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

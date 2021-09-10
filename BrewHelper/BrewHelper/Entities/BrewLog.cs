@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BrewHelper.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BrewHelper.Entities
@@ -18,8 +17,11 @@ namespace BrewHelper.Entities
         /// <summary>
         /// Recipe the brewing is based off
         /// </summary>
-        [Required]
-        public Recipe Recipe { get; set; } = null!;
+        public Recipe Recipe { get; set; }
+        
+        [Required(ErrorMessage = "Recipe is required")]
+        [ForeignKey(nameof(Recipe))]
+        public long RecipeId { get; set; }
 
         /// <summary>
         /// Brewing notes
@@ -28,12 +30,13 @@ namespace BrewHelper.Entities
         /// <summary>
         /// Date the brewing started
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "StartDate is required")]
         public DateTime StartDate { get; set; }
+
         /// <summary>
         /// Date the brewing was completed
         /// </summary>
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; } = null;
         /// <summary>
         /// Measured start SG
         /// </summary>
@@ -61,15 +64,15 @@ namespace BrewHelper.Entities
         /// <summary>
         /// Mashing Log
         /// </summary>
-        public StepLog MashingLog { get; set; }
+        public StepLog? MashingLog { get; set; }
         /// <summary>
         /// Mashing Log
         /// </summary>
-        public StepLog BoilingLog { get; set; }
+        public StepLog? BoilingLog { get; set; }
         /// <summary>
         /// Mashing Log
         /// </summary>
-        public StepLog YeastingLog { get; set; }
+        public StepLog? YeastingLog { get; set; }
 
         public void InitializeNextStep()
         {
@@ -103,12 +106,13 @@ namespace BrewHelper.Entities
         /// <summary>
         /// Start of mashing step
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Start date is required")]
         public DateTime Start { get; set; }
+
         /// <summary>
         /// End of mashing step
         /// </summary>
-        public DateTime End { get; set; }
+        public DateTime? End { get; set; } = null;
         /// <summary>
         /// Mashing notes
         /// </summary>
@@ -139,12 +143,12 @@ namespace BrewHelper.Entities
         /// <summary>
         /// Measurement value
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Measurement value is required")]
         public double Value { get; set; }
         /// <summary>
         /// Time the measurement was taken
         /// </summary>
-        [Required]
+        [Required(ErrorMessage = "Measurement time is required")]
         public DateTime Time { get; set; }
         /// <summary>
         /// Notes for the measurement

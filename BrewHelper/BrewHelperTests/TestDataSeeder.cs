@@ -61,24 +61,72 @@ namespace BrewHelper
                 }
             };
 
+        public static List<BrewLog> BrewLogs = new List<BrewLog>()
+        {
+            new BrewLog
+            {
+                Notes = "Test 1", Recipe = Recipes.First(), Yield = 1.5, AlcoholPercentage = 10,
+                StartDate = DateTime.UtcNow.Subtract(new TimeSpan(5, 0, 0)),
+                EndDate = DateTime.UtcNow, BoilingLog = new StepLog(), MashingLog = new StepLog(),
+                YeastingLog = new StepLog()
+            },
+            new BrewLog
+            {
+                Notes = "Test 2", Recipe = Recipes.First(), Yield = 1.5, AlcoholPercentage = 10,
+                StartDate = DateTime.UtcNow.Subtract(new TimeSpan(4, 0, 0)),
+                BoilingLog = new StepLog(), MashingLog = new StepLog()
+            },
+            new BrewLog
+            {
+                Notes = "Test 3", Recipe = Recipes.First(), Yield = 1.5, AlcoholPercentage = 10,
+                StartDate = DateTime.UtcNow.Subtract(new TimeSpan(3, 0, 0)),
+                BoilingLog = new StepLog()
+            },
+            new BrewLog
+            {
+                Notes = "Test 4", Recipe = Recipes.First(), Yield = 1.5, AlcoholPercentage = 10,
+                StartDate = DateTime.UtcNow.Subtract(new TimeSpan(2, 0, 0))
+            }
+        };
+
         public static void Seed(BrewhelperContext context)
         {
             SeedIngredients(context);
             SeedRecipes(context);
+            SeedLogs(context);
         }
 
         private static void SeedIngredients(BrewhelperContext context)
         {
             if (context.Ingredients.Any()) { return; }
-            context.Ingredients.AddRange(Ingredients);
-            context.SaveChanges();
+
+            foreach (var ingredient in Ingredients)
+            {
+                context.Ingredients.Add(ingredient);
+                context.SaveChanges();
+            }
         }
 
         private static void SeedRecipes(BrewhelperContext context)
         {
             if (context.Recipes.Any()) { return; }
-            context.Recipes.AddRange(Recipes);
-            context.SaveChanges();
+
+            foreach (var recipe in Recipes)
+            {
+                context.Recipes.Add(recipe);
+                context.SaveChanges();
+            }
+        }
+
+        private static void SeedLogs(BrewhelperContext context)
+        {
+            if (context.BrewLogs.Any()) { return; }
+
+            foreach (var log in BrewLogs)
+            {
+                context.BrewLogs.Add(log);
+                context.SaveChanges();
+            }
         }
     }
 }
