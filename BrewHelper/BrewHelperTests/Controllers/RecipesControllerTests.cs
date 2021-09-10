@@ -320,9 +320,9 @@ namespace BrewHelperTests.Controllers
             {
                 Name = "new Test recipe",
                 AlcoholPercentage = 2,
-                Mashing = new RecipeStepDTO { Ingredients = null },
-                Boiling = new RecipeStepDTO { Ingredients = null },
-                Yeasting = new RecipeStepDTO { Ingredients =null },
+                Mashing = new RecipeStepDTO { Ingredients = new List<RecipeIngredientDTO>() },
+                Boiling = new RecipeStepDTO { Ingredients = new List<RecipeIngredientDTO>() },
+                Yeasting = new RecipeStepDTO { Ingredients =new List<RecipeIngredientDTO>() },
                 Description = "new test recipe 2",
                 EBC = 10,
                 IBU = 10,
@@ -356,9 +356,9 @@ namespace BrewHelperTests.Controllers
             {
                 Name = "Test recipe",
                 AlcoholPercentage = 2,
-                Mashing = new RecipeStepDTO { Ingredients = null },
-                Boiling = new RecipeStepDTO { Ingredients = null },
-                Yeasting = new RecipeStepDTO { Ingredients = null },
+                Mashing = new RecipeStepDTO { Ingredients = new List<RecipeIngredientDTO>() },
+                Boiling = new RecipeStepDTO { Ingredients = new List<RecipeIngredientDTO>() },
+                Yeasting = new RecipeStepDTO { Ingredients = new List<RecipeIngredientDTO>() },
                 Description = "new test recipe 2",
                 EBC = 10,
                 IBU = 10,
@@ -412,9 +412,9 @@ namespace BrewHelperTests.Controllers
             {
                 Name = "delete Test recipe",
                 AlcoholPercentage = 2,
-                Mashing = new RecipeStepDTO { Ingredients = null },
-                Boiling = new RecipeStepDTO { Ingredients = null },
-                Yeasting = new RecipeStepDTO { Ingredients = null },
+                Mashing = new RecipeStepDTO { Ingredients = new List<RecipeIngredientDTO>() },
+                Boiling = new RecipeStepDTO { Ingredients = new List<RecipeIngredientDTO>() },
+                Yeasting = new RecipeStepDTO { Ingredients = new List<RecipeIngredientDTO>() },
                 Description = "new test recipe 2",
                 EBC = 10,
                 IBU = 10,
@@ -427,7 +427,7 @@ namespace BrewHelperTests.Controllers
             };
 
             var json = JsonConvert.SerializeObject(newRecipe);
-            var stringContent = new StringContent(json, UnicodeEncoding.UTF8, MediaTypeNames.Application.Json);
+            var stringContent = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
 
             var response = await _userClient.PostAsync("/api/Recipes", stringContent);
             RecipeDTO recipe = JsonConvert.DeserializeObject<RecipeDTO>(await response.Content.ReadAsStringAsync());

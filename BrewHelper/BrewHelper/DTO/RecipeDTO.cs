@@ -26,9 +26,9 @@ namespace BrewHelper.Models
             EBC = recipe.EBC;
             MashWater = recipe.MashWater;
             RinseWater = recipe.RinseWater;
-            Mashing = new RecipeStepDTO(recipe.Mashing);
-            Boiling = new RecipeStepDTO(recipe.Boiling);
-            Yeasting = new RecipeStepDTO(recipe.Yeasting);
+            if (recipe.Mashing != null) Mashing = new RecipeStepDTO(recipe.Mashing);
+            if (recipe.Boiling != null) Boiling = new RecipeStepDTO(recipe.Boiling);
+            if (recipe.Yeasting != null) Yeasting = new RecipeStepDTO(recipe.Yeasting);
         }
 
         public long Id { get; set; }
