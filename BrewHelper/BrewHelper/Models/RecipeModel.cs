@@ -42,9 +42,9 @@ namespace BrewHelper.Models
                 query = query.Where(i => ids.Contains(i.Id));
 
             if (inStock != null)
-                query = query.Where(r => r.Mashing != null && r.Mashing.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)))
-                            .Where(r => r.Boiling != null && r.Boiling.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)))
-                            .Where(r => r.Yeasting != null && r.Yeasting.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)));
+                query = query.Where(r => r.Mashing != null && r.Mashing.Ingredients != null && r.Mashing.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)))
+                            .Where(r => r.Boiling != null && r.Boiling.Ingredients != null && r.Boiling.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)))
+                            .Where(r => r.Yeasting != null && r.Yeasting.Ingredients != null && r.Yeasting.Ingredients.All(ri => ri.Weight <= ri.Ingredient.InStock || !inStock.Contains(ri.Ingredient.Type)));
 
             var recipes = await query.OrderBy(i => i.Name).PaginateAsync(page, limit, cancellationToken);
 
