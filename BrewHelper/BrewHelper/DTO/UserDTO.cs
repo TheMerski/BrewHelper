@@ -17,6 +17,7 @@ namespace BrewHelper.DTO
         [EmailAddress]
         [Required(ErrorMessage = "Email is required")]
         public string Email { get; set; }
+
         public List<ApplicationRoles> Roles { get; set; }
     }
 }

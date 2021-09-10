@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using BrewHelper.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,12 +9,18 @@ namespace BrewHelper.Entities
 {
     public class BrewLog
     {
+        public BrewLog()
+        {
+            Notes = string.Empty;
+        }
+        
         public long Id { get; set; }
         /// <summary>
         /// Recipe the brewing is based off
         /// </summary>
         [Required]
-        public Recipe Recipe { get; set; }
+        public Recipe Recipe { get; set; } = null!;
+
         /// <summary>
         /// Brewing notes
         /// </summary>
@@ -35,10 +42,10 @@ namespace BrewHelper.Entities
         /// Measured end SG
         /// </summary>
         public int? EndSG { get; set; }
-        /// <summary>§
+        /// <summary>
         /// Alcohol percentage of brewing
         /// </summary>
-        public double? AlcoholPercentage { get; private set; }
+        public double? AlcoholPercentage { get; set; }
         /// <summary>
         /// Brew yield (L)
         /// </summary>
@@ -63,10 +70,35 @@ namespace BrewHelper.Entities
         /// Mashing Log
         /// </summary>
         public StepLog YeastingLog { get; set; }
+
+        public void InitializeNextStep()
+        {
+            if (MashingLog == null)
+            {
+                MashingLog = new StepLog();
+            } else if (BoilingLog == null)
+            {
+                MashingLog.End = DateTime.UtcNow;
+                BoilingLog = new StepLog();
+            } else if (YeastingLog == null)
+            {
+                BoilingLog.End = DateTime.UtcNow;
+                YeastingLog = new StepLog();
+            }
+        }
     }
 
     public class StepLog
     {
+        public StepLog()
+        {
+            TemperatureMeasurements = new List<Measurement>();
+            PhMeasurements = new List<Measurement>();
+            SgMeasurements = new List<Measurement>();
+            Notes = string.Empty;
+            Start = DateTime.UtcNow;
+        }
+        
         public long Id { get; set; }
         /// <summary>
         /// Start of mashing step
@@ -90,7 +122,7 @@ namespace BrewHelper.Entities
         /// </summary>
         public List<Measurement> PhMeasurements { get; set; }
         /// <summary>
-        /// Measurements of ph value
+        /// Measurements of sg value
         /// </summary>
         public List<Measurement> SgMeasurements { get; set; }
     }
@@ -98,6 +130,11 @@ namespace BrewHelper.Entities
     [Owned]
     public class Measurement
     {
+        public Measurement()
+        {
+            Notes = string.Empty;
+        }
+        
         public long Id { get; set; }
         /// <summary>
         /// Measurement value
