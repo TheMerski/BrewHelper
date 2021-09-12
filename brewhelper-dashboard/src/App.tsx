@@ -1,6 +1,6 @@
 // in src/App.js
 import { Route } from 'react-router';
-import { Admin, Resource } from 'react-admin';
+import { Admin, EditGuesser, ListGuesser, Resource } from 'react-admin';
 import Dashboard from './Dashboard';
 import authProvider from './DataProvider/authProvider';
 import devDataProvider from './DataProvider/BrewHelperDataProvider';
@@ -13,7 +13,9 @@ import { RecipeCreate, RecipeEdit, RecipeList } from './Entities/Recipes';
 import { UserCreate, UserEdit, UserList } from './Entities/Users';
 import { ProfileEdit } from './Profile';
 import PersonIcon from '@material-ui/icons/Person';
+import { Assignment, LocalBar, LibraryBooks } from '@material-ui/icons';
 import MyLayout from './Layout';
+import { BrewlogEdit, BrewlogList } from './Entities/BrewLogs';
 
 const App = () => (
   <Admin
@@ -31,12 +33,20 @@ const App = () => (
         list={IngredientList}
         edit={IngredientEdit}
         create={IngredientCreate}
+        icon={LibraryBooks}
       />,
       <Resource
         name="Recipes"
         list={RecipeList}
         edit={RecipeEdit}
         create={RecipeCreate}
+        icon={Assignment}
+      />,
+      <Resource
+        name="BrewLogs"
+        list={BrewlogList}
+        edit={BrewlogEdit}
+        icon={LocalBar}
       />,
       permissions.includes('Admin') ? (
         <Resource
