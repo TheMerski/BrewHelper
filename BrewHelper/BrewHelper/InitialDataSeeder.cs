@@ -43,7 +43,7 @@ namespace BrewHelper
         {
             if (context.Recipes.Any()) { return; }
 
-            var ingredient = context.Ingredients.AsNoTracking().First();
+            var ingredient = context.Ingredients.OrderBy(i => i.Id).First();
 
             var recipes = new List<Recipe>
             {
@@ -65,7 +65,7 @@ namespace BrewHelper
         {
             if (context.BrewLogs.Any()) {return;}
 
-            var recipe = context.Recipes.AsNoTracking().First();
+            var recipe = context.Recipes.OrderBy(r => r.Id).First();
 
             var logs = new List<BrewLog>()
             {
