@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace BrewHelper.DTO
 {
     public record GenericListResponseDTO<T>
     {
+        public GenericListResponseDTO()
+        {
+            Items = new List<T>();
+        }
+
         public int CurrentPage { get; init; }
 
         public int TotalItems { get; init; }

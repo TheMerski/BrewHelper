@@ -1,7 +1,7 @@
 ﻿using BrewHelper.DTO;
+using BrewHelper.Entities;
 using BrewHelper.Extensions;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -38,7 +38,7 @@ namespace BrewHelper.Models
         /// <param name="inStock">Wether the ingredient is in stock</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<GetIngredientListResponseDTO> GetByPageAsync(int limit, int page, string name, long[] ids, Ingredient.IngredientType[] types, bool? inStock, CancellationToken cancellationToken)
+        public async Task<GenericListResponseDTO<Ingredient>> GetByPageAsync(int limit, int page, string? name, long[]? ids, Ingredient.IngredientType[]? types, bool? inStock, CancellationToken cancellationToken)
         {
             var query = context.Ingredients.AsNoTracking();
 
@@ -58,7 +58,7 @@ namespace BrewHelper.Models
                 
             var ingredients = await query.OrderBy(i => i.Name).PaginateAsync(page, limit, cancellationToken);
 
-            return new GetIngredientListResponseDTO
+            return new GenericListResponseDTO<Ingredient>
             {
                 CurrentPage = ingredients.CurrentPage,
                 TotalItems = ingredients.TotalItems,
@@ -72,7 +72,7 @@ namespace BrewHelper.Models
         /// </summary>
         /// <param name="id">The id of the Ingredient to get</param>
         /// <returns>Ingredient with id or default</returns>
-        public virtual async Task<Ingredient> GetIngredientById(long id)
+        public virtual async Task<Ingredient?> GetIngredientById(long id)
         {
             return await context.Ingredients.Where(r => r.Id == id).FirstOrDefaultAsync();
         }
@@ -80,15 +80,15 @@ namespace BrewHelper.Models
         /// <summary>
         /// Add a Ingredient
         /// </summary>
-        /// <param name="Ingredient">The Ingredient to add</param>
+        /// <param name="ingredient">The Ingredient to add</param>
         /// <returns>The Ingredient or null</returns>
-        public virtual async Task<Ingredient> AddIngredient(Ingredient Ingredient)
+        public virtual async Task<Ingredient?> AddIngredient(Ingredient? ingredient)
         {
-            if (Ingredient != null && !await context.Ingredients.Where(r => r.Name.Equals(Ingredient.Name)).AnyAsync())
+            if (ingredient != null && !await context.Ingredients.Where(r => r.Name.Equals(ingredient.Name)).AnyAsync())
             {
-                await context.Ingredients.AddAsync(Ingredient);
+                await context.Ingredients.AddAsync(ingredient);
                 await context.SaveChangesAsync();
-                return Ingredient;
+                return ingredient;
             }
 
             return null;
@@ -97,11 +97,12 @@ namespace BrewHelper.Models
         /// <summary>
         /// Update a Ingredient
         /// </summary>
-        /// <param name="Ingredient">The updated Ingredient</param>
+        /// <param name="id">Ingredient id</param>
+        /// <param name="ingredient">The updated Ingredient</param>
         /// <returns>The updated Ingredient</returns>
-        public virtual async Task<Ingredient> UpdateIngredient(long id, Ingredient Ingredient)
+        public virtual async Task<Ingredient?> UpdateIngredient(long id, Ingredient ingredient)
         {
-            context.Entry(Ingredient).State = EntityState.Modified;
+            context.Entry(ingredient).State = EntityState.Modified;
 
             try
             {
@@ -118,7 +119,7 @@ namespace BrewHelper.Models
                     throw;
                 }
             }
-            return Ingredient;
+            return ingredient;
         }
 
         /// <summary>
@@ -128,13 +129,13 @@ namespace BrewHelper.Models
         /// <returns></returns>
         public virtual async Task<bool> DeleteIngredientById(long id)
         {
-            var Ingredient = await context.Ingredients.FindAsync(id);
-            if (Ingredient == null)
+            var ingredient = await context.Ingredients.FindAsync(id);
+            if (ingredient == null)
             {
                 return false;
             }
 
-            context.Ingredients.Remove(Ingredient);
+            context.Ingredients.Remove(ingredient);
             await context.SaveChangesAsync();
 
             return true;

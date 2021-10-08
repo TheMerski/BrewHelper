@@ -1,14 +1,7 @@
-using BrewHelper;
-using BrewHelper.Controllers;
 using BrewHelper.DTO;
-using BrewHelper.Models;
+using BrewHelper.Entities;
 using FluentAssertions;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Moq;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -37,7 +30,7 @@ namespace BrewHelperTests.Controllers
             var response = await _adminClient.GetAsync("/api/Ingredients");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Should().NotBeEmpty();
         }
 
@@ -47,7 +40,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Ingredients");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Should().NotBeEmpty();
         }
 
@@ -57,7 +50,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Ingredients?limit=2");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Count.Should().Be(2);
             Ingredients.TotalPages.Should().BeGreaterThan(1);
             Ingredients.TotalItems.Should().BeGreaterThan(2);
@@ -70,7 +63,7 @@ namespace BrewHelperTests.Controllers
             var response1 = await _userClient.GetAsync("/api/Ingredients?limit=1&Page=1");
             response1.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var IngredientsPage1 = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response1.Content.ReadAsStringAsync());
+            var IngredientsPage1 = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response1.Content.ReadAsStringAsync());
             IngredientsPage1.Items.Count.Should().Be(1);
             IngredientsPage1.CurrentPage.Should().Be(1);
             Ingredient ing1 = IngredientsPage1.Items.First();
@@ -78,7 +71,7 @@ namespace BrewHelperTests.Controllers
             var response2 = await _userClient.GetAsync("/api/Ingredients?limit=1&Page=2");
             response2.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var IngredientsPage2 = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response2.Content.ReadAsStringAsync());
+            var IngredientsPage2 = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response2.Content.ReadAsStringAsync());
             IngredientsPage2.Items.Count.Should().Be(1);
             IngredientsPage2.CurrentPage.Should().Be(2);
             Ingredient ing2 = IngredientsPage2.Items.First();
@@ -106,7 +99,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Ingredients?Name=Hop");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Should().NotBeEmpty();
             Ingredients.Items.First().Name.Should().Be("Hop");
         }
@@ -117,7 +110,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Ingredients?Types=Hop");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Should().NotBeEmpty();
             Ingredients.Items.First().Type.Should().Be(Ingredient.IngredientType.Hop);
         }
@@ -128,7 +121,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Ingredients?Types=Hop&Types=Herb");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Should().NotBeEmpty();
             Ingredients.Items.Count.Should().BeGreaterOrEqualTo(2);
         }
@@ -146,7 +139,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Ingredients?Id=1");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Should().NotBeEmpty();
             Ingredients.Items.Count.Should().Be(1);
             Ingredients.TotalItems.Should().Be(1);
@@ -159,7 +152,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Ingredients?Id=1&Id=2");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Should().NotBeEmpty();
             Ingredients.Items.Count.Should().Be(2);
             Ingredients.TotalItems.Should().Be(2);
@@ -178,7 +171,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Ingredients?InStock=true");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Should().NotBeEmpty();
             Ingredients.Items.Count.Should().BeGreaterThan(1);
             Ingredients.Items.ForEach(i => i.InStock.Should().BeGreaterOrEqualTo(1));
@@ -190,7 +183,7 @@ namespace BrewHelperTests.Controllers
             var response = await _userClient.GetAsync("/api/Ingredients?InStock=false");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
-            var Ingredients = JsonConvert.DeserializeObject<GetIngredientListResponseDTO>(await response.Content.ReadAsStringAsync());
+            var Ingredients = JsonConvert.DeserializeObject<GenericListResponseDTO<Ingredient>>(await response.Content.ReadAsStringAsync());
             Ingredients.Items.Should().NotBeEmpty();
             Ingredients.Items.Count.Should().BeGreaterThan(1);
             Ingredients.Items.ForEach(i => i.InStock.Should().Be(0));

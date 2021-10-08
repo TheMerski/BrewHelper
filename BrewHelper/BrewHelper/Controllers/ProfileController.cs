@@ -2,10 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BrewHelper.Controllers
@@ -16,12 +12,10 @@ namespace BrewHelper.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IConfiguration _configuration;
 
-        public ProfileController(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public ProfileController(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
-            _configuration = configuration;
         }
 
         [HttpPost]
@@ -33,7 +27,7 @@ namespace BrewHelper.Controllers
                 return BadRequest();
             }
 
-            var user = await userManager.FindByNameAsync(User.Identity.Name);
+            var user = await userManager.FindByNameAsync(User.Identity?.Name);
             if (user != null)
             {
                 IdentityResult result = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);

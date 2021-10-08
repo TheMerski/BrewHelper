@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace BrewHelper.Extensions
 {
-    public static class context
+    public static class Context
     {
         public static void TryUpdateManyToMany<T, TKey>(this DbContext db, IEnumerable<T> currentItems, IEnumerable<T> newItems, Func<T, TKey> getKey) where T : class
         {
+            // ReSharper disable once PossibleMultipleEnumeration
             db.Set<T>().RemoveRange(currentItems.Except(newItems, getKey));
+            // ReSharper disable once PossibleMultipleEnumeration
             db.Set<T>().AddRange(newItems.Except(currentItems, getKey));
         }
 

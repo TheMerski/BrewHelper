@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using BrewHelper.Models;
-using Newtonsoft.Json;
-using System.Text.Json.Serialization;
 using BrewHelper.DTO;
 using System.Threading;
 using Microsoft.AspNetCore.Authorization;
+using BrewHelper.Entities;
 
 namespace BrewHelper.Controllers
 {
@@ -28,7 +23,7 @@ namespace BrewHelper.Controllers
 
         // GET: api/Ingredients
         [HttpGet]
-        [ProducesResponseType(typeof(GetIngredientListResponseDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GenericListResponseDTO<Ingredient>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetIngredients(
             [FromQuery] UrlQueryParameters urlQueryParameters,
@@ -111,7 +106,6 @@ namespace BrewHelper.Controllers
             return NotFound();
         }
 
+        public record UrlQueryParameters(int Limit = 50, int Page = 1, string? Name = null, long[]? Id = null, Ingredient.IngredientType[]? Types = null, bool? InStock = null);
     }
-
-    public record UrlQueryParameters(int Limit = 50, int Page = 1, string Name = null, long[] Id = null, Ingredient.IngredientType[] Types = null, bool? InStock = null);
 }

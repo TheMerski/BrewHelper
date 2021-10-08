@@ -2,7 +2,6 @@
 using BrewHelper.DTO;
 using BrewHelper.Extensions;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +14,10 @@ namespace BrewHelper.Models
     public class UserModel
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IConfiguration _configuration;
 
-        public UserModel(UserManager<ApplicationUser> userManager, IConfiguration configuration)
+        public UserModel(UserManager<ApplicationUser> userManager)
         {
             this.userManager = userManager;
-            _configuration = configuration;
         }
 
         /// <summary>
@@ -47,7 +44,7 @@ namespace BrewHelper.Models
         /// </summary>
         /// <param name="id">Id of the user</param>
         /// <returns>The UserDTO or null</returns>
-        public async Task<UserDTO> GetById(string id)
+        public async Task<UserDTO?> GetById(string id)
         {
             var user = await userManager.FindByIdAsync(id);
             if (user != null)
@@ -78,7 +75,7 @@ namespace BrewHelper.Models
         /// </summary>
         /// <param name="dto">UserDTO of the user to update</param>
         /// <returns>Updated UserDTO or null</returns>
-        public async Task<UserDTO> UpdateUser(UserDTO dto)
+        public async Task<UserDTO?> UpdateUser(UserDTO dto)
         {
             var user = await userManager.FindByIdAsync(dto.Id);
             if (user == null)
@@ -98,7 +95,7 @@ namespace BrewHelper.Models
         /// </summary>
         /// <param name="register">Registered user model</param>
         /// <returns>The created UserDTO</returns>
-        public async Task<UserDTO> CreateUser(RegisterDTO register)
+        public async Task<UserDTO?> CreateUser(RegisterDTO register)
         {
             if (await UserExists(register.Username)) return null;
 
@@ -130,7 +127,7 @@ namespace BrewHelper.Models
         /// <returns>Id of current user</returns>
         public async Task<string> GetCurrentUserId(ClaimsPrincipal principal)
         {
-            ApplicationUser user = await userManager.FindByNameAsync(principal.Identity.Name);
+            ApplicationUser user = await userManager.FindByNameAsync(principal.Identity?.Name);
             return user.Id;
         }
 
@@ -139,12 +136,12 @@ namespace BrewHelper.Models
         /// </summary>
         /// <param name="user">The user to update</param>
         /// <returns>The updated user</returns>
-        public async Task<UserDTO> UpdateUserRoles(UserDTO user)
+        public async Task<UserDTO?> UpdateUserRoles(UserDTO user)
         {
             if (!await UserExists(user.Username)) return null;
             var appUser = await userManager.FindByNameAsync(user.Username);
             List<ApplicationRoles> currentRoles = await GetUserRoles(appUser);
-            if (user.Roles.Count != currentRoles.Count || !user.Roles.All(currentRoles.Contains))
+            if (user.Roles != null && (user.Roles.Count != currentRoles.Count || !user.Roles.All(currentRoles.Contains)))
             {
                 List<ApplicationRoles> newRoles = user.Roles.Where(r => !currentRoles.Contains(r)).ToList();
                 List<ApplicationRoles> removedRoles = currentRoles.Where(r => !user.Roles.Contains(r)).ToList();
@@ -152,11 +149,13 @@ namespace BrewHelper.Models
                 {
                     await userManager.AddToRolesAsync(appUser, newRoles.Select(r => r.ToString()).ToArray());
                 }
+
                 if (removedRoles.Count > 0)
                 {
                     await userManager.RemoveFromRolesAsync(appUser, removedRoles.Select(r => r.ToString()).ToArray());
                 }
             }
+
             List<ApplicationRoles> roles = await GetUserRoles(appUser);
             return new UserDTO { Username = user.Username, Email = user.Email, Roles = roles };
         }

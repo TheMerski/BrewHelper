@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using BrewHelper.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace BrewHelper.Models
 {
@@ -39,11 +36,13 @@ namespace BrewHelper.Models
         /// Recipe name
         /// </summary>
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
+
         /// <summary>
         /// Recipe Description
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
+
         /// <summary>
         /// Expected start SG
         /// </summary>
@@ -83,45 +82,39 @@ namespace BrewHelper.Models
         /// <summary>
         /// Mashing Step for recipe
         /// </summary>
-        [Required]
-        public RecipeStepDTO Mashing { get; set; }
+        public RecipeStepDTO? Mashing { get; set; }
+
         /// <summary>
         /// Boiling Step for recipe
         /// </summary>
-        [Required]
-        public RecipeStepDTO Boiling { get; set; }        
+        public RecipeStepDTO? Boiling { get; set; }
+
         /// <summary>
         /// Yeasting Step for recipe
         /// </summary>
-        [Required]
-        public RecipeStepDTO Yeasting { get; set; }
+        public RecipeStepDTO? Yeasting { get; set; }
     }
 
     public class RecipeStepDTO
     {
         public RecipeStepDTO()
         {
-
+            Ingredients = new List<RecipeIngredientDTO>();
         }
         public RecipeStepDTO(RecipeStep step)
         {
             Id = step.Id;
             Description = step.Description;
             Time = step.Time;
+            Ingredients = new List<RecipeIngredientDTO>();
             if (step.Ingredients != null)
-            {
-                Ingredients = new List<RecipeIngredientDTO>();
-                step.Ingredients.ForEach(i =>
-                {
-                    Ingredients.Add(new RecipeIngredientDTO(i));
-                });
-            }
+                step.Ingredients.ForEach(i => { Ingredients.Add(new RecipeIngredientDTO(i)); });
         }
         public long Id { get; set; }
         /// <summary>
         /// Step Description
         /// </summary>
-        public string Description { get; set; }
+        public string? Description { get; set; }
         /// <summary>
         /// Amount of time for step
         /// </summary>
@@ -133,7 +126,7 @@ namespace BrewHelper.Models
         /// <summary>
         /// Ingredients needed for step (weight in grams)
         /// </summary>
-        public List<RecipeIngredientDTO> Ingredients { get; set; }
+        public List<RecipeIngredientDTO>? Ingredients { get; set; }
         ///// <summary>
         ///// The recipe the step belongs to
         ///// </summary>

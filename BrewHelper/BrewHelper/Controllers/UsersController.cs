@@ -1,15 +1,8 @@
 ﻿using BrewHelper.Authentication;
 using BrewHelper.DTO;
 using BrewHelper.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,12 +14,10 @@ namespace BrewHelper.Controllers
     public class UsersController : Controller
     {
         private readonly UserModel userModel;
-        private readonly IConfiguration _configuration;
 
-        public UsersController(UserModel userModel, IConfiguration configuration)
+        public UsersController(UserModel userModel)
         {
             this.userModel = userModel;
-            _configuration = configuration;
         }
 
         // GET: api/Users
@@ -72,7 +63,7 @@ namespace BrewHelper.Controllers
                 return BadRequest();
             }
 
-            UserDTO updated = await userModel.UpdateUser(user);
+            var updated = await userModel.UpdateUser(user);
             if (updated == null)
             {
                 return NotFound();
@@ -89,7 +80,7 @@ namespace BrewHelper.Controllers
 
             if (ModelState.IsValid)
             {
-                UserDTO created = await userModel.CreateUser(model);
+                var created = await userModel.CreateUser(model);
                 if (created != null)
                 {
                     return Created("GetUser", created);

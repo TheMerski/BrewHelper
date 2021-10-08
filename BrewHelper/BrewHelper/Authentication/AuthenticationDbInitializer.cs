@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BrewHelper.Authentication
 {
@@ -34,7 +31,7 @@ namespace BrewHelper.Authentication
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRolesAsync(user, new string[] { ApplicationRoles.Admin.ToString(), ApplicationRoles.User.ToString() }).Wait();
+                    userManager.AddToRolesAsync(user, new [] { ApplicationRoles.Admin.ToString(), ApplicationRoles.User.ToString() }).Wait();
                 }
             }
         }
@@ -53,7 +50,7 @@ namespace BrewHelper.Authentication
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRolesAsync(user, new string[] { ApplicationRoles.User.ToString() }).Wait();
+                    userManager.AddToRolesAsync(user, new [] { ApplicationRoles.User.ToString() }).Wait();
                 }
             }
         }
