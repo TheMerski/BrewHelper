@@ -12,7 +12,23 @@ import {
   SelectInput,
   SimpleForm,
   TextInput,
-} from 'react-admin';
+  EditProps,
+  TabbedForm,
+  FormTab,
+  FormWithRedirect,
+  SaveButton,
+  DeleteButton,
+  NullableBooleanInput,
+  SelectArrayInput,
+  Toolbar,
+} from "react-admin";
+import RichTextInput from "ra-input-rich-text";
+import BrewDateTime from "../components/BrewDateTime";
+import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
+
+const useStyles = makeStyles({
+  inlineBlock: { display: "inline-flex", marginRight: "1rem" },
+});
 
 export const BrewlogList = (props: any) => (
   <List {...props}>
@@ -32,21 +48,26 @@ export const BrewlogList = (props: any) => (
   </List>
 );
 
-export const BrewlogEdit = (props: any) => (
-  <Edit {...props}>
-    <SimpleForm>
-      <ReferenceInput source="recipeId" reference="Recipes">
-        <SelectInput optionText="name" />
-      </ReferenceInput>
-      <TextInput source="notes" />
-      <DateInput source="startDate" />
-      <DateInput source="endDate" />
-      <NumberInput source="startSG" />
-      <NumberInput source="endSG" />
-      <NumberInput source="alcoholPercentage" />
-      <NumberInput source="yield" />
-      <NumberInput source="ibu" />
-      <NumberInput source="ebc" />
-    </SimpleForm>
-  </Edit>
-);
+export const BrewlogEdit = (props: EditProps) => {
+  const classes = useStyles();
+  return (
+    <Edit {...props}>
+      <TabbedForm>
+        <FormTab label="Overview">
+          <ReferenceField source="recipeId" reference="Recipes">
+            <TextField source="name"></TextField>
+          </ReferenceField>
+          <RichTextInput multiline source="notes" />
+          <BrewDateTime startSource="startDate" endSource="endDate" />
+          <NumberInput label="Start SG" source="startSG" formClassName={classes.inlineBlock} />
+          <NumberInput label="End SG" source="endSG" formClassName={classes.inlineBlock} />
+          <NumberInput label="Alcohol percentage" source="alcoholPercentage" formClassName={classes.inlineBlock} />
+          <NumberInput label="Yield" source="yield" formClassName={classes.inlineBlock} />
+          <NumberInput label="IBU" source="ibu" formClassName={classes.inlineBlock} />
+          <NumberInput label="EBC" source="ebc" formClassName={classes.inlineBlock} />
+        </FormTab>
+        <FormTab label="Mashing"></FormTab>
+      </TabbedForm>
+    </Edit>
+  );
+};

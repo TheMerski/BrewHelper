@@ -15,47 +15,22 @@ import { ProfileEdit } from './Profile';
 import PersonIcon from '@material-ui/icons/Person';
 import { Assignment, LocalBar, LibraryBooks } from '@material-ui/icons';
 import MyLayout from './Layout';
-import { BrewlogEdit, BrewlogList } from './Entities/BrewLogs';
+import { BrewlogEdit, BrewlogForm, BrewlogList } from "./Entities/BrewLogs";
 
 const App = () => (
   <Admin
     dashboard={Dashboard}
     authProvider={authProvider}
     dataProvider={devDataProvider}
-    customRoutes={[
-      <Route key="my-profile" path="/my-profile" component={ProfileEdit} />,
-    ]}
+    customRoutes={[<Route key="my-profile" path="/my-profile" component={ProfileEdit} />]}
     layout={MyLayout}
   >
     {(permissions: string[]) => [
-      <Resource
-        name="Ingredients"
-        list={IngredientList}
-        edit={IngredientEdit}
-        create={IngredientCreate}
-        icon={LibraryBooks}
-      />,
-      <Resource
-        name="Recipes"
-        list={RecipeList}
-        edit={RecipeEdit}
-        create={RecipeCreate}
-        icon={Assignment}
-      />,
-      <Resource
-        name="BrewLogs"
-        list={BrewlogList}
-        edit={BrewlogEdit}
-        icon={LocalBar}
-      />,
-      permissions.includes('Admin') ? (
-        <Resource
-          name="Users"
-          list={UserList}
-          edit={UserEdit}
-          create={UserCreate}
-          icon={PersonIcon}
-        />
+      <Resource name="Ingredients" list={IngredientList} edit={IngredientEdit} create={IngredientCreate} icon={LibraryBooks} />,
+      <Resource name="Recipes" list={RecipeList} edit={RecipeEdit} create={RecipeCreate} icon={Assignment} />,
+      <Resource name="BrewLogs" list={BrewlogList} edit={BrewlogEdit} icon={LocalBar} />,
+      permissions.includes("Admin") ? (
+        <Resource name="Users" list={UserList} edit={UserEdit} create={UserCreate} icon={PersonIcon} />
       ) : null,
     ]}
   </Admin>
