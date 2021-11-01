@@ -3,6 +3,7 @@ using BrewHelper.Authentication;
 using BrewHelper.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
+using BrewHelper.Authentication.Context;
 using Xunit;
 
 namespace BrewHelperTests

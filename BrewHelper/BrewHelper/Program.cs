@@ -35,23 +35,23 @@ namespace BrewHelper
 
                 throw;
             }
-
-            try
-            {
-                var authenticationDbContext = services.GetRequiredService<AuthenticationDbContext>();
-                if (authenticationDbContext.Database.IsSqlServer())
-                {
-                    authenticationDbContext.Database.Migrate();
-                }
-            }
-            catch (Exception ex)
-            {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-
-                logger.LogError(ex, "An error occurred while migrating or seeding the authentication database");
-
-                throw;
-            }
+            //
+            // try
+            // {
+            //     var authenticationDbContext = services.GetRequiredService<AuthenticationDbContext>();
+            //     if (authenticationDbContext.Database.IsSqlServer())
+            //     {
+            //         authenticationDbContext.Database.Migrate();
+            //     }
+            // }
+            // catch (Exception ex)
+            // {
+            //     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            //
+            //     logger.LogError(ex, "An error occurred while migrating or seeding the authentication database");
+            //
+            //     throw;
+            // }
 
             await host.RunAsync();
         }

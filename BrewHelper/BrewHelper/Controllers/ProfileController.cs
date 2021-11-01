@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using BrewHelper.Authentication.DTO;
+using BrewHelper.Authentication.Users;
 
 namespace BrewHelper.Controllers
 {

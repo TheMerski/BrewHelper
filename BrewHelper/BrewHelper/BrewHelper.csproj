@@ -24,5 +24,11 @@
     <PackageReference Include="NSwag.AspNetCore" Version="13.13.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BrewHelper.Authentication\BrewHelper.Authentication.csproj" />
+    <ProjectReference Include="..\BrewHelper.Business\BrewHelper.Business.csproj" />
+    <ProjectReference Include="..\BrewHelper.Data\BrewHelper.Data.csproj" />
+  </ItemGroup>
+
 
 </Project>

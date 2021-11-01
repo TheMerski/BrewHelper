@@ -1,4 +1,5 @@
 ﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
@@ -7,6 +8,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrewHelper", "BrewHelper\Br
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BrewHelperTests", "BrewHelperTests\BrewHelperTests.csproj", "{E1E08C88-8C24-45A5-9AF9-A3E54FDF60E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrewHelper.Web", "BrewHelper.Web\BrewHelper.Web.csproj", "{00EF1C75-1E28-4F1B-9AF7-DE186C0A497B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrewHelper.Business", "BrewHelper.Business\BrewHelper.Business.csproj", "{A2E880FD-F6BB-4595-A4DB-F5AA17384406}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{ABB70F9F-1818-4560-AD95-57F7B769E7CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrewHelper.Authentication", "BrewHelper.Authentication\BrewHelper.Authentication.csproj", "{F2A40FD2-0B2D-4BF7-B022-105D36A07EEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrewHelper.Data", "BrewHelper.Data\BrewHelper.Data.csproj", "{32808424-4F56-410A-8491-C2BB1694A66F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,18 +25,37 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{C846B47B-3265-4B84-8CD5-7EC08BE3B49E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C846B47B-3265-4B84-8CD5-7EC08BE3B49E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C846B47B-3265-4B84-8CD5-7EC08BE3B49E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C846B47B-3265-4B84-8CD5-7EC08BE3B49E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C846B47B-3265-4B84-8CD5-7EC08BE3B49E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1E08C88-8C24-45A5-9AF9-A3E54FDF60E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E1E08C88-8C24-45A5-9AF9-A3E54FDF60E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1E08C88-8C24-45A5-9AF9-A3E54FDF60E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1E08C88-8C24-45A5-9AF9-A3E54FDF60E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00EF1C75-1E28-4F1B-9AF7-DE186C0A497B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00EF1C75-1E28-4F1B-9AF7-DE186C0A497B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00EF1C75-1E28-4F1B-9AF7-DE186C0A497B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00EF1C75-1E28-4F1B-9AF7-DE186C0A497B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2E880FD-F6BB-4595-A4DB-F5AA17384406}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2E880FD-F6BB-4595-A4DB-F5AA17384406}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2E880FD-F6BB-4595-A4DB-F5AA17384406}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2E880FD-F6BB-4595-A4DB-F5AA17384406}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2A40FD2-0B2D-4BF7-B022-105D36A07EEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2A40FD2-0B2D-4BF7-B022-105D36A07EEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2A40FD2-0B2D-4BF7-B022-105D36A07EEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2A40FD2-0B2D-4BF7-B022-105D36A07EEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32808424-4F56-410A-8491-C2BB1694A66F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32808424-4F56-410A-8491-C2BB1694A66F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32808424-4F56-410A-8491-C2BB1694A66F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32808424-4F56-410A-8491-C2BB1694A66F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1A50044C-3FC5-408B-9AD7-F45617AF6C96}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E1E08C88-8C24-45A5-9AF9-A3E54FDF60E6} = {ABB70F9F-1818-4560-AD95-57F7B769E7CC}
 	EndGlobalSection
 EndGlobal

@@ -1,5 +1,4 @@
-﻿using BrewHelper.Authentication;
-using BrewHelper.DTO;
+﻿using BrewHelper.DTO;
 using BrewHelper.Extensions;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -8,6 +7,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using BrewHelper.Authentication.DTO;
+using BrewHelper.Authentication.Users;
 
 namespace BrewHelper.Models
 {

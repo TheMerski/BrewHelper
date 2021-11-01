@@ -1,6 +1,7 @@
 ﻿using BrewHelper.Authentication;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using BrewHelper.Authentication.Users;
 
 namespace BrewHelper.DTO
 {

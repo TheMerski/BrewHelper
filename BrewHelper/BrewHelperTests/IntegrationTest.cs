@@ -9,6 +9,7 @@ using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using BrewHelper.Authentication.DTO;
 using Xunit;
 
 namespace BrewHelperTests

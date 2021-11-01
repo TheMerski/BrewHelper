@@ -13,6 +13,9 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using System.Linq;
 using System.Text;
+using BrewHelper.Authentication.Context;
+using BrewHelper.Authentication.Model;
+using BrewHelper.Authentication.Users;
 using BrewHelper.Interfaces;
 
 namespace BrewHelper
@@ -30,15 +33,15 @@ namespace BrewHelper
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("SQL");
-            string authenticationConnection = Configuration.GetConnectionString("Authentication");
-
-            services.AddTransient<BrewhelperContext>();
-            services.AddDbContext<BrewhelperContext>(opt =>
-                                           opt.UseSqlServer(connection));
-
-            services.AddDbContext<AuthenticationDbContext>(opt =>
-                               opt.UseSqlServer(authenticationConnection));
+            // string connection = Configuration.GetConnectionString("SQL");
+            // string authenticationConnection = Configuration.GetConnectionString("Authentication");
+            //
+            // services.AddTransient<BrewhelperContext>();
+            // services.AddDbContext<BrewhelperContext>(opt =>
+            //                                opt.UseSqlServer(connection));
+            //
+            // services.AddDbContext<AuthenticationDbContext>(opt =>
+            //                    opt.UseSqlServer(authenticationConnection));
 
             // For Identity  
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -105,6 +108,7 @@ namespace BrewHelper
             services.AddTransient<RecipeModel>();
             services.AddTransient<IngredientModel>();
             services.AddTransient<UserModel>();
+            services.AddTransient<IAuthenticationModel, AuthenticationModel>();
             services.AddScoped<IBrewLogModel, BrewLogModel>();
 
         }

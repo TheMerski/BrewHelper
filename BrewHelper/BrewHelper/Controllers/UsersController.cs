@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
+using BrewHelper.Authentication.DTO;
+using BrewHelper.Authentication.Users;
 
 namespace BrewHelper.Controllers
 {
