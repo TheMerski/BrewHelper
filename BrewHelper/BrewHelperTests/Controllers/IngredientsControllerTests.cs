@@ -1,5 +1,4 @@
 using BrewHelper.DTO;
-using BrewHelper.Entities;
 using FluentAssertions;
 using Newtonsoft.Json;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using BrewHelper.Data.Entities;
 using Xunit;
 
 namespace BrewHelperTests.Controllers

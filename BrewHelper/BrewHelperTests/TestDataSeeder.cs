@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using BrewHelper.Entities;
+using BrewHelper.Data.Context;
+using BrewHelper.Data.Entities;
 using BrewHelper.Models;
 
 namespace BrewHelperTests

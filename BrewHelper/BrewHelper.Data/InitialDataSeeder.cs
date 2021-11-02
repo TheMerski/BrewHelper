@@ -1,12 +1,12 @@
-﻿using BrewHelper.Entities;
-using BrewHelper.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BrewHelper.Data.Context;
+using BrewHelper.Data.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace BrewHelper
+namespace BrewHelper.Data
 {
     public class InitialDataSeeder
     {

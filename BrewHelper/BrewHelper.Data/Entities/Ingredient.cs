@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace BrewHelper.Entities
+namespace BrewHelper.Data.Entities
 {
     public class Ingredient
     {

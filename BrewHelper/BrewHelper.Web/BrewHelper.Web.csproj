@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BrewHelper.Authentication\BrewHelper.Authentication.csproj" />
+      <ProjectReference Include="..\BrewHelper.Data\BrewHelper.Data.csproj" />
     </ItemGroup>
 
     <ItemGroup>

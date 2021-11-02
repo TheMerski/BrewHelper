@@ -1,8 +1,10 @@
 ﻿@page "/"
 @using BrewHelper.Authentication.DTO
+@using Microsoft.AspNetCore.Authorization
 @namespace BrewHelper.Web.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@attribute [Authorize]
 @{
     Layout = null;
     var tokens = new InitialApplicationState

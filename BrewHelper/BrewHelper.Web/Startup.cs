@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BrewHelper.Authentication.Context;
 using BrewHelper.Authentication.DTO;
 using BrewHelper.Authentication.Users;
+using BrewHelper.Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -36,6 +37,10 @@ namespace BrewHelper.Web
             services.AddDbContext<AuthenticationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("Authentication"), x => x.MigrationsAssembly("BrewHelper.Authentication")));
+            
+            services.AddDbContext<BrewhelperContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("Data"), x => x.MigrationsAssembly("BrewHelper.Data")));
             
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>()

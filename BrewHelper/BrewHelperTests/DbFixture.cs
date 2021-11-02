@@ -4,6 +4,7 @@ using BrewHelper.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using BrewHelper.Authentication.Context;
+using BrewHelper.Data.Context;
 using Xunit;
 
 namespace BrewHelperTests

@@ -1,5 +1,6 @@
 using System;
 using BrewHelper.Authentication.Context;
+using BrewHelper.Data.Context;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,22 +18,22 @@ namespace BrewHelper.Web
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
             
-            // try
-            // {
-            //     var dbContext = services.GetRequiredService<BrewhelperContext>();
-            //     if (dbContext.Database.IsSqlServer())
-            //     {
-            //         dbContext.Database.Migrate();
-            //     }
-            // }
-            // catch (Exception ex)
-            // {
-            //     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-            //
-            //     logger.LogError(ex, "An error occurred while migrating or seeding the database");
-            //
-            //     throw;
-            // }
+            try
+            {
+                var dbContext = services.GetRequiredService<BrewhelperContext>();
+                if (dbContext.Database.IsSqlServer())
+                {
+                    dbContext.Database.Migrate();
+                }
+            }
+            catch (Exception ex)
+            {
+                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+            
+                logger.LogError(ex, "An error occurred while migrating or seeding the database");
+            
+                throw;
+            }
 
             try
             {

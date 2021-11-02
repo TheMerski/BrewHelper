@@ -6,8 +6,8 @@ using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using BrewHelper.Data.Entities;
 using BrewHelper.DTO;
-using BrewHelper.Entities;
 using FluentAssertions;
 using Xunit;
 

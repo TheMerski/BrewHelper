@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using BrewHelper.Models;
 using BrewHelper.DTO;
 using System.Threading;
-using BrewHelper.Entities;
+using BrewHelper.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BrewHelper.Controllers

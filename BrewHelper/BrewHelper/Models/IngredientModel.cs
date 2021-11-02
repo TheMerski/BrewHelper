@@ -1,11 +1,12 @@
 ﻿using BrewHelper.DTO;
-using BrewHelper.Entities;
 using BrewHelper.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BrewHelper.Data.Context;
+using BrewHelper.Data.Entities;
 
 namespace BrewHelper.Models
 {

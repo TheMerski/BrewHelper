@@ -1,7 +1,7 @@
-﻿using BrewHelper.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using BrewHelper.Data.Entities;
 
 namespace BrewHelper.Models
 {

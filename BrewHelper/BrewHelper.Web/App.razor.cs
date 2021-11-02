@@ -8,9 +8,9 @@ namespace BrewHelper.Web
     {
         [Parameter]
         public InitialApplicationState? InitialState { get; set; }
-        
+
         [Inject]
-        private TokenProvider TokenProvider { get; set; } = fr
+        private TokenProvider TokenProvider { get; set; } = default!;
 
         protected override void OnInitialized()
         {

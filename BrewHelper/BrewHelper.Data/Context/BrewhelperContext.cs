@@ -1,8 +1,7 @@
-﻿using BrewHelper.Entities;
+﻿using BrewHelper.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 
-namespace BrewHelper.Models
+namespace BrewHelper.Data.Context
 {
     public class BrewhelperContext : DbContext
     {
