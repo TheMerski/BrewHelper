@@ -5,12 +5,15 @@
 <MudSnackbarProvider/>
 
 <MudLayout>
-    <LoginDisplay />
-    <MudAppBar>
+    <MudAppBar Elevation="1" Dense="@true">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
-        My Application
+        <MudSpacer/>
+        <LoginDisplay/>
     </MudAppBar>
-    <MudDrawer @bind-Open="@_drawerOpen">
+    <MudDrawer Elevation="2" @bind-Open="@drawerOpen">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Class="mt-1">BrewHelper</MudText>
+        </MudDrawerHeader>
         <NavMenu/>
     </MudDrawer>
     <MudMainContent>
@@ -21,11 +24,11 @@
 </MudLayout>
 
 @code {
-    bool _drawerOpen = true;
+    bool drawerOpen = true;
 
     void DrawerToggle()
     {
-        _drawerOpen = !_drawerOpen;
+        drawerOpen = !drawerOpen;
     }
 
 }

@@ -5,6 +5,8 @@
         <UserSecretsId>aspnet-BrewHelper.Web-CAE1A0BC-A128-4840-A3B5-291D088078BA</UserSecretsId>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <Nullable>enable</Nullable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <CodeAnalysisRuleSet>..\analyzers.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,6 +16,10 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10" />
         <PackageReference Include="MudBlazor" Version="5.1.5" />
+        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
     </ItemGroup>
 
     <ItemGroup>

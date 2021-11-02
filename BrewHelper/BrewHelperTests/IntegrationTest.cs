@@ -73,8 +73,8 @@ namespace BrewHelperTests
 
             var response = await _adminClient.PostAsync($"/api/Authentication/login", stringContent);
             var result = JsonConvert.DeserializeObject<LoginResponse>(await response.Content.ReadAsStringAsync());
-            _userTokens[username] = result.token;
-            return result.token;
+            _userTokens[username] = result.Token;
+            return result.Token;
         }
 
         public async Task InitializeAsync()

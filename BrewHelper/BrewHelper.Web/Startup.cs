@@ -1,31 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BrewHelper.Authentication.Context;
-using BrewHelper.Authentication.DTO;
-using BrewHelper.Authentication.Users;
-using BrewHelper.Data.Context;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using MudBlazor.Services;
-
 namespace BrewHelper.Web
 {
+    using BrewHelper.Authentication.Context;
+    using BrewHelper.Authentication.DTO;
+    using BrewHelper.Authentication.Users;
+    using BrewHelper.Data.Context;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using MudBlazor.Services;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -36,16 +28,17 @@ namespace BrewHelper.Web
         {
             services.AddDbContext<AuthenticationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("Authentication"), x => x.MigrationsAssembly("BrewHelper.Authentication")));
-            
+                    this.Configuration.GetConnectionString("Authentication"),
+                    x => x.MigrationsAssembly("BrewHelper.Authentication")));
+
             services.AddDbContext<BrewhelperContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("Data"), x => x.MigrationsAssembly("BrewHelper.Data")));
-            
+                    this.Configuration.GetConnectionString("Data"), x => x.MigrationsAssembly("BrewHelper.Data")));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>()
                 .AddDefaultTokenProviders();
-            
+
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
@@ -62,7 +55,7 @@ namespace BrewHelper.Web
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-            
+
             services.AddServerSideBlazor();
             services.AddMudServices();
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -92,7 +85,7 @@ namespace BrewHelper.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -100,7 +93,7 @@ namespace BrewHelper.Web
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-            
+
             AuthenticationDbInitializer.SeedRoles(roleManager);
             AuthenticationDbInitializer.SeedAdmin(userManager);
 
@@ -111,7 +104,7 @@ namespace BrewHelper.Web
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
-            
+
             if (env.IsEnvironment("Test"))
             {
                 AuthenticationDbInitializer.SeedTestUsers(userManager);

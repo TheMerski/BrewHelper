@@ -1,12 +1,11 @@
-using System.IO;
-using BrewHelper.Authentication.Context;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace BrewHelper.Authentication
 {
+    using System.IO;
+    using BrewHelper.Authentication.Context;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Design;
+    using Microsoft.Extensions.Configuration;
+
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AuthenticationDbContext>
     {
         public AuthenticationDbContext CreateDbContext(string[] args)

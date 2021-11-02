@@ -1,9 +1,9 @@
-﻿using System;
-using BrewHelper.Authentication.Users;
-using Microsoft.AspNetCore.Identity;
-
-namespace BrewHelper.Authentication.Context
+﻿namespace BrewHelper.Authentication.Context
 {
+    using System;
+    using BrewHelper.Authentication.Users;
+    using Microsoft.AspNetCore.Identity;
+
     public class AuthenticationDbInitializer
     {
         public static void SeedRoles(RoleManager<IdentityRole> roleManager)
@@ -32,7 +32,7 @@ namespace BrewHelper.Authentication.Context
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRolesAsync(user, new [] { ApplicationRoles.Admin.ToString(), ApplicationRoles.User.ToString() }).Wait();
+                    userManager.AddToRolesAsync(user, new[] { ApplicationRoles.Admin.ToString(), ApplicationRoles.User.ToString() }).Wait();
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace BrewHelper.Authentication.Context
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRolesAsync(user, new [] { ApplicationRoles.User.ToString() }).Wait();
+                    userManager.AddToRolesAsync(user, new[] { ApplicationRoles.User.ToString() }).Wait();
                 }
             }
         }

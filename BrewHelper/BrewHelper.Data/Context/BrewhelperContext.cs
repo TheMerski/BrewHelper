@@ -1,11 +1,12 @@
-﻿using BrewHelper.Data.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace BrewHelper.Data.Context
+﻿namespace BrewHelper.Data.Context
 {
+    using BrewHelper.Data.Entities;
+    using Microsoft.EntityFrameworkCore;
+
     public class BrewhelperContext : DbContext
     {
-        public BrewhelperContext(DbContextOptions<BrewhelperContext> options) : base(options)
+        public BrewhelperContext(DbContextOptions<BrewhelperContext> options)
+            : base(options)
         {
         }
 
@@ -21,12 +22,6 @@ namespace BrewHelper.Data.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //optionsBuilder.ConfigureWarnings(w => w.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
-            base.OnConfiguring(optionsBuilder);
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace BrewHelper.Authentication.Users
+﻿namespace BrewHelper.Authentication.Users
 {
+    using Microsoft.AspNetCore.Identity;
+
     public class ApplicationUser : IdentityUser
     {
     }

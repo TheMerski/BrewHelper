@@ -1,23 +1,23 @@
-using System;
-using BrewHelper.Authentication.Context;
-using BrewHelper.Data.Context;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-
 namespace BrewHelper.Web
 {
+    using System;
+    using BrewHelper.Authentication.Context;
+    using BrewHelper.Data.Context;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
+
     public class Program
     {
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
-            
+
             using var scope = host.Services.CreateScope();
             var services = scope.ServiceProvider;
-            
+
             try
             {
                 var dbContext = services.GetRequiredService<BrewhelperContext>();
@@ -29,9 +29,9 @@ namespace BrewHelper.Web
             catch (Exception ex)
             {
                 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-            
+
                 logger.LogError(ex, "An error occurred while migrating or seeding the database");
-            
+
                 throw;
             }
 
@@ -51,7 +51,7 @@ namespace BrewHelper.Web
 
                 throw;
             }
-            
+
             host.Run();
         }
 

@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BrewHelper.Authentication.DTO
+﻿namespace BrewHelper.Authentication.DTO
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
-    /// Class to update user passwords
+    /// Class to update user passwords.
     /// </summary>
     public class UpdatePasswordDTO
     {

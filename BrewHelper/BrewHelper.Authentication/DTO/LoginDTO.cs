@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace BrewHelper.Authentication.DTO
+﻿namespace BrewHelper.Authentication.DTO
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class LoginDTO
     {
         [Required(ErrorMessage = "User Name is required")]

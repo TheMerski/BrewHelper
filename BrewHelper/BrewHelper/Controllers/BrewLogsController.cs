@@ -1,8 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
+using BrewHelper.Business.Exceptions;
 using BrewHelper.Data.Entities;
 using BrewHelper.DTO;
-using BrewHelper.Exceptions;
 using BrewHelper.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

@@ -9,7 +9,7 @@
     Layout = null;
     var tokens = new InitialApplicationState
     {
-        XsrfToken = Xsrf.GetAndStoreTokens(HttpContext).RequestToken
+        XsrfToken = Xsrf.GetAndStoreTokens(HttpContext).RequestToken ?? string.Empty
     };
 }
 

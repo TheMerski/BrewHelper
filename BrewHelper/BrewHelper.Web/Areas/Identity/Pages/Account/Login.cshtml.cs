@@ -1,107 +1,117 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using BrewHelper.Authentication.Users;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-
 namespace BrewHelper.Web.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
-    public class LoginModel : PageModel
-    {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger<LoginModel> _logger;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using BrewHelper.Authentication.Users;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Extensions.Logging;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, 
-            ILogger<LoginModel> logger,
-            UserManager<ApplicationUser> userManager)
+    [AllowAnonymous]
+#pragma warning disable SA1649
+    public class LoginModel : PageModel
+#pragma warning restore SA1649
+    {
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ILogger<LoginModel> logger;
+
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, UserManager<ApplicationUser> userManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
+            this.userManager = userManager;
+            this.signInManager = signInManager;
+            this.logger = logger;
         }
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel? Input { get; set; }
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        public IList<AuthenticationScheme>? ExternalLogins { get; set; }
 
-        public string ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; }
 
         [TempData]
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
 
         public class InputModel
         {
             [Required]
+#pragma warning disable 8618
             public string Username { get; set; }
+#pragma warning restore 8618
 
             [Required]
             [DataType(DataType.Password)]
+#pragma warning disable 8618
             public string Password { get; set; }
+#pragma warning restore 8618
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }
 
+#pragma warning disable SA1201
         public async Task OnGetAsync(string? returnUrl = null)
+#pragma warning restore SA1201
         {
-            if (!string.IsNullOrEmpty(ErrorMessage))
+            if (!string.IsNullOrEmpty(this.ErrorMessage))
             {
-                ModelState.AddModelError(string.Empty, ErrorMessage);
+                this.ModelState.AddModelError(string.Empty, this.ErrorMessage);
             }
 
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= this.Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            ReturnUrl = returnUrl;
+            this.ReturnUrl = returnUrl;
         }
 
         public async Task<IActionResult> OnPostAsync(string? returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= this.Url.Content("~/");
 
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-        
-            if (ModelState.IsValid)
+            this.ExternalLogins = (await this.signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            if (this.ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+#pragma warning disable 8602
+                var result = await this.signInManager.PasswordSignInAsync(this.Input.Username, this.Input.Password, this.Input.RememberMe, false);
+#pragma warning restore 8602
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    this.logger.LogInformation("User logged in.");
+                    return this.LocalRedirect(returnUrl);
                 }
+
                 if (result.RequiresTwoFactor)
                 {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                    return this.RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = this.Input.RememberMe });
                 }
+
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
+                    this.logger.LogWarning("User account locked out.");
+                    return this.RedirectToPage("./Lockout");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
+                    this.ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return this.Page();
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return Page();
+            return this.Page();
         }
     }
 }

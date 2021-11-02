@@ -1,23 +1,25 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using BrewHelper.Authentication.Users;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Logging;
-
 namespace BrewHelper.Web.Areas.Identity.Pages.Account
 {
+    using System.Threading.Tasks;
+    using BrewHelper.Authentication.Users;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Microsoft.Extensions.Logging;
+
     [AllowAnonymous]
+#pragma warning disable SA1649
     public class LogoutModel : PageModel
+#pragma warning restore SA1649
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger<LogoutModel> _logger;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ILogger<LogoutModel> logger;
 
         public LogoutModel(SignInManager<ApplicationUser> signInManager, ILogger<LogoutModel> logger)
         {
-            _signInManager = signInManager;
-            _logger = logger;
+            this.signInManager = signInManager;
+            this.logger = logger;
         }
 
         public void OnGet()
@@ -26,15 +28,15 @@ namespace BrewHelper.Web.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string? returnUrl = null)
         {
-            await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
+            await this.signInManager.SignOutAsync();
+            this.logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
-                return LocalRedirect(returnUrl);
+                return this.LocalRedirect(returnUrl);
             }
             else
             {
-                return RedirectToPage();
+                return this.RedirectToPage();
             }
         }
     }

@@ -1,11 +1,11 @@
-using System.IO;
-using BrewHelper.Data.Context;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
-
 namespace BrewHelper.Data
 {
+    using System.IO;
+    using BrewHelper.Data.Context;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Design;
+    using Microsoft.Extensions.Configuration;
+
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<BrewhelperContext>
     {
         public BrewhelperContext CreateDbContext(string[] args)

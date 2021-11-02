@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using BrewHelper.Authentication.Users;
-
-namespace BrewHelper.Authentication.DTO
+﻿namespace BrewHelper.Authentication.DTO
 {
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using BrewHelper.Authentication.Users;
+
     public class RegisterDTO
     {
         [Required(ErrorMessage = "User Name is required")]

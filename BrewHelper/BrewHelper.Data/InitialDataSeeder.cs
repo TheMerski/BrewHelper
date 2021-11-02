@@ -1,20 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using BrewHelper.Data.Context;
-using BrewHelper.Data.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace BrewHelper.Data
+﻿namespace BrewHelper.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using BrewHelper.Data.Context;
+    using BrewHelper.Data.Entities;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
+
     public class InitialDataSeeder
     {
         public static void Seed(IServiceProvider serviceProvider)
         {
             using var context = new BrewhelperContext(
-                      serviceProvider
-                      .GetRequiredService<DbContextOptions<BrewhelperContext>>());
+                serviceProvider
+                    .GetRequiredService<DbContextOptions<BrewhelperContext>>());
 
             SeedIngredients(context);
             SeedRecipes(context);
@@ -23,15 +23,26 @@ namespace BrewHelper.Data
 
         private static void SeedIngredients(BrewhelperContext context)
         {
-            if (context.Ingredients.Any()) { return; }
+            if (context.Ingredients.Any())
+            {
+                return;
+            }
 
             var ingredients = new List<Ingredient>
             {
-                new Ingredient {Name= "Hop", Description = "Hopping", Type = Ingredient.IngredientType.Hop, InStock = 50},
-                new Ingredient {Name= "Herb", Description = "Herb description", Type = Ingredient.IngredientType.Herb},
-                new Ingredient {Name= "white malt", Description = "Malt description", Type = Ingredient.IngredientType.Malt, InStock = 2000},
-                new Ingredient {Name= "white sugar", Description = "Sugar description", Type = Ingredient.IngredientType.Sugar},
-                new Ingredient {Name= "Yeast", Description = "Yeast description", Type = Ingredient.IngredientType.Yeast}
+                new Ingredient
+                    { Name = "Hop", Description = "Hopping", Type = Ingredient.IngredientType.Hop, InStock = 50 },
+                new Ingredient
+                    { Name = "Herb", Description = "Herb description", Type = Ingredient.IngredientType.Herb },
+                new Ingredient
+                {
+                    Name = "white malt", Description = "Malt description", Type = Ingredient.IngredientType.Malt,
+                    InStock = 2000
+                },
+                new Ingredient
+                    { Name = "white sugar", Description = "Sugar description", Type = Ingredient.IngredientType.Sugar },
+                new Ingredient
+                    { Name = "Yeast", Description = "Yeast description", Type = Ingredient.IngredientType.Yeast }
             };
 
             context.Ingredients.AddRange(ingredients);
@@ -41,18 +52,36 @@ namespace BrewHelper.Data
 
         private static void SeedRecipes(BrewhelperContext context)
         {
-            if (context.Recipes.Any()) { return; }
+            if (context.Recipes.Any())
+            {
+                return;
+            }
 
             var ingredient = context.Ingredients.OrderBy(i => i.Id).First();
 
             var recipes = new List<Recipe>
             {
-                new Recipe { Name = "Test recipe", AlcoholPercentage = 2, 
-                    Mashing = new RecipeStep {  Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = ingredient, Weight = 10000 } } },
-                    Boiling = new RecipeStep {  Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = ingredient, Weight = 200 } } },
-                    Yeasting = new RecipeStep { Ingredients = new List<RecipeIngredient> { new RecipeIngredient { Ingredient = ingredient, Weight = 10000 } } },
+                new Recipe
+                {
+                    Name = "Test recipe", AlcoholPercentage = 2,
+                    Mashing = new RecipeStep
+                    {
+                        Ingredients = new List<RecipeIngredient>
+                            { new RecipeIngredient { Ingredient = ingredient, Weight = 10000 } }
+                    },
+                    Boiling = new RecipeStep
+                    {
+                        Ingredients = new List<RecipeIngredient>
+                            { new RecipeIngredient { Ingredient = ingredient, Weight = 200 } }
+                    },
+                    Yeasting = new RecipeStep
+                    {
+                        Ingredients = new List<RecipeIngredient>
+                            { new RecipeIngredient { Ingredient = ingredient, Weight = 10000 } }
+                    },
                     Description = "Test recipe",
-                    EBC = 10, IBU = 10, EndSG = 1050, StartSG = 1080, ReadyAfter =20, MashWater = 20, RinseWater = 27, Yield = 20,
+                    EBC = 10, IBU = 10, EndSG = 1050, StartSG = 1080, ReadyAfter = 20, MashWater = 20, RinseWater = 27,
+                    Yield = 20,
                 }
             };
 
@@ -63,7 +92,10 @@ namespace BrewHelper.Data
 
         private static void SeedBrewLogs(BrewhelperContext context)
         {
-            if (context.BrewLogs.Any()) {return;}
+            if (context.BrewLogs.Any())
+            {
+                return;
+            }
 
             var recipe = context.Recipes.OrderBy(r => r.Id).First();
 
@@ -152,7 +184,7 @@ namespace BrewHelper.Data
                     }
                 }
             };
-            
+
             context.BrewLogs.AddRange(logs);
             context.SaveChanges();
         }

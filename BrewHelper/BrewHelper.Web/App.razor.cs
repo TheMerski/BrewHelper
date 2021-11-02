@@ -1,9 +1,8 @@
-using System.Threading.Tasks;
-using BrewHelper.Authentication.DTO;
-using Microsoft.AspNetCore.Components;
-
 namespace BrewHelper.Web
 {
+    using BrewHelper.Authentication.DTO;
+    using Microsoft.AspNetCore.Components;
+
     public partial class App
     {
         [Parameter]
@@ -16,9 +15,9 @@ namespace BrewHelper.Web
         {
             base.OnInitialized();
 
-            if (InitialState != null)
+            if (this.InitialState != null)
             {
-                TokenProvider.XsrfToken = InitialState.XsrfToken;
+                this.TokenProvider.XsrfToken = this.InitialState.XsrfToken;
             }
         }
     }

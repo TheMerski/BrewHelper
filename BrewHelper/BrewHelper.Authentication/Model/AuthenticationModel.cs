@@ -1,35 +1,35 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using BrewHelper.Authentication.DTO;
-using BrewHelper.Authentication.Exceptions;
-using BrewHelper.Authentication.Users;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-
 namespace BrewHelper.Authentication.Model
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Security.Claims;
+    using System.Text;
+    using System.Threading.Tasks;
+    using BrewHelper.Authentication.DTO;
+    using BrewHelper.Authentication.Exceptions;
+    using BrewHelper.Authentication.Users;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.IdentityModel.Tokens;
+
     public class AuthenticationModel : IAuthenticationModel
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration configuration;
 
         public AuthenticationModel(UserManager<ApplicationUser> userManager, IConfiguration configuration)
         {
             this.userManager = userManager;
-            _configuration = configuration;
+            this.configuration = configuration;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginDTO model)
         {
-            var user = await userManager.FindByNameAsync(model.Username);
-            if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
+            var user = await this.userManager.FindByNameAsync(model.Username);
+            if (user != null && await this.userManager.CheckPasswordAsync(user, model.Password))
             {
-                var userRoles = await userManager.GetRolesAsync(user);
+                var userRoles = await this.userManager.GetRolesAsync(user);
 
                 var authClaims = new List<Claim>
                 {
@@ -42,21 +42,20 @@ namespace BrewHelper.Authentication.Model
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JWT:Secret"]));
 
                 var token = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
+                    issuer: this.configuration["JWT:ValidIssuer"],
+                    audience: this.configuration["JWT:ValidAudience"],
                     expires: DateTime.Now.AddHours(3),
                     claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                );
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256));
 
-                return (new LoginResponse
+                return new LoginResponse
                 {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
+                    Token = new JwtSecurityTokenHandler().WriteToken(token),
+                    Expiration = token.ValidTo,
+                };
             }
 
             throw new UnauthorizedException();
