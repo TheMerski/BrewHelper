@@ -10,12 +10,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.10" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.10" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.10" />
-        <PackageReference Include="MudBlazor" Version="5.1.5" />
+        <PackageReference Include="Blazored.LocalStorage" Version="4.1.5" />
+        <PackageReference Include="Blazored.SessionStorage" Version="2.2.0" />
+        <PackageReference Include="Fluxor" Version="4.1.0" />
+        <PackageReference Include="Fluxor.Blazor.Web" Version="4.1.0" />
+        <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="4.1.0" />
+        <PackageReference Include="Fluxor.Persist" Version="1.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.11" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.11" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.11">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="MudBlazor" Version="5.2.0" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,6 +33,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BrewHelper.Authentication\BrewHelper.Authentication.csproj" />
+      <ProjectReference Include="..\BrewHelper.Business\BrewHelper.Business.csproj" />
       <ProjectReference Include="..\BrewHelper.Data\BrewHelper.Data.csproj" />
     </ItemGroup>
 
