@@ -7,6 +7,7 @@
     using BrewHelper.Data.Entities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
 
     public class InitialDataSeeder
     {
@@ -16,17 +17,23 @@
                 serviceProvider
                     .GetRequiredService<DbContextOptions<BrewhelperContext>>());
 
-            SeedIngredients(context);
+            var logger = serviceProvider.GetRequiredService<ILogger<InitialDataSeeder>>();
+
+            logger.LogInformation("<<<<START DATA SEED>>>>");
+            SeedIngredients(context, logger);
             SeedRecipes(context);
             SeedBrewLogs(context);
+            logger.LogInformation("<<<<END DATA SEED>>>>");
         }
 
-        private static void SeedIngredients(BrewhelperContext context)
+        private static void SeedIngredients(BrewhelperContext context, ILogger logger)
         {
             if (context.Ingredients.Any())
             {
                 return;
             }
+
+            logger.LogInformation("<<<<START SEEDING INGREDIENTS>>>>");
 
             var ingredients = new List<Ingredient>
             {
@@ -48,6 +55,7 @@
             context.Ingredients.AddRange(ingredients);
 
             context.SaveChanges();
+            logger.LogInformation("<<<<END SEEDING INGREDIENTS>>>>");
         }
 
         private static void SeedRecipes(BrewhelperContext context)

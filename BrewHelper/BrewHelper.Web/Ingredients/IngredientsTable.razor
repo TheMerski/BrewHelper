@@ -1,0 +1,20 @@
+@using BrewHelper.Data.Entities
+
+<MudTable
+    ServerData="@(new Func<TableState, Task<TableData<Ingredient>>>(this.TableData))"
+    Hover="true"
+    @ref="@this.Table">
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="name" T="@Ingredient">>Name</MudTableSortLabel></MudTh>
+        <MudTh>In Stock</MudTh>
+        <MudTh>Type</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Name</MudTd>
+        <MudTd>@context.InStock</MudTd>
+        <MudTd>@context.Type.ToString()</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>

@@ -1,9 +1,18 @@
 namespace BrewHelper.Web
 {
+    using Blazored.LocalStorage;
+    using Blazored.SessionStorage;
     using BrewHelper.Authentication.Context;
     using BrewHelper.Authentication.DTO;
     using BrewHelper.Authentication.Users;
+    using BrewHelper.Business.Ingredient;
+    using BrewHelper.Business.Ingredient.Interfaces;
+    using BrewHelper.Data;
     using BrewHelper.Data.Context;
+    using BrewHelper.Web.Helpers;
+    using Fluxor;
+    using Fluxor.Persist.Middleware;
+    using Fluxor.Persist.Storage;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -11,6 +20,8 @@ namespace BrewHelper.Web
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Logging;
+    using MudBlazor;
     using MudBlazor.Services;
 
     public class Startup
@@ -26,14 +37,14 @@ namespace BrewHelper.Web
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BrewhelperContext>(options =>
+                options.UseSqlServer(
+                    this.Configuration.GetConnectionString("Data"), x => x.MigrationsAssembly("BrewHelper.Data")));
+
             services.AddDbContext<AuthenticationDbContext>(options =>
                 options.UseSqlServer(
                     this.Configuration.GetConnectionString("Authentication"),
                     x => x.MigrationsAssembly("BrewHelper.Authentication")));
-
-            services.AddDbContext<BrewhelperContext>(options =>
-                options.UseSqlServer(
-                    this.Configuration.GetConnectionString("Data"), x => x.MigrationsAssembly("BrewHelper.Data")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AuthenticationDbContext>()
@@ -57,10 +68,28 @@ namespace BrewHelper.Web
             services.AddRazorPages();
 
             services.AddServerSideBlazor();
-            services.AddMudServices();
+            services.AddMudServices(config =>
+            {
+                config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomRight;
+            });
+            services.AddBlazoredLocalStorage();
+            services.AddBlazoredSessionStorage();
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.AddFluxor(o => o
+                .ScanAssemblies(typeof(Program).Assembly)
+                .UseReduxDevTools()
+                .UsePersist(options => options.UseInclusionApproach()));
+
             services.AddScoped<TokenProvider>();
+
+            // Fluxor persists
+            services.AddScoped<IStringStateStorage, StateStorageProvider>();
+            services.AddScoped<IStoreHandler, JsonStoreHandler>();
+
+            // Data Services
+            services.AddScoped<IIngredientService, IngredientService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +99,11 @@ namespace BrewHelper.Web
             {
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
+                using var serviceScope = app.ApplicationServices
+                    .GetRequiredService<IServiceScopeFactory>()
+                    .CreateScope();
+                var service = serviceScope.ServiceProvider;
+                InitialDataSeeder.Seed(service);
             }
             else
             {

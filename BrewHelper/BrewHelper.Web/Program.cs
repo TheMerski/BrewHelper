@@ -2,6 +2,7 @@ namespace BrewHelper.Web
 {
     using System;
     using BrewHelper.Authentication.Context;
+    using BrewHelper.Data;
     using BrewHelper.Data.Context;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
@@ -15,41 +16,43 @@ namespace BrewHelper.Web
         {
             var host = CreateHostBuilder(args).Build();
 
-            using var scope = host.Services.CreateScope();
-            var services = scope.ServiceProvider;
-
-            try
+            using (var scope = host.Services.CreateScope())
             {
-                var dbContext = services.GetRequiredService<BrewhelperContext>();
-                if (dbContext.Database.IsSqlServer())
+                var services = scope.ServiceProvider;
+
+                try
                 {
-                    dbContext.Database.Migrate();
+                    var dbContext = services.GetRequiredService<BrewhelperContext>();
+                    if (dbContext.Database.IsSqlServer())
+                    {
+                        dbContext.Database.Migrate();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-
-                logger.LogError(ex, "An error occurred while migrating or seeding the database");
-
-                throw;
-            }
-
-            try
-            {
-                var authenticationDbContext = services.GetRequiredService<AuthenticationDbContext>();
-                if (authenticationDbContext.Database.IsSqlServer())
+                catch (Exception ex)
                 {
-                    authenticationDbContext.Database.Migrate();
+                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+                    logger.LogError(ex, "An error occurred while migrating or seeding the database");
+
+                    throw;
                 }
-            }
-            catch (Exception ex)
-            {
-                var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
-                logger.LogError(ex, "An error occurred while migrating or seeding the authentication database");
+                try
+                {
+                    var authenticationDbContext = services.GetRequiredService<AuthenticationDbContext>();
+                    if (authenticationDbContext.Database.IsSqlServer())
+                    {
+                        authenticationDbContext.Database.Migrate();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
-                throw;
+                    logger.LogError(ex, "An error occurred while migrating or seeding the authentication database");
+
+                    throw;
+                }
             }
 
             host.Run();
