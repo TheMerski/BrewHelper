@@ -1,0 +1,20 @@
+@using BrewHelper.Authentication.Users
+<MudDialog>
+    <DialogContent>
+        <MudGrid>
+            <MudItem xs="8">
+                <MudSelect T="string" Label="Roles" MultiSelection="true" @bind-SelectedValues="SelectedRoles">
+                    @foreach (var role in (ApplicationRoles[])Enum.GetValues(typeof(ApplicationRoles)))
+                    {
+                        <MudSelectItem T="string" Value="@role.ToString()">@role.ToString()</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+
+        </MudGrid>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Save</MudButton>
+    </DialogActions>
+</MudDialog>

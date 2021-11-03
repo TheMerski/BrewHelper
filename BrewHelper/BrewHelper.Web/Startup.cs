@@ -5,6 +5,7 @@ namespace BrewHelper.Web
     using BrewHelper.Authentication.Context;
     using BrewHelper.Authentication.DTO;
     using BrewHelper.Authentication.Users;
+    using BrewHelper.Authentication.Users.Interfaces;
     using BrewHelper.Business.Ingredient;
     using BrewHelper.Business.Ingredient.Interfaces;
     using BrewHelper.Data;
@@ -90,6 +91,7 @@ namespace BrewHelper.Web
 
             // Data Services
             services.AddScoped<IIngredientService, IngredientService>();
+            services.AddScoped<IUsersService, UsersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

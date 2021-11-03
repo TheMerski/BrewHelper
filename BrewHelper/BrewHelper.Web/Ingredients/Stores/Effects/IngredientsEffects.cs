@@ -2,7 +2,6 @@ namespace BrewHelper.Web.Ingredients.Stores.Effects
 {
     using System.Threading.Tasks;
     using BrewHelper.Business.Ingredient.Interfaces;
-    using BrewHelper.Data.Entities;
     using BrewHelper.Web.Ingredients.Stores.Actions;
     using Fluxor;
 

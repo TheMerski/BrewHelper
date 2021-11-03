@@ -1,7 +1,9 @@
 @inherits LayoutComponentBase
 
 <MudThemeProvider/>
-<MudDialogProvider/>
+<MudDialogProvider
+    FullWidth="true"
+    MaxWidth="MaxWidth.Small"/>
 <MudSnackbarProvider/>
 
 <MudLayout>
@@ -17,9 +19,11 @@
         <NavMenu/>
     </MudDrawer>
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Medium">
-            @Body
-        </MudContainer>
+        <MudGrid>
+            <MudItem xs="12" Style="margin: 10px;">
+                @Body
+            </MudItem>
+        </MudGrid>
     </MudMainContent>
 </MudLayout>
 

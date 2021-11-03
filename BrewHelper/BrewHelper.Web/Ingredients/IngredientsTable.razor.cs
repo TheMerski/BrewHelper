@@ -3,6 +3,7 @@ namespace BrewHelper.Web.Ingredients
     using System.Linq;
     using System.Threading.Tasks;
     using BrewHelper.Data.Entities;
+    using BrewHelper.Web.Ingredients.Stores.Actions;
     using BrewHelper.Web.Ingredients.Stores.States;
     using Fluxor;
     using Microsoft.AspNetCore.Components;
@@ -13,7 +14,37 @@ namespace BrewHelper.Web.Ingredients
         [Inject]
         private IState<IngredientsState> IngredientsState { get; set; } = default!;
 
+        [Inject]
+        private IDispatcher Dispatcher { get; set; } = default!;
+
         private MudTable<Ingredient> Table { get; set; } = default!;
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            this.IngredientsState.StateChanged += this.StateChanged;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            this.IngredientsState.StateChanged -= this.StateChanged;
+        }
+
+        private void StateChanged(object? sender, IngredientsState state)
+        {
+            if (!state.IsLoading)
+            {
+                this.Table.ReloadServerData();
+            }
+        }
+
+        private void ReloadData()
+        {
+            this.Dispatcher.Dispatch(new GetIngredientsAction());
+        }
 
         private async Task<TableData<Ingredient>> TableData(TableState state)
         {
@@ -33,7 +64,7 @@ namespace BrewHelper.Web.Ingredients
                 nameof(Ingredient.Name) =>
                     ingredients.OrderByDirection(state.SortDirection, i => i.Name),
                 _ =>
-                    ingredients,
+                    ingredients.OrderBy(i => i.Name),
             };
 
             var skip = state.Page * state.PageSize;
