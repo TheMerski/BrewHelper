@@ -2,7 +2,9 @@ namespace BrewHelper.Web.Admin.Users
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using BrewHelper.Authentication.Extensions;
+    using BrewHelper.Authentication.Users.Interfaces;
     using BrewHelper.Web.Users;
     using Microsoft.AspNetCore.Components;
     using MudBlazor;
@@ -17,6 +19,9 @@ namespace BrewHelper.Web.Admin.Users
 
         private IEnumerable<string> SelectedRoles { get; set; } = new HashSet<string>();
 
+        [Inject]
+        private IUsersService UsersService { get; set; } = default!;
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -24,8 +29,9 @@ namespace BrewHelper.Web.Admin.Users
             this.SelectedRoles = this.User.Roles.Select(r => r.ToString());
         }
 
-        private void Submit()
+        private async Task SubmitAsync()
         {
+            await this.UsersService.UpdateUserRoles(this.User.User, this.SelectedRoles.GetApplicationRoles().ToList());
             this.MudDialog.Close(DialogResult.Ok(this.SelectedRoles.GetApplicationRoles()));
         }
 
