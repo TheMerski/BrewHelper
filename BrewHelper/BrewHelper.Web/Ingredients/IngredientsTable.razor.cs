@@ -23,6 +23,11 @@ namespace BrewHelper.Web.Ingredients
         {
             base.OnInitialized();
 
+            if (!this.IngredientsState.Value.IsLoading && this.IngredientsState.Value == null)
+            {
+                this.ReloadData();
+            }
+
             this.IngredientsState.StateChanged += this.StateChanged;
         }
 

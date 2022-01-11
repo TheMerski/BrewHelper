@@ -1,8 +1,8 @@
-namespace BrewHelper.Web.Users.Stores.Effects
+namespace BrewHelper.Web.Admin.Users.Stores.Effects
 {
     using System.Threading.Tasks;
     using BrewHelper.Authentication.Users.Interfaces;
-    using BrewHelper.Web.Users.Stores.Actions;
+    using BrewHelper.Web.Admin.Users.Stores.Actions;
     using Fluxor;
 
     public class UsersEffects

@@ -1,4 +1,4 @@
-namespace BrewHelper.Web.Users.Stores.Actions
+namespace BrewHelper.Web.Admin.Users.Stores.Actions
 {
     using System.Linq;
     using BrewHelper.Authentication.Users;

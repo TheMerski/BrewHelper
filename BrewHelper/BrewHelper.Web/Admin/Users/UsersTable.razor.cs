@@ -1,4 +1,4 @@
-namespace BrewHelper.Web.Users
+namespace BrewHelper.Web.Admin.Users
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,9 @@ namespace BrewHelper.Web.Users
     using System.Threading.Tasks;
     using BrewHelper.Authentication.Users;
     using BrewHelper.Authentication.Users.Interfaces;
-    using BrewHelper.Web.Ingredients.Stores.Actions;
-    using BrewHelper.Web.Users.Stores.Actions;
-    using BrewHelper.Web.Users.Stores.States;
+    using BrewHelper.Web.Admin.Users.Stores.Actions;
+    using BrewHelper.Web.Admin.Users.Stores.States;
+    using BrewHelper.Web.Users;
     using Fluxor;
     using Microsoft.AspNetCore.Components;
     using MudBlazor;
@@ -65,7 +65,7 @@ namespace BrewHelper.Web.Users
                 return await Task.FromResult(new TableData<TableUser>
                 {
                     TotalItems = 0,
-                    Items = System.Array.Empty<TableUser>(),
+                    Items = Array.Empty<TableUser>(),
                 });
             }
 

@@ -1,7 +1,7 @@
-namespace BrewHelper.Web.Users
+namespace BrewHelper.Web.Admin.Users
 {
     using BrewHelper.Authentication.Users.Interfaces;
-    using BrewHelper.Web.Users.Stores.Actions;
+    using BrewHelper.Web.Admin.Users.Stores.Actions;
     using Fluxor;
     using Microsoft.AspNetCore.Components;
 

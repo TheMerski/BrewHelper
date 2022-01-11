@@ -1,7 +1,7 @@
-namespace BrewHelper.Web.Users.Stores.Reducers
+namespace BrewHelper.Web.Admin.Users.Stores.Reducers
 {
-    using BrewHelper.Web.Users.Stores.Actions;
-    using BrewHelper.Web.Users.Stores.States;
+    using BrewHelper.Web.Admin.Users.Stores.Actions;
+    using BrewHelper.Web.Admin.Users.Stores.States;
     using Fluxor;
 
     public class UsersReducers

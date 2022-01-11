@@ -1,6 +1,6 @@
-namespace BrewHelper.Web.Users.Stores.Features
+namespace BrewHelper.Web.Admin.Users.Stores.Features
 {
-    using BrewHelper.Web.Users.Stores.States;
+    using BrewHelper.Web.Admin.Users.Stores.States;
     using Fluxor;
 
     public class UsersFeature : Feature<UsersState>

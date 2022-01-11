@@ -1,10 +1,9 @@
-namespace BrewHelper.Web.Users
+namespace BrewHelper.Web.Admin.Users
 {
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using BrewHelper.Authentication.Extensions;
-    using BrewHelper.Authentication.Users;
+    using BrewHelper.Web.Users;
     using Microsoft.AspNetCore.Components;
     using MudBlazor;
 
