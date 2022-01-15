@@ -1,5 +1,6 @@
 namespace BrewHelper.Web.Ingredients
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
     using BrewHelper.Data.Entities;
@@ -38,9 +39,9 @@ namespace BrewHelper.Web.Ingredients
             this.IngredientsState.StateChanged -= this.StateChanged;
         }
 
-        private void StateChanged(object? sender, IngredientsState state)
+        private void StateChanged(object? sender, EventArgs e)
         {
-            if (!state.IsLoading)
+            if (!this.IngredientsState.Value.IsLoading)
             {
                 this.Table.ReloadServerData();
             }

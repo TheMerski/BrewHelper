@@ -43,9 +43,9 @@ namespace BrewHelper.Web.Admin.Users
             this.UsersState.StateChanged -= this.StateChanged;
         }
 
-        private void StateChanged(object? sender, UsersState state)
+        private void StateChanged(object? sender, EventArgs e)
         {
-            if (!state.IsLoading)
+            if (!this.UsersState.Value.IsLoading)
             {
                 this.Table.ReloadServerData();
             }
