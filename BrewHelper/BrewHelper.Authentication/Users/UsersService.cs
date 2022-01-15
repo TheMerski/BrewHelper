@@ -1,8 +1,10 @@
 namespace BrewHelper.Authentication.Users
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+    using BrewHelper.Authentication.Exceptions;
     using BrewHelper.Authentication.Extensions;
     using BrewHelper.Authentication.Users.Interfaces;
     using Microsoft.AspNetCore.Identity;
@@ -44,6 +46,26 @@ namespace BrewHelper.Authentication.Users
                     await this.userManager.RemoveFromRolesAsync(user, removedRoles.Select(r => r.ToString()).ToArray());
                 }
             }
+        }
+
+        public async Task<string> CreateUser(string username)
+        {
+            // Check if nu user with the username exists.
+            if (await this.userManager.FindByNameAsync(username) == null)
+            {
+                ApplicationUser user = new ApplicationUser { UserName = username };
+                var res = await this.userManager.CreateAsync(user);
+                if (res.Succeeded)
+                {
+                    // If the user is successfully created return a passwordResetToken to allow the user to create a password.
+                    var createdUser = await this.userManager.FindByNameAsync(username);
+                    return await this.userManager.GeneratePasswordResetTokenAsync(createdUser);
+                }
+
+                throw new Exception($"Something went wrong creating user {username}: {res.Errors}");
+            }
+
+            throw new UsernameExistsException();
         }
     }
 }
