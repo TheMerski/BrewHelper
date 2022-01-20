@@ -48,6 +48,13 @@ namespace BrewHelper.Authentication.Users
             }
         }
 
+        /// <summary>
+        /// Create a new user without password.
+        /// </summary>
+        /// <param name="username">The username for the user to create.</param>
+        /// <returns>The password reset token for the generated user.</returns>
+        /// <exception cref="Exception">Exception if something went wrong creating the user.</exception>
+        /// <exception cref="UsernameExistsException">Exception if there allready is a user with the username.</exception>
         public async Task<string> CreateUser(string username)
         {
             // Check if nu user with the username exists.
@@ -66,6 +73,23 @@ namespace BrewHelper.Authentication.Users
             }
 
             throw new UsernameExistsException();
+        }
+
+        /// <summary>
+        /// Generate a password reset token for a user.
+        /// </summary>
+        /// <param name="username">Username of the user to generate a password reset token for.</param>
+        /// <returns>The password reset token.</returns>
+        /// <exception cref="UserNotFoundException">User with username was not found.</exception>
+        public async Task<string> GetPasswordResetToken(string username)
+        {
+            var user = await this.userManager.FindByNameAsync(username);
+            if (user != null)
+            {
+                return await this.userManager.GeneratePasswordResetTokenAsync(user);
+            }
+
+            throw new UserNotFoundException();
         }
     }
 }
