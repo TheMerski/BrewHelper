@@ -8,14 +8,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354">
+      <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.406">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="BeerXMLSharp" Version="1.1.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\BrewHelper.Data\BrewHelper.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="BeerXMLSharp" />
+    </ItemGroup>
 </Project>
