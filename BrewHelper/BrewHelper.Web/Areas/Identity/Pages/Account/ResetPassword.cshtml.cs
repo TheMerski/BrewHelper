@@ -1,4 +1,4 @@
-namespace BrewHelper.Web.Areas.Identity.Pages.Account.Manage
+namespace BrewHelper.Web.Areas.Identity.Pages.Account
 {
     using System.ComponentModel.DataAnnotations;
     using System.Threading.Tasks;

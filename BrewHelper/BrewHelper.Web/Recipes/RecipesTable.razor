@@ -3,23 +3,19 @@
 
 
 <MudTable
-    ServerData="@(new Func<TableState, Task<TableData<Ingredient>>>(this.TableData))"
+    ServerData="@(new Func<TableState, Task<TableData<BrewHelperRecipe>>>(this.TableData))"
     Hover="true"
     @ref="@this.Table">
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Ingredients</MudText>
+        <MudText Typo="Typo.h6">Recipes</MudText>
         <MudSpacer />
         <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="@this.ReloadData" aria-label="refresh"></MudIconButton>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortLabel="Name" T="@Ingredient">Name</MudTableSortLabel></MudTh>
-        <MudTh>In Stock</MudTh>
-        <MudTh>Type</MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Name" T="BrewHelperRecipe">Name</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd>@context.Name</MudTd>
-        <MudTd>@context.InStock</MudTd>
-        <MudTd>@context.Type.ToString()</MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager/>

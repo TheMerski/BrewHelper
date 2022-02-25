@@ -6,9 +6,6 @@ namespace BrewHelper.Web
     using BrewHelper.Authentication.DTO;
     using BrewHelper.Authentication.Users;
     using BrewHelper.Authentication.Users.Interfaces;
-    using BrewHelper.Business.Ingredient;
-    using BrewHelper.Business.Ingredient.Interfaces;
-    using BrewHelper.Data;
     using BrewHelper.Data.Context;
     using BrewHelper.Web.Helpers;
     using Fluxor;
@@ -90,7 +87,6 @@ namespace BrewHelper.Web
             services.AddScoped<IStoreHandler, JsonStoreHandler>();
 
             // Data Services
-            services.AddScoped<IIngredientService, IngredientService>();
             services.AddScoped<IUsersService, UsersService>();
         }
 
@@ -104,8 +100,8 @@ namespace BrewHelper.Web
                 using var serviceScope = app.ApplicationServices
                     .GetRequiredService<IServiceScopeFactory>()
                     .CreateScope();
-                var service = serviceScope.ServiceProvider;
-                InitialDataSeeder.Seed(service);
+                // var service = serviceScope.ServiceProvider;
+                // InitialDataSeeder.Seed(service);
             }
             else
             {

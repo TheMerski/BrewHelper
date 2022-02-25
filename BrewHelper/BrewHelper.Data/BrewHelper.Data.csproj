@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <CodeAnalysisRuleSet>..\analyzers.ruleset</CodeAnalysisRuleSet>
+        <LangVersion>10</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,5 +23,9 @@
     </ItemGroup>
     <ItemGroup>
       <None Remove="BeerXMLSharp" />
+      <None Remove="Entities\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Entities\" />
     </ItemGroup>
 </Project>
