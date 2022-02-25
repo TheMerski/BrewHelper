@@ -14,6 +14,12 @@ public class BrewHelperRecipe
     {
     }
 
+    public BrewHelperRecipe(string recipeXml)
+    {
+        this.RecipeXml = recipeXml;
+        this.Name = this.Recipe.Name;
+    }
+
     public long Id { get; set; }
 
     [Required]

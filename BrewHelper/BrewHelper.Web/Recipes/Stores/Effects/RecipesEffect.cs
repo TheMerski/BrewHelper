@@ -1,22 +1,26 @@
 namespace BrewHelper.Web.Recipes.Stores.Effects
 {
     using System.Threading.Tasks;
+    using BrewHelper.Business.Recipes;
     using BrewHelper.Web.Recipes.Stores.Actions;
     using Fluxor;
 
     public class RecipesEffect
     {
-        public RecipesEffect()
+        private readonly IRecipeService recipeService;
+
+        public RecipesEffect(IRecipeService recipeService)
         {
-            //this.ingredientService = ingredientService;
+            this.recipeService = recipeService;
         }
 
         [EffectMethod]
-        public Task GetIngredients(GetRecipesAction action, IDispatcher dispatcher)
+        public Task GetRecipes(GetRecipesAction action, IDispatcher dispatcher)
         {
-            // var ingredients = this.ingredientService.GetIngredients();
-            //
-            // dispatcher.Dispatch(new GetRecipesResultAction(ingredients));
+            var recipes = this.recipeService.GetRecipes();
+
+            dispatcher.Dispatch(new GetRecipesResultAction(recipes));
+
             return Task.CompletedTask;
         }
     }

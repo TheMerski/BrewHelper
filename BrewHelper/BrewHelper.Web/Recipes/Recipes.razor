@@ -4,6 +4,8 @@
 
 <MudGrid>
     <MudItem xs="12">
-        <RecipesTable />
+        <MudTextField @ref="@this.TextField" T="string" Label="Multiline" Variant="Variant.Text" Lines="5" />
+        <MudButton OnClick="@this.AddRecipe">Createee</MudButton>
+        <RecipesTable/>
     </MudItem>
 </MudGrid>

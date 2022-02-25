@@ -6,6 +6,7 @@ namespace BrewHelper.Web
     using BrewHelper.Authentication.DTO;
     using BrewHelper.Authentication.Users;
     using BrewHelper.Authentication.Users.Interfaces;
+    using BrewHelper.Business.Recipes;
     using BrewHelper.Data.Context;
     using BrewHelper.Web.Helpers;
     using Fluxor;
@@ -88,6 +89,7 @@ namespace BrewHelper.Web
 
             // Data Services
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IRecipeService, RecipeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
