@@ -1,6 +1,8 @@
 namespace BrewHelper.Web.Recipes
 {
+    using System;
     using System.Threading.Tasks;
+    using BeerXMLSharp;
     using BrewHelper.Business.Recipes;
     using BrewHelper.Web.Recipes.Stores.Actions;
     using BrewHelper.Web.Recipes.Stores.States;
@@ -28,9 +30,10 @@ namespace BrewHelper.Web.Recipes
             this.Dispatcher.Dispatch(new GetRecipesAction());
         }
 
-        private async Task AddRecipe()
+        private Task AddRecipe()
         {
-            await this.RecipeService.CreateRecipeFromXml(this.TextField.Value);
+            // TODO: xml File uploading & creating Recipes from it.
+            throw new NotImplementedException();
         }
     }
 }

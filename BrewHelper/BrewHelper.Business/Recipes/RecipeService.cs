@@ -3,8 +3,10 @@ namespace BrewHelper.Business.Recipes;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using BrewHelper.Business.Exceptions;
 using BrewHelper.Data.Context;
 using BrewHelper.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 public class RecipeService : IRecipeService
@@ -20,11 +22,18 @@ public class RecipeService : IRecipeService
 
     public IQueryable<Recipe> GetRecipes()
     {
-        return this.context.Recipes.AsQueryable();
+        return this.context.Recipes.AsSplitQuery().AsNoTracking().AsQueryable();
     }
 
-    public Task<Recipe> CreateRecipeFromXml(string recipeXml)
+    public async Task<Recipe> CreateRecipe(Recipe recipe)
     {
-        throw new NotImplementedException();
+        if (await this.context.Recipes.AnyAsync((r) => r.Name == recipe.Name && r.Version == recipe.Version))
+        {
+            throw new NameAlreadyExistsException<Recipe>();
+        }
+
+        this.context.Add(recipe);
+        await this.context.SaveChangesAsync();
+        return recipe;
     }
 }

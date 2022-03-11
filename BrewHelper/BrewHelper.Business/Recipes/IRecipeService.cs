@@ -13,9 +13,9 @@ public interface IRecipeService
     public IQueryable<Recipe> GetRecipes();
 
     /// <summary>
-    /// Create a recipe from an BeerXML string.
+    /// Create a recipe.
     /// </summary>
-    /// <param name="recipeXml">BeerXML formatted recipe string.</param>
+    /// <param name="recipe">The recipe to create.</param>
     /// <returns>The created recipe.</returns>
-    public Task<Recipe> CreateRecipeFromXml(string recipeXml);
+    public Task<Recipe> CreateRecipe(Recipe recipe);
 }
