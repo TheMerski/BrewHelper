@@ -1,5 +1,7 @@
 namespace BrewHelper.Data.Entities;
 
+using Microsoft.EntityFrameworkCore;
+
 public enum HopUse
 {
     Boil,
@@ -9,6 +11,7 @@ public enum HopUse
     Aroma
 }
 
+[Owned]
 public class Hop : BrewHelperEntityBase
 {
     public Hop()

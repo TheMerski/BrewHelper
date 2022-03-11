@@ -1,5 +1,7 @@
 namespace BrewHelper.Data.Entities;
 
+using Microsoft.EntityFrameworkCore;
+
 public enum YeastType
 {
     Ale,
@@ -17,6 +19,7 @@ public enum YeastForm
     Culture
 }
 
+[Owned]
 public class Yeast : BrewHelperEntityBase
 {
     public YeastType Type { get; set; }

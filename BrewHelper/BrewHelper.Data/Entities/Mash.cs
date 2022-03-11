@@ -1,7 +1,9 @@
 namespace BrewHelper.Data.Entities;
 
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
+[Owned]
 public class Mash : BrewHelperEntityBase
 {
     public Mash()

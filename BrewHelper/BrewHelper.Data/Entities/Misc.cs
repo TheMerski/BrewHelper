@@ -1,5 +1,7 @@
 namespace BrewHelper.Data.Entities;
 
+using Microsoft.EntityFrameworkCore;
+
 public enum MiscType
 {
     Spice,
@@ -19,6 +21,7 @@ public enum MiscUse
     Bottling
 }
 
+[Owned]
 public class Misc : BrewHelperEntityBase
 {
     public MiscType Type { get; set; }

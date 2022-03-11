@@ -1,5 +1,8 @@
 namespace BrewHelper.Data.Entities;
 
+using Microsoft.EntityFrameworkCore;
+
+[Owned]
 public class Water : BrewHelperEntityBase
 {
     public double Amount { get; set; }

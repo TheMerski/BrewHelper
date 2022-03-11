@@ -1,5 +1,7 @@
 namespace BrewHelper.Data.Entities;
 
+using Microsoft.EntityFrameworkCore;
+
 public enum MashStepType
 {
     Infusion,
@@ -7,6 +9,7 @@ public enum MashStepType
     Decoction
 }
 
+[Owned]
 public class MashStep : BrewHelperEntityBase
 {
     public MashStepType Type { get; set; }

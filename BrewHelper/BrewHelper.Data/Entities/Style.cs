@@ -1,5 +1,7 @@
 namespace BrewHelper.Data.Entities;
 
+using Microsoft.EntityFrameworkCore;
+
 public enum StyleType
 {
     Lager,
@@ -10,6 +12,7 @@ public enum StyleType
     Cider
 }
 
+[Owned]
 public class Style : BrewHelperEntityBase
 {
     public string Category { get; set; } = default!;

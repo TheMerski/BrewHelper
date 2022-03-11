@@ -1,5 +1,7 @@
 namespace BrewHelper.Data.Entities;
 
+using Microsoft.EntityFrameworkCore;
+
 public enum FermentableType
 {
     Grain,
@@ -9,6 +11,7 @@ public enum FermentableType
     Adjunct
 }
 
+[Owned]
 public class Fermentable : BrewHelperEntityBase
 {
     public FermentableType Type { get; set; }
