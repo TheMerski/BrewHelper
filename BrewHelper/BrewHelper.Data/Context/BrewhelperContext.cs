@@ -1,6 +1,5 @@
 ﻿namespace BrewHelper.Data.Context
 {
-    using BeerXMLSharp.OM.Records;
     using BrewHelper.Data.Entities;
     using Microsoft.EntityFrameworkCore;
 
@@ -11,15 +10,13 @@
         {
         }
 
-        public DbSet<Equipment> Equipments { get; set; } = null!;
-
         public DbSet<Fermentable> Fermentables { get; set; } = null!;
 
         public DbSet<Hop> Hops { get; set; } = null!;
 
         public DbSet<Misc> Miscs { get; set; } = null!;
 
-        public DbSet<BrewHelperRecipe> Recipes { get; set; } = null!;
+        public DbSet<Recipe> Recipes { get; set; } = null!;
 
         public DbSet<Style> Styles { get; set; } = null!;
 
@@ -29,9 +26,6 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Equipment>()
-                .HasKey((e) => new { e.Name, e.Version });
-
             modelBuilder.Entity<Fermentable>()
                 .HasKey((e) => new { e.Name, e.Version });
 

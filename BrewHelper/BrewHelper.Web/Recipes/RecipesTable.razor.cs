@@ -18,7 +18,7 @@ namespace BrewHelper.Web.Recipes
         [Inject]
         private IDispatcher Dispatcher { get; set; } = default!;
 
-        private MudTable<BrewHelperRecipe> Table { get; set; } = default!;
+        private MudTable<Recipe> Table { get; set; } = default!;
 
         protected override void OnInitialized()
         {
@@ -52,22 +52,22 @@ namespace BrewHelper.Web.Recipes
             this.Dispatcher.Dispatch(new GetRecipesAction());
         }
 
-        private async Task<TableData<BrewHelperRecipe>> TableData(TableState state)
+        private async Task<TableData<Recipe>> TableData(TableState state)
         {
             var recipes = this.RecipesState.Value.Recipes;
 
             if (recipes == null)
             {
-                return await Task.FromResult(new TableData<BrewHelperRecipe>
+                return await Task.FromResult(new TableData<Recipe>
                 {
                     TotalItems = 0,
-                    Items = System.Array.Empty<BrewHelperRecipe>(),
+                    Items = System.Array.Empty<Recipe>(),
                 });
             }
 
             recipes = state.SortLabel switch
             {
-                nameof(BrewHelperRecipe.Name) =>
+                nameof(Recipe.Name) =>
                     recipes.OrderByDirection(state.SortDirection, i => i.Name),
                 _ =>
                     recipes.OrderBy(i => i.Name),
@@ -76,7 +76,7 @@ namespace BrewHelper.Web.Recipes
             var skip = state.Page * state.PageSize;
             var take = state.PageSize;
 
-            return await Task.FromResult(new TableData<BrewHelperRecipe>
+            return await Task.FromResult(new TableData<Recipe>
             {
                 TotalItems = recipes.Count(),
                 Items = recipes.Skip(skip).Take(take).ToArray(),

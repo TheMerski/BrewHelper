@@ -10,12 +10,12 @@ public interface IRecipeService
     /// Get a list of recipes.
     /// </summary>
     /// <returns>An IQueryable with recipes.</returns>
-    public IQueryable<BrewHelperRecipe> GetRecipes();
+    public IQueryable<Recipe> GetRecipes();
 
     /// <summary>
     /// Create a recipe from an BeerXML string.
     /// </summary>
     /// <param name="recipeXml">BeerXML formatted recipe string.</param>
     /// <returns>The created recipe.</returns>
-    public Task<BrewHelperRecipe> CreateRecipeFromXml(string recipeXml);
+    public Task<Recipe> CreateRecipeFromXml(string recipeXml);
 }

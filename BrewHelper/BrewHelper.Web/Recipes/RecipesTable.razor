@@ -3,7 +3,7 @@
 
 
 <MudTable
-    ServerData="@(new Func<TableState, Task<TableData<BrewHelperRecipe>>>(this.TableData))"
+    ServerData="@(new Func<TableState, Task<TableData<Recipe>>>(this.TableData))"
     Hover="true"
     @ref="@this.Table">
     <ToolBarContent>
@@ -12,7 +12,7 @@
         <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="@this.ReloadData" aria-label="refresh"></MudIconButton>
     </ToolBarContent>
     <HeaderContent>
-        <MudTh><MudTableSortLabel SortLabel="Name" T="BrewHelperRecipe">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Name" T="Recipe">Name</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd>@context.Name</MudTd>
