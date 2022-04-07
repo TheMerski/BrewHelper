@@ -1684,7 +1684,7 @@ public partial class RECIPESRECIPESTYLE
 
     private string cATEGORYField;
 
-    private byte cATEGORY_NUMBERField;
+    private string cATEGORY_NUMBERField;
 
     private string sTYLE_LETTERField;
 
@@ -1779,7 +1779,7 @@ public partial class RECIPESRECIPESTYLE
     }
 
     /// <remarks/>
-    public byte CATEGORY_NUMBER {
+    public string CATEGORY_NUMBER {
         get {
             return this.cATEGORY_NUMBERField;
         }
@@ -2597,13 +2597,13 @@ public partial class RECIPESRECIPEMASHMASH_STEP
 
     private string tYPEField;
 
-    private decimal iNFUSE_AMOUNTField;
+    private decimal? iNFUSE_AMOUNTField;
 
-    private byte sTEP_TIMEField;
+    private int sTEP_TIMEField;
 
     private decimal sTEP_TEMPField;
 
-    private byte rAMP_TIMEField;
+    private int rAMP_TIMEField;
 
     private decimal eND_TEMPField;
 
@@ -2650,7 +2650,7 @@ public partial class RECIPESRECIPEMASHMASH_STEP
     }
 
     /// <remarks/>
-    public decimal INFUSE_AMOUNT {
+    public decimal? INFUSE_AMOUNT {
         get {
             return this.iNFUSE_AMOUNTField;
         }
@@ -2660,7 +2660,7 @@ public partial class RECIPESRECIPEMASHMASH_STEP
     }
 
     /// <remarks/>
-    public byte STEP_TIME {
+    public int STEP_TIME {
         get {
             return this.sTEP_TIMEField;
         }
@@ -2680,7 +2680,7 @@ public partial class RECIPESRECIPEMASHMASH_STEP
     }
 
     /// <remarks/>
-    public byte RAMP_TIME {
+    public int RAMP_TIME {
         get {
             return this.rAMP_TIMEField;
         }

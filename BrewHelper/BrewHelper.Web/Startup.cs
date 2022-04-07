@@ -8,6 +8,7 @@ namespace BrewHelper.Web
     using BrewHelper.Authentication.Users.Interfaces;
     using BrewHelper.Business.Recipes;
     using BrewHelper.Data.Context;
+    using BrewHelper.Data.Mappers;
     using BrewHelper.Web.Helpers;
     using Fluxor;
     using Fluxor.Persist.Middleware;
@@ -90,6 +91,7 @@ namespace BrewHelper.Web
             // Data Services
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IRecipeService, RecipeService>();
+            services.AddScoped<IBeerXMLMapper, BeerXMLmapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

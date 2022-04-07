@@ -20,7 +20,7 @@ public class Hop : BrewHelperEntityBase
 
     public double Alpha { get; set; }
 
-    public double Weight { get; set; }
+    public double Amount { get; set; }
 
     public HopUse Use { get; set; }
 

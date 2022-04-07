@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public enum RecipeType
 {
-    Extract,
-    Partial_Mash,
-    All_Grain
+    Extract = 0,
+    Partial_Mash = 1,
+    All_Grain = 2,
 }
 
 public class Recipe : BrewHelperEntityBase

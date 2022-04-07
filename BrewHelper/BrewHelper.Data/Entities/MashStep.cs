@@ -16,7 +16,7 @@ public class MashStep : BrewHelperEntityBase
 
     public double StepTemp { get; set; }
 
-    public double StepTime { get; set; }
+    public int StepTime { get; set; }
 
     public double? InfuseAmount { get; set; }
 }

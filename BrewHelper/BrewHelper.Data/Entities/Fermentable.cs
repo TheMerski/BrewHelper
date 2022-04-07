@@ -20,5 +20,8 @@ public class Fermentable : BrewHelperEntityBase
 
     public double Yield { get; set; }
 
+    /// <summary>
+    /// The color of the item in Lovibond Units (SRM for liquid extracts).
+    /// </summary>
     public double Color { get; set; }
 }
