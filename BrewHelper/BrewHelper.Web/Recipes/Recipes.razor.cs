@@ -25,8 +25,6 @@ public partial class Recipes
     [Inject]
     private IBeerXMLMapper BeerXMLMapper { get; set; } = default!;
 
-    private MudTextField<string> TextField { get; set; } = default!;
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -34,12 +32,9 @@ public partial class Recipes
         this.Dispatcher.Dispatch(new GetRecipesAction());
     }
 
-    private async Task AddRecipe()
+    private Task AddRecipe()
     {
-        // TODO: xml File uploading & creating Recipes from it.
-        var recipe = await this.BeerXMLMapper.MapRecipes(this.TextField.Value);
-        var recipes = recipe.ToList();
-        var first = recipes.First();
+        // TODO: xml File uploading & creating Recipes from it
         throw new NotImplementedException();
     }
 }

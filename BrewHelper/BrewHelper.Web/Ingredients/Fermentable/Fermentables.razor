@@ -2,7 +2,10 @@
 @attribute [Authorize]
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
-<MudGrid>
+<MudGrid Justify="Justify.FlexEnd">
+    <MudItem xs="1">
+        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"/>
+    </MudItem>
     <MudItem xs="12">
         <FermentablesTable/>
     </MudItem>

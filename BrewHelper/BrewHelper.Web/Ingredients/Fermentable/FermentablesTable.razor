@@ -2,7 +2,7 @@
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 
-<MudTable
+<MudTable xs="12"
     ServerData="@(new Func<TableState, Task<TableData<Fermentable>>>(this.TableData))"
     Hover="true"
     @ref="@this.Table">

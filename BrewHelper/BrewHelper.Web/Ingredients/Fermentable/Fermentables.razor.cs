@@ -19,18 +19,15 @@ public partial class Fermentables
     [Inject]
     private IDispatcher Dispatcher { get; set; } = default!;
 
-    [Inject]
-    private IRecipeService RecipeService { get; set; } = default!;
-
-    [Inject]
-    private IBeerXMLMapper BeerXMLMapper { get; set; } = default!;
-
-    private MudTextField<string> TextField { get; set; } = default!;
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
         this.Dispatcher.Dispatch(new GetFermentablesAction());
+    }
+
+    protected Task CreateFermentable()
+    {
+        return Task.CompletedTask;
     }
 }
