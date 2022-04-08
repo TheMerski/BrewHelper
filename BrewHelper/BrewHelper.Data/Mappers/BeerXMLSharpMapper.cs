@@ -30,6 +30,8 @@ public static class BeerXMLSharpMapper
             Yeasts = recipe.YEASTS.Select(y => y.ToYeast()).ToList(),
             Mash = recipe.MASH.ToMash(),
             Style = recipe.STYLE.ToStyle(),
+            Waters = recipe.WATERS.Select(w => w.ToWater()).ToList(),
+            Miscs = recipe.MISCS.Select(m => m.ToMisc()).ToList(),
         };
     }
 
@@ -117,6 +119,37 @@ public static class BeerXMLSharpMapper
             StyleLetter = style.STYLE_LETTER,
             Notes = style.NOTES,
             Type = Enum.Parse<StyleType>(style.TYPE.Replace(' ', '_'), true)
+        };
+    }
+
+    public static Water ToWater(this RECIPESRECIPEWATER water)
+    {
+        return new Water
+        {
+            Name = water.NAME,
+            Version = water.VERSION,
+            Amount = decimal.ToDouble(water.AMOUNT),
+            Calcium = decimal.ToDouble(water.CALCIUM),
+            Bicarbonate = decimal.ToDouble(water.BICARBONATE),
+            Chloride = decimal.ToDouble(water.CHLORIDE),
+            Sulfate = decimal.ToDouble(water.SULFATE),
+            Sodium = decimal.ToDouble(water.SODIUM),
+            Magnesium = decimal.ToDouble(water.MAGNESIUM),
+            Notes = water.NOTES,
+        };
+    }
+
+    public static Misc ToMisc(this RECIPESRECIPEMISC misc)
+    {
+        return new Misc
+        {
+            Name = misc.NAME,
+            Version = misc.VERSION,
+            Amount = decimal.ToDouble(misc.AMOUNT),
+            Type = Enum.Parse<MiscType>(misc.TYPE.Replace(' ', '_'), true),
+            Use = Enum.Parse<MiscUse>(misc.USE.Replace(' ', '_'), true),
+            Time = decimal.ToDouble(misc.TIME),
+            Notes = misc.NOTES,
         };
     }
 }
