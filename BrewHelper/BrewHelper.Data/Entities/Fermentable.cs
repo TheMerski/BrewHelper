@@ -11,7 +11,6 @@ public enum FermentableType
     Adjunct
 }
 
-[Owned]
 public class Fermentable : BrewHelperEntityBase
 {
     public FermentableType Type { get; set; }

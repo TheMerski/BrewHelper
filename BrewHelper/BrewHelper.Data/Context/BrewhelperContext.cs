@@ -18,6 +18,8 @@
 
         public DbSet<Yeast> Yeasts { get; set; } = null!;
 
+        public DbSet<Misc> Miscs { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Recipe>()

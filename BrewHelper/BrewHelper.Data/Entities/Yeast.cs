@@ -19,7 +19,6 @@ public enum YeastForm
     Culture
 }
 
-[Owned]
 public class Yeast : BrewHelperEntityBase
 {
     public YeastType Type { get; set; }

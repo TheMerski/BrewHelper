@@ -11,13 +11,8 @@ public enum HopUse
     Aroma
 }
 
-[Owned]
 public class Hop : BrewHelperEntityBase
 {
-    public Hop()
-    {
-    }
-
     public double Alpha { get; set; }
 
     public double Amount { get; set; }

@@ -49,55 +49,53 @@ namespace BrewHelper.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Fermentable",
+                name: "Fermentables",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RecipeId = table.Column<long>(type: "bigint", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     Yield = table.Column<double>(type: "float", nullable: false),
                     Color = table.Column<double>(type: "float", nullable: false),
+                    RecipeId = table.Column<long>(type: "bigint", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Fermentable", x => new { x.RecipeId, x.Id });
+                    table.PrimaryKey("PK_Fermentables", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Fermentable_Recipes_RecipeId",
+                        name: "FK_Fermentables_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Hop",
+                name: "Hops",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RecipeId = table.Column<long>(type: "bigint", nullable: false),
                     Alpha = table.Column<double>(type: "float", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     Use = table.Column<int>(type: "int", nullable: false),
                     Time = table.Column<double>(type: "float", nullable: false),
+                    RecipeId = table.Column<long>(type: "bigint", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hop", x => new { x.RecipeId, x.Id });
+                    table.PrimaryKey("PK_Hops", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Hop_Recipes_RecipeId",
+                        name: "FK_Hops_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -132,24 +130,23 @@ namespace BrewHelper.Data.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RecipeId = table.Column<long>(type: "bigint", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Use = table.Column<int>(type: "int", nullable: false),
                     Time = table.Column<double>(type: "float", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
+                    RecipeId = table.Column<long>(type: "bigint", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Misc", x => new { x.RecipeId, x.Id });
+                    table.PrimaryKey("PK_Misc", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Misc_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -182,38 +179,57 @@ namespace BrewHelper.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Yeast",
+                name: "Yeasts",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RecipeId = table.Column<long>(type: "bigint", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     Form = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
+                    RecipeId = table.Column<long>(type: "bigint", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Yeast", x => new { x.RecipeId, x.Id });
+                    table.PrimaryKey("PK_Yeasts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Yeast_Recipes_RecipeId",
+                        name: "FK_Yeasts_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fermentables_RecipeId",
+                table: "Fermentables",
+                column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Hops_RecipeId",
+                table: "Hops",
+                column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Misc_RecipeId",
+                table: "Misc",
+                column: "RecipeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Yeasts_RecipeId",
+                table: "Yeasts",
+                column: "RecipeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Fermentable");
+                name: "Fermentables");
 
             migrationBuilder.DropTable(
-                name: "Hop");
+                name: "Hops");
 
             migrationBuilder.DropTable(
                 name: "MashStep");
@@ -225,7 +241,7 @@ namespace BrewHelper.Data.Migrations
                 name: "Water");
 
             migrationBuilder.DropTable(
-                name: "Yeast");
+                name: "Yeasts");
 
             migrationBuilder.DropTable(
                 name: "Recipes");

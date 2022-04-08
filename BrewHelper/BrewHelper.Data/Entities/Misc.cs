@@ -21,7 +21,6 @@ public enum MiscUse
     Bottling
 }
 
-[Owned]
 public class Misc : BrewHelperEntityBase
 {
     public MiscType Type { get; set; }
