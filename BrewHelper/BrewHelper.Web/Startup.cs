@@ -6,6 +6,7 @@ namespace BrewHelper.Web
     using BrewHelper.Authentication.DTO;
     using BrewHelper.Authentication.Users;
     using BrewHelper.Authentication.Users.Interfaces;
+    using BrewHelper.Business.Fermentables;
     using BrewHelper.Business.Recipes;
     using BrewHelper.Data.Context;
     using BrewHelper.Data.Mappers;
@@ -91,6 +92,9 @@ namespace BrewHelper.Web
             // Data Services
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IRecipeService, RecipeService>();
+            services.AddScoped<IFermentableService, FermentableService>();
+
+            // Mappers
             services.AddScoped<IBeerXMLMapper, BeerXMLmapper>();
         }
 

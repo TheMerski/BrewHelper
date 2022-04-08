@@ -1,0 +1,23 @@
+@using BrewHelper.Data.Entities
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+
+<MudTable
+    ServerData="@(new Func<TableState, Task<TableData<Fermentable>>>(this.TableData))"
+    Hover="true"
+    @ref="@this.Table">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Fermentables</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="@this.ReloadData" aria-label="refresh"></MudIconButton>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="Name" T="Fermentable">Name</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Name</MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager/>
+    </PagerContent>
+</MudTable>

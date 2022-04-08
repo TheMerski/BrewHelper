@@ -12,22 +12,28 @@
 
         public DbSet<Recipe> Recipes { get; set; } = null!;
 
+        public DbSet<Fermentable> Fermentables { get; set; } = null!;
+
+        public DbSet<Hop> Hops { get; set; } = null!;
+
+        public DbSet<Yeast> Yeasts { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Recipe>()
-                .OwnsMany((e) => e.Fermentables);
+                .HasMany((e) => e.Fermentables);
 
             modelBuilder.Entity<Recipe>()
-                .OwnsMany((e) => e.Hops);
+                .HasMany((e) => e.Hops);
 
             modelBuilder.Entity<Recipe>()
-                .OwnsMany((e) => e.Miscs);
+                .HasMany((e) => e.Miscs);
 
             modelBuilder.Entity<Recipe>()
                 .OwnsMany((e) => e.Waters);
 
             modelBuilder.Entity<Recipe>()
-                .OwnsMany((e) => e.Yeasts);
+                .HasMany((e) => e.Yeasts);
 
             modelBuilder.Entity<Recipe>()
                 .OwnsOne((e) => e.Style);
