@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BrewHelper.Data.Migrations
 {
     [DbContext(typeof(BrewhelperContext))]
-    [Migration("20220311141411_Initial")]
+    [Migration("20220408081937_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -122,6 +122,9 @@ namespace BrewHelper.Data.Migrations
                             b1.Property<double>("Alpha")
                                 .HasColumnType("float");
 
+                            b1.Property<double>("Amount")
+                                .HasColumnType("float");
+
                             b1.Property<string>("Name")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
@@ -138,9 +141,6 @@ namespace BrewHelper.Data.Migrations
 
                             b1.Property<int>("Version")
                                 .HasColumnType("int");
-
-                            b1.Property<double>("Weight")
-                                .HasColumnType("float");
 
                             b1.HasKey("RecipeId", "Id");
 
@@ -204,8 +204,8 @@ namespace BrewHelper.Data.Migrations
                                     b2.Property<double>("StepTemp")
                                         .HasColumnType("float");
 
-                                    b2.Property<double>("StepTime")
-                                        .HasColumnType("float");
+                                    b2.Property<int>("StepTime")
+                                        .HasColumnType("int");
 
                                     b2.Property<int>("Type")
                                         .HasColumnType("int");
