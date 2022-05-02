@@ -1,11 +1,11 @@
-namespace BrewHelper.Web.Ingredients.Fermentable;
+namespace BrewHelper.Web.Ingredients.Fermentables;
 
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BrewHelper.Data.Entities;
-using BrewHelper.Web.Ingredients.Fermentable.Stores.Actions;
-using BrewHelper.Web.Ingredients.Fermentable.Stores.States;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Actions;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.States;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -75,11 +75,12 @@ public partial class FermentablesTable
 
         var skip = state.Page * state.PageSize;
         var take = state.PageSize;
+        var items = fermentables.Skip(skip).Take(take).ToArray();
 
         return await Task.FromResult(new TableData<Fermentable>
         {
             TotalItems = fermentables.Count(),
-            Items = fermentables.Skip(skip).Take(take).ToArray(),
+            Items = items,
         });
     }
 }

@@ -27,12 +27,12 @@ public class FermentableService : IFermentableService
 
     public async Task<Fermentable> CreateFermentable(Fermentable fermentable)
     {
-        if (await this.context.Recipes.AnyAsync((r) => r.Name == fermentable.Name && r.Version == fermentable.Version))
+        if (await this.context.Fermentables.AnyAsync((f) => f.Name == fermentable.Name && f.Version == fermentable.Version))
         {
             throw new NameAlreadyExistsException<Fermentable>();
         }
 
-        this.context.Add(fermentable);
+        this.context.Fermentables.Add(fermentable);
         await this.context.SaveChangesAsync();
         return fermentable;
     }

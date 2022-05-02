@@ -1,0 +1,11 @@
+﻿<MudDialog>
+    <DialogContent>
+        <FermentableEditForm @ref="this.Form">
+
+        </FermentableEditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit" Disabled="!this.Form?.Form.IsValid ?? true">Save</MudButton>
+    </DialogActions>
+</MudDialog>

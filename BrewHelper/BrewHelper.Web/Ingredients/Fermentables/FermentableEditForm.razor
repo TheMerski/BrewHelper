@@ -1,0 +1,17 @@
+@using BrewHelper.Data.Entities
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<MudItem xs="12">
+    <MudForm @ref="this.Form">
+        <MudTextField @bind-Value="this.Fermentable.Name" Label="Name" Required="true"></MudTextField>
+        <MudSelect @bind-Value="this.Fermentable.Type" Label="Select type">
+            @foreach (FermentableType item in Enum.GetValues(typeof(FermentableType)))
+            {
+                <MudSelectItem Value="@item">@item</MudSelectItem>
+            }
+        </MudSelect>
+        <MudNumericField @bind-Value="this.Fermentable.StockAmount" Label="Amount in stock (g)"></MudNumericField>
+        <MudNumericField @bind-Value="this.Fermentable.Yield" Label="Yield (Percent dry yield)" Max="100"></MudNumericField>
+        <MudNumericField @bind-Value="this.Fermentable.Color" Label="Color of the item in Lovibond Units (SRM for liquid extracts)"></MudNumericField>
+    </MudForm>
+</MudItem>

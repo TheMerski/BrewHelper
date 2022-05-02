@@ -1,6 +1,6 @@
-namespace BrewHelper.Web.Ingredients.Fermentable.Stores.Features;
+namespace BrewHelper.Web.Ingredients.Fermentables.Stores.Features;
 
-using BrewHelper.Web.Ingredients.Fermentable.Stores.States;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.States;
 using Fluxor;
 
 public class FermentablesFeature : Feature<FermentablesState>

@@ -1,7 +1,7 @@
-namespace BrewHelper.Web.Ingredients.Fermentable.Stores.Reducers;
+namespace BrewHelper.Web.Ingredients.Fermentables.Stores.Reducers;
 
-using BrewHelper.Web.Ingredients.Fermentable.Stores.Actions;
-using BrewHelper.Web.Ingredients.Fermentable.Stores.States;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Actions;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.States;
 using Fluxor;
 
 public class FermentablesReducers
