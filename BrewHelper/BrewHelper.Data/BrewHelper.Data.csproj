@@ -24,7 +24,4 @@
       <None Remove="BeerXMLSharp" />
       <None Remove="Entities\" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Entities\" />
-    </ItemGroup>
 </Project>

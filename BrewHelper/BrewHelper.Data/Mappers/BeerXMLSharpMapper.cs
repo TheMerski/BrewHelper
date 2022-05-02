@@ -25,13 +25,15 @@ public static class BeerXMLSharpMapper
             Brewer = recipe.BREWER,
             Type = Enum.Parse<RecipeType>(recipe.TYPE.Replace(' ', '_'), true),
             Notes = recipe.NOTES,
-            Fermentables = recipe.FERMENTABLES.Select(f => f.ToFermetable()).ToList(),
-            Hops = recipe.HOPS.Select(h => h.ToHop()).ToList(),
-            Yeasts = recipe.YEASTS.Select(y => y.ToYeast()).ToList(),
+            Fermentables = recipe.FERMENTABLES.Select(f => new RecipeIngredient<Fermentable>(f.ToFermetable(), decimal.ToDouble(f.AMOUNT))).ToList(),
+            Hops = recipe.HOPS.Select(
+                h => new HopIngredient(h.ToHop(), Enum.Parse<HopUse>(h.USE.Replace(' ', '_'), true), decimal.ToDouble(h.AMOUNT), decimal.ToDouble(h.TIME)))
+                .ToList(),
+            Yeasts = recipe.YEASTS.Select(y => new RecipeIngredient<Yeast>(y.ToYeast(), decimal.ToDouble(y.AMOUNT))).ToList(),
             Mash = recipe.MASH.ToMash(),
             Style = recipe.STYLE.ToStyle(),
-            Waters = recipe.WATERS.Select(w => w.ToWater()).ToList(),
-            Miscs = recipe.MISCS.Select(m => m.ToMisc()).ToList(),
+            Waters = recipe.WATERS.Select(w => new RecipeIngredient<Water>(w.ToWater(), decimal.ToDouble(w.AMOUNT))).ToList(),
+            Miscs = recipe.MISCS.Select(m => new RecipeIngredient<Misc>(m.ToMisc(), decimal.ToDouble(m.AMOUNT), decimal.ToDouble(m.TIME))).ToList(),
         };
     }
 
@@ -41,7 +43,6 @@ public static class BeerXMLSharpMapper
         {
             Name = fermentable.NAME,
             Version = fermentable.VERSION,
-            Amount = decimal.ToDouble(fermentable.AMOUNT),
             Color = decimal.ToDouble(fermentable.COLOR),
             Type = Enum.Parse<FermentableType>(fermentable.TYPE.Replace(' ', '_'), true),
             Yield = decimal.ToDouble(fermentable.YIELD),
@@ -56,9 +57,6 @@ public static class BeerXMLSharpMapper
             Name = hop.NAME,
             Version = hop.VERSION,
             Alpha = decimal.ToDouble(hop.ALPHA),
-            Time = decimal.ToDouble(hop.TIME),
-            Amount = decimal.ToDouble(hop.AMOUNT),
-            Use = Enum.Parse<HopUse>(hop.USE.Replace(' ', '_'), true),
             Notes = hop.NOTES,
         };
     }
@@ -69,7 +67,6 @@ public static class BeerXMLSharpMapper
         {
             Name = yeast.NAME,
             Version = yeast.VERSION,
-            Amount = decimal.ToDouble(yeast.AMOUNT),
             Notes = yeast.NOTES,
             Form = Enum.Parse<YeastForm>(yeast.FORM.Replace(' ', '_'), true),
             Type = Enum.Parse<YeastType>(yeast.TYPE.Replace(' ', '_'), true),
@@ -128,7 +125,6 @@ public static class BeerXMLSharpMapper
         {
             Name = water.NAME,
             Version = water.VERSION,
-            Amount = decimal.ToDouble(water.AMOUNT),
             Calcium = decimal.ToDouble(water.CALCIUM),
             Bicarbonate = decimal.ToDouble(water.BICARBONATE),
             Chloride = decimal.ToDouble(water.CHLORIDE),
@@ -145,10 +141,8 @@ public static class BeerXMLSharpMapper
         {
             Name = misc.NAME,
             Version = misc.VERSION,
-            Amount = decimal.ToDouble(misc.AMOUNT),
             Type = Enum.Parse<MiscType>(misc.TYPE.Replace(' ', '_'), true),
             Use = Enum.Parse<MiscUse>(misc.USE.Replace(' ', '_'), true),
-            Time = decimal.ToDouble(misc.TIME),
             Notes = misc.NOTES,
         };
     }

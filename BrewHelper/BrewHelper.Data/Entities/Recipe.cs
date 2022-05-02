@@ -23,15 +23,15 @@ public class Recipe : BrewHelperEntityBase
 
     public double BoilTime { get; set; }
 
-    public List<Hop> Hops { get; set; } = default!;
+    public List<HopIngredient> Hops { get; set; } = default!;
 
-    public List<Fermentable> Fermentables { get; set; } = default!;
+    public List<RecipeIngredient<Fermentable>> Fermentables { get; set; } = default!;
 
-    public List<Misc> Miscs { get; set; } = default!;
+    public List<RecipeIngredient<Misc>> Miscs { get; set; } = default!;
 
-    public List<Yeast> Yeasts { get; set; } = default!;
+    public List<RecipeIngredient<Yeast>> Yeasts { get; set; } = default!;
 
-    public List<Water> Waters { get; set; } = default!;
+    public List<RecipeIngredient<Water>> Waters { get; set; } = default!;
 
     public Mash Mash { get; set; } = default!;
 }

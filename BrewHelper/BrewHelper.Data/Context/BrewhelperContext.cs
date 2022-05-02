@@ -23,19 +23,19 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Recipe>()
-                .HasMany((e) => e.Fermentables);
+                .OwnsMany((e) => e.Fermentables);
 
             modelBuilder.Entity<Recipe>()
-                .HasMany((e) => e.Hops);
+                .OwnsMany((e) => e.Hops);
 
             modelBuilder.Entity<Recipe>()
-                .HasMany((e) => e.Miscs);
+                .OwnsMany((e) => e.Miscs);
 
             modelBuilder.Entity<Recipe>()
                 .OwnsMany((e) => e.Waters);
 
             modelBuilder.Entity<Recipe>()
-                .HasMany((e) => e.Yeasts);
+                .OwnsMany((e) => e.Yeasts);
 
             modelBuilder.Entity<Recipe>()
                 .OwnsOne((e) => e.Style);

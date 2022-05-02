@@ -24,6 +24,4 @@ public class Yeast : BrewHelperEntityBase
     public YeastType Type { get; set; }
 
     public YeastForm Form { get; set; }
-
-    public double Amount { get; set; }
 }

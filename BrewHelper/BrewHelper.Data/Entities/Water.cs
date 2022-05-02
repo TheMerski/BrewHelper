@@ -5,8 +5,6 @@ using Microsoft.EntityFrameworkCore;
 [Owned]
 public class Water : BrewHelperEntityBase
 {
-    public double Amount { get; set; }
-
     public double Calcium { get; set; }
 
     public double Bicarbonate { get; set; }
