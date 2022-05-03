@@ -42,4 +42,21 @@ public class FermetablesEffect
 
         return;
     }
+
+    [EffectMethod]
+    public async Task CreateRecipes(DeleteFermentableAction action, IDispatcher dispatcher)
+    {
+        try
+        {
+            await this.fermentableService.DeleteFermentable(action.Fermentable);
+            dispatcher.Dispatch(new SuccessMessageAction("Fermentable deleted successfully"));
+            dispatcher.Dispatch(new GetFermentablesAction());
+        }
+        catch (Exception e)
+        {
+            dispatcher.Dispatch(new ErrorMessageAction(e));
+        }
+
+        return;
+    }
 }

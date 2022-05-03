@@ -18,4 +18,17 @@ public interface IFermentableService
     /// <param name="fermentable">The fermentable to create.</param>
     /// <returns>The created fermentable.</returns>
     public Task<Fermentable> CreateFermentable(Fermentable fermentable);
+
+    /// <summary>
+    /// Update a fermentable.
+    /// </summary>
+    /// <param name="fermentable">Updated fermentable.</param>
+    /// <returns>The updated fermentable.</returns>
+    public Task<Fermentable> UpdateFermentable(Fermentable fermentable);
+
+    /// <summary>
+    /// Delete a fermentable.
+    /// </summary>
+    /// <param name="fermentable">The fermentable to delete.</param>
+    public Task DeleteFermentable(Fermentable fermentable);
 }

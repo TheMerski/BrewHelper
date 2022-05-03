@@ -36,4 +36,19 @@ public class FermentableService : IFermentableService
         await this.context.SaveChangesAsync();
         return fermentable;
     }
+
+    public Task<Fermentable> UpdateFermentable(Fermentable fermentable) => throw new System.NotImplementedException();
+
+    public async Task DeleteFermentable(Fermentable fermentable)
+    {
+        if (await this.context.Fermentables.ContainsAsync(fermentable))
+        {
+            this.context.Fermentables.Remove(fermentable);
+            await this.context.SaveChangesAsync();
+            return;
+        }
+
+        this.logger.LogInformation("Fermentable to delete could not be found", fermentable);
+        throw new NotFoundException<Fermentable>();
+    }
 }

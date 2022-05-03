@@ -10,8 +10,8 @@
                 <MudSelectItem Value="@item">@item</MudSelectItem>
             }
         </MudSelect>
-        <MudNumericField @bind-Value="this.Fermentable.StockAmount" Label="Amount in stock (g)"></MudNumericField>
-        <MudNumericField @bind-Value="this.Fermentable.Yield" Label="Yield (Percent dry yield)" Max="100"></MudNumericField>
-        <MudNumericField @bind-Value="this.Fermentable.Color" Label="Color of the item in Lovibond Units (SRM for liquid extracts)"></MudNumericField>
+        <MudNumericField @bind-Value="this.Fermentable.StockAmount" Label="Amount in stock (g)" Min="0"></MudNumericField>
+        <MudNumericField @bind-Value="this.Fermentable.Yield" Label="Yield (Percent dry yield)" Max="100" Min="0"></MudNumericField>
+        <MudNumericField @bind-Value="this.Fermentable.Color" Label="Color of the item in Lovibond Units (SRM for liquid extracts)" Min="0"></MudNumericField>
     </MudForm>
 </MudItem>

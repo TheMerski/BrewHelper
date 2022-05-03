@@ -18,6 +18,9 @@ public partial class FermentablesTable
     [Inject]
     private IDispatcher Dispatcher { get; set; } = default!;
 
+    [Inject]
+    private IDialogService DialogService { get; set; } = default!;
+
     private MudTable<Fermentable> Table { get; set; } = default!;
 
     protected override void OnInitialized()
@@ -52,6 +55,22 @@ public partial class FermentablesTable
         this.Dispatcher.Dispatch(new GetFermentablesAction());
     }
 
+    private async Task DeleteFermentable(Fermentable fermentable)
+    {
+        bool? result = await this.DialogService.ShowMessageBox(
+            "Warning",
+            "Deleting can not be undone!",
+            yesText: "Delete!",
+            cancelText: "Cancel");
+
+        if (result == true)
+        {
+            this.Dispatcher.Dispatch(new DeleteFermentableAction(fermentable));
+        }
+
+        return;
+    }
+
     private async Task<TableData<Fermentable>> TableData(TableState state)
     {
         var fermentables = this.FermentablesState.Value.Fermentables;
@@ -69,6 +88,10 @@ public partial class FermentablesTable
         {
             nameof(Fermentable.Name) =>
                 fermentables.OrderByDirection(state.SortDirection, i => i.Name),
+            nameof(Fermentable.Version) =>
+                fermentables.OrderByDirection(state.SortDirection, i => i.Version),
+            nameof(Fermentable.StockAmount) =>
+                fermentables.OrderByDirection(state.SortDirection, i => i.StockAmount),
             _ =>
                 fermentables.OrderBy(x => x.Name),
         };
