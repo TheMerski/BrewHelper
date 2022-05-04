@@ -1,5 +1,0 @@
-﻿using BrewHelper.Data.Entities;
-
-namespace BrewHelper.Web.Ingredients.Fermentables.Stores.Actions;
-
-public record DeleteFermentableAction(Fermentable Fermentable);

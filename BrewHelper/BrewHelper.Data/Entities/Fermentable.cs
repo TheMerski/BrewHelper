@@ -29,4 +29,9 @@ public class Fermentable : BrewHelperEntityBase
     /// The color of the item in Lovibond Units (SRM for liquid extracts).
     /// </summary>
     public double Color { get; set; }
+
+    public Fermentable Clone()
+    {
+        return (Fermentable)this.MemberwiseClone();
+    }
 }

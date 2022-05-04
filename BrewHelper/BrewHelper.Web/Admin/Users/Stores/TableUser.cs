@@ -1,4 +1,4 @@
-namespace BrewHelper.Web.Users
+namespace BrewHelper.Web.Admin.Users.Stores
 {
     using System.Collections.Generic;
     using BrewHelper.Authentication.Users;

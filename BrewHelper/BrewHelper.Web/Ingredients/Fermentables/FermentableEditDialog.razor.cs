@@ -8,6 +8,9 @@ namespace BrewHelper.Web.Ingredients.Fermentables;
 
 public partial class FermentableEditDialog
 {
+    [Parameter]
+    public long? FermentableId { get; set; } = null;
+
     [CascadingParameter]
     private MudDialogInstance MudDialog { get; set; } = default!;
 

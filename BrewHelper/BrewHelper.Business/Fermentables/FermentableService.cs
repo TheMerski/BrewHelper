@@ -1,5 +1,6 @@
 namespace BrewHelper.Business.Fermentables;
 
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BrewHelper.Business.Exceptions;
@@ -25,30 +26,114 @@ public class FermentableService : IFermentableService
         return this.context.Fermentables.AsSplitQuery().AsNoTracking().AsQueryable();
     }
 
+    public async Task<Fermentable> GetFermentable(long id)
+    {
+        var fermentable = await this.context.Fermentables.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
+        if (fermentable == null)
+        {
+            this.logger.LogWarning("Fermentable could not be found", fermentable);
+            throw new NotFoundException<Fermentable>();
+        }
+
+        return fermentable;
+    }
+
     public async Task<Fermentable> CreateFermentable(Fermentable fermentable)
     {
-        if (await this.context.Fermentables.AnyAsync((f) => f.Name == fermentable.Name && f.Version == fermentable.Version))
+        if (await this.context.Fermentables.AnyAsync((f) => f.Name == fermentable.Name))
         {
             throw new NameAlreadyExistsException<Fermentable>();
         }
 
-        this.context.Fermentables.Add(fermentable);
-        await this.context.SaveChangesAsync();
-        return fermentable;
+        try
+        {
+            this.context.Fermentables.Add(fermentable);
+            await this.context.SaveChangesAsync();
+            return fermentable;
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError("Something went wrong when creating fermentable", new { e, fermentable });
+            throw new Exception("Something went wrong during creation");
+        }
     }
 
-    public Task<Fermentable> UpdateFermentable(Fermentable fermentable) => throw new System.NotImplementedException();
+    public async Task<Fermentable> CreateFermentableVersion(Fermentable fermentable)
+    {
+        await this.FermentableExists(fermentable);
+
+        try
+        {
+            // Get the latest version for this fermentable.
+            int latestVersion = await this.context.Fermentables.AsNoTracking().Where((f) => f.Name == fermentable.Name).MaxAsync(f => f.Version);
+
+            Fermentable newFermentable = fermentable.Clone();
+            newFermentable.Id = 0;                      // Set id to 0, this will be set by EF
+            newFermentable.Version = latestVersion + 1; // New version is latest version + 1
+
+            this.context.Fermentables.Add(fermentable);
+            await this.context.SaveChangesAsync();
+            return fermentable;
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError("Something went wrong when creating fermentable version", new { e, fermentable });
+            throw new Exception("Something went wrong during version creation");
+        }
+    }
+
+    public async Task<Fermentable> UpdateFermentable(Fermentable fermentable)
+    {
+        await this.FermentableExists(fermentable);
+
+        if (await this.FermentableInUse(fermentable))
+        {
+            // If it is in use verify only update the Notes & StockAmount.
+            Fermentable dbFermentable = await this.context.Fermentables.Where((f) => f.Id == fermentable.Id).FirstAsync();
+            dbFermentable.Notes = fermentable.Notes;
+            dbFermentable.StockAmount = fermentable.StockAmount;
+            await this.context.SaveChangesAsync();
+
+            return dbFermentable;
+        }
+        else
+        {
+            // If it is not in use update the entry.
+            this.context.Fermentables.Update(fermentable);
+            await this.context.SaveChangesAsync();
+
+            return fermentable;
+        }
+    }
 
     public async Task DeleteFermentable(Fermentable fermentable)
     {
-        if (await this.context.Fermentables.ContainsAsync(fermentable))
-        {
-            this.context.Fermentables.Remove(fermentable);
-            await this.context.SaveChangesAsync();
-            return;
-        }
+        await this.FermentableExists(fermentable);
 
-        this.logger.LogInformation("Fermentable to delete could not be found", fermentable);
-        throw new NotFoundException<Fermentable>();
+        this.context.Fermentables.Remove(fermentable);
+        await this.context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// Check wether the fermentable is in use.
+    /// </summary>
+    /// <returns>True if the fermentable is used in a recipe.</returns>
+    public async Task<bool> FermentableInUse(Fermentable fermentable)
+    {
+        return await this.context.Recipes.AsNoTracking().Where((r) => r.Fermentables.Any((rf) => rf.Ingredient.Id == fermentable.Id)).AnyAsync();
+    }
+
+    /// <summary>
+    /// Checks wether a fermentable exists.
+    /// </summary>
+    /// <param name="fermentable">The fermentable to check for.</param>
+    /// <exception cref="NotFoundException{Fermentable}">Exception thrown when the fermentable does not exists.</exception>
+    private async Task FermentableExists(Fermentable fermentable)
+    {
+        if (!await this.context.Fermentables.AnyAsync((f) => f.Id == fermentable.Id))
+        {
+            this.logger.LogWarning("Fermentable could not be found", fermentable);
+            throw new NotFoundException<Fermentable>();
+        }
     }
 }

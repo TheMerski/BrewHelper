@@ -4,8 +4,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using BrewHelper.Data.Entities;
-using BrewHelper.Web.Ingredients.Fermentables.Stores.Actions;
-using BrewHelper.Web.Ingredients.Fermentables.Stores.States;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentable.Actions;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables.Actions;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -69,6 +70,16 @@ public partial class FermentablesTable
         }
 
         return;
+    }
+
+    private Task EditFermentable(long id)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add(nameof(FermentableEditDialog.FermentableId), id);
+
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+        this.DialogService.Show<FermentableEditDialog>("Edit Fermentable", parameters, options);
+        return Task.CompletedTask;
     }
 
     private async Task<TableData<Fermentable>> TableData(TableState state)

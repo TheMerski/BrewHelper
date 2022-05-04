@@ -5,7 +5,7 @@ namespace BrewHelper.Web.Admin.Users
     using System.Threading.Tasks;
     using BrewHelper.Authentication.Extensions;
     using BrewHelper.Authentication.Users.Interfaces;
-    using BrewHelper.Web.Users;
+    using BrewHelper.Web.Admin.Users.Stores;
     using Microsoft.AspNetCore.Components;
     using MudBlazor;
 

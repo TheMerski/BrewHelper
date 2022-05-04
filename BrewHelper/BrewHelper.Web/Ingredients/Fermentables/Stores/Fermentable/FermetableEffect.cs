@@ -1,33 +1,42 @@
-namespace BrewHelper.Web.Ingredients.Fermentables.Stores.Effects;
+namespace BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentable;
 
 using System;
 using System.Threading.Tasks;
 using BrewHelper.Business.Fermentables;
-using BrewHelper.Web.Ingredients.Fermentables.Stores.Actions;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentable.Actions;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables.Actions;
 using BrewHelper.Web.Shared.Snackbar.Stores.Actions;
 using Fluxor;
 
-public class FermetablesEffect
+public class FermetableEffect
 {
     private readonly IFermentableService fermentableService;
 
-    public FermetablesEffect(IFermentableService fermentableService)
+    public FermetableEffect(IFermentableService fermentableService)
     {
         this.fermentableService = fermentableService;
     }
 
     [EffectMethod]
-    public Task GetRecipes(GetFermentablesAction action, IDispatcher dispatcher)
+    public async Task GetFermentable(GetFermentableAction action, IDispatcher dispatcher)
     {
-        var fermentables = this.fermentableService.GetFermentables();
+        try
+        {
+            var fermentable = await this.fermentableService.GetFermentable(action.Id);
+            var inUse = await this.fermentableService.FermentableInUse(fermentable);
 
-        dispatcher.Dispatch(new GetFermentablesResultAction(fermentables));
+            dispatcher.Dispatch(new GetFermentableResultAction(fermentable, inUse));
+        }
+        catch (Exception e)
+        {
+            dispatcher.Dispatch(new ErrorMessageAction(e));
+        }
 
-        return Task.CompletedTask;
+        return;
     }
 
     [EffectMethod]
-    public async Task CreateRecipes(CreateFermentableAction action, IDispatcher dispatcher)
+    public async Task CreateFermentable(CreateFermentableAction action, IDispatcher dispatcher)
     {
         try
         {
@@ -44,7 +53,7 @@ public class FermetablesEffect
     }
 
     [EffectMethod]
-    public async Task CreateRecipes(DeleteFermentableAction action, IDispatcher dispatcher)
+    public async Task DeleteFermentable(DeleteFermentableAction action, IDispatcher dispatcher)
     {
         try
         {

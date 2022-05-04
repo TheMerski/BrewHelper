@@ -6,9 +6,9 @@ namespace BrewHelper.Web.Admin.Users
     using System.Threading.Tasks;
     using BrewHelper.Authentication.Users;
     using BrewHelper.Authentication.Users.Interfaces;
+    using BrewHelper.Web.Admin.Users.Stores;
     using BrewHelper.Web.Admin.Users.Stores.Actions;
     using BrewHelper.Web.Admin.Users.Stores.States;
-    using BrewHelper.Web.Users;
     using Fluxor;
     using Microsoft.AspNetCore.Components;
     using MudBlazor;

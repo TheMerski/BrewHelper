@@ -1,12 +1,7 @@
 namespace BrewHelper.Web.Ingredients.Fermentables;
-
-using System;
-using System.Linq;
 using System.Threading.Tasks;
-using BrewHelper.Business.Recipes;
-using BrewHelper.Data.Mappers;
-using BrewHelper.Web.Ingredients.Fermentables.Stores.Actions;
-using BrewHelper.Web.Ingredients.Fermentables.Stores.States;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables.Actions;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;

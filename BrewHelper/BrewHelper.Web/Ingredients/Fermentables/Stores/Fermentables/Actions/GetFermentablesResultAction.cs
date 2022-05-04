@@ -1,4 +1,4 @@
-namespace BrewHelper.Web.Ingredients.Fermentables.Stores.Actions;
+namespace BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables.Actions;
 
 using System.Linq;
 using BrewHelper.Data.Entities;
