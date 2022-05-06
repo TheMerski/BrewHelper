@@ -35,6 +35,10 @@ public partial class FermentableEditForm
             this.Dispatcher.Dispatch(new CreateFermentableAction(this.Fermentable));
             return;
         }
+        else
+        {
+            this.Dispatcher.Dispatch(new UpdateFermentableAction(this.Fermentable));
+        }
     }
 
     protected override void OnInitialized()
