@@ -10,7 +10,7 @@ namespace BrewHelper.Web.Ingredients.Fermentables;
 public partial class FermentableEditForm
 {
     [Parameter]
-    public long? FermentableId { get; set; } = null;
+    public long FermentableId { get; set; } = default!;
 
     public MudForm Form { get; set; } = default!;
 
@@ -29,15 +29,17 @@ public partial class FermentableEditForm
             return;
         }
 
-        // If FermentableId is null this is a newly created entity
-        if (this.FermentableId == null)
+        this.Dispatcher.Dispatch(new UpdateFermentableAction(this.Fermentable));
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+
+        if (!this.FermentableState.Value.IsLoading && this.FermentableId != this.FermentableState.Value?.Fermentable?.Id)
         {
-            this.Dispatcher.Dispatch(new CreateFermentableAction(this.Fermentable));
-            return;
-        }
-        else
-        {
-            this.Dispatcher.Dispatch(new UpdateFermentableAction(this.Fermentable));
+            this.Fermentable = null;
+            this.Dispatcher.Dispatch(new GetFermentableAction(this.FermentableId));
         }
     }
 
@@ -45,25 +47,15 @@ public partial class FermentableEditForm
     {
         base.OnInitialized();
 
-        if (this.FermentableId == null)
-        {
-            this.Fermentable = new Fermentable();
-        }
-        else
-        {
-            this.FermentableState.StateChanged += this.OnStateChanged;
-            this.Dispatcher.Dispatch(new GetFermentableAction((long)this.FermentableId));
-        }
+        this.FermentableState.StateChanged += this.OnStateChanged;
+        this.Dispatcher.Dispatch(new GetFermentableAction(this.FermentableId));
     }
 
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
 
-        if (this.FermentableId == null)
-        {
-            this.FermentableState.StateChanged -= this.OnStateChanged;
-        }
+        this.FermentableState.StateChanged -= this.OnStateChanged;
     }
 
     private void OnStateChanged(object? sender, EventArgs e)

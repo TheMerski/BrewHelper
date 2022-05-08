@@ -11,10 +11,6 @@ public class FermentableReducers
         new(true, null, null);
 
     [ReducerMethod]
-    public static FermentableState Reduce(FermentableState state, CreateEmptyFermentableAction action) =>
-        new(false, new Fermentable(), null);
-
-    [ReducerMethod]
     public static FermentableState Reduce(FermentableState state, GetFermentableResultAction action) =>
         new(false, action.Fermentable, action.InUse);
 

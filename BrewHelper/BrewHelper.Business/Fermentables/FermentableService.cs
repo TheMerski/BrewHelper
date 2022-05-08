@@ -28,7 +28,7 @@ public class FermentableService : IFermentableService
 
     public async Task<Fermentable> GetFermentable(long id)
     {
-        var fermentable = await this.context.Fermentables.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
+        var fermentable = await this.context.Fermentables.FirstOrDefaultAsync(f => f.Id == id);
         if (fermentable == null)
         {
             this.logger.LogWarning("Fermentable could not be found", fermentable);
@@ -84,25 +84,33 @@ public class FermentableService : IFermentableService
 
     public async Task<Fermentable> UpdateFermentable(Fermentable fermentable)
     {
-        await this.FermentableExists(fermentable);
-
-        if (await this.FermentableInUse(fermentable))
+        try
         {
-            // If it is in use verify only update the Notes & StockAmount.
-            Fermentable dbFermentable = await this.context.Fermentables.Where((f) => f.Id == fermentable.Id).FirstAsync();
-            dbFermentable.Notes = fermentable.Notes;
-            dbFermentable.StockAmount = fermentable.StockAmount;
-            await this.context.SaveChangesAsync();
+            await this.FermentableExists(fermentable);
 
-            return dbFermentable;
+            if (await this.FermentableInUse(fermentable))
+            {
+                // If it is in use verify only update the Notes & StockAmount.
+                Fermentable dbFermentable = await this.context.Fermentables.Where((f) => f.Id == fermentable.Id).FirstAsync();
+                dbFermentable.Notes = fermentable.Notes;
+                dbFermentable.StockAmount = fermentable.StockAmount;
+                await this.context.SaveChangesAsync();
+
+                return dbFermentable;
+            }
+            else
+            {
+                // If it is not in use update the entry.
+                this.context.Fermentables.Update(fermentable);
+                await this.context.SaveChangesAsync();
+
+                return fermentable;
+            }
         }
-        else
+        catch (Exception e)
         {
-            // If it is not in use update the entry.
-            this.context.Fermentables.Update(fermentable);
-            await this.context.SaveChangesAsync();
-
-            return fermentable;
+            this.logger.LogError("Something went wrong when updating fermentable", new { e, fermentable });
+            throw new Exception("Something went wrong during updating");
         }
     }
 

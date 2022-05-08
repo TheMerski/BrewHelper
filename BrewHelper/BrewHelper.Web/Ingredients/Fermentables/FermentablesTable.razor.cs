@@ -13,6 +13,11 @@ using MudBlazor;
 
 public partial class FermentablesTable
 {
+    [Parameter]
+    public EventCallback<Fermentable> SelectedItemChanged { get; set; }
+
+    private MudTable<Fermentable> Table { get; set; } = default!;
+
     [Inject]
     private IState<FermentablesState> FermentablesState { get; set; } = default!;
 
@@ -21,8 +26,6 @@ public partial class FermentablesTable
 
     [Inject]
     private IDialogService DialogService { get; set; } = default!;
-
-    private MudTable<Fermentable> Table { get; set; } = default!;
 
     protected override void OnInitialized()
     {
@@ -70,16 +73,6 @@ public partial class FermentablesTable
         }
 
         return;
-    }
-
-    private Task EditFermentable(long id)
-    {
-        var parameters = new DialogParameters();
-        parameters.Add(nameof(FermentableEditDialog.FermentableId), id);
-
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-        this.DialogService.Show<FermentableEditDialog>("Edit Fermentable", parameters, options);
-        return Task.CompletedTask;
     }
 
     private async Task<TableData<Fermentable>> TableData(TableState state)

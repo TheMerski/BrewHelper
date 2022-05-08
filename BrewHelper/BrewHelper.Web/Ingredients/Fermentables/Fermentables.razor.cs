@@ -1,5 +1,6 @@
 namespace BrewHelper.Web.Ingredients.Fermentables;
 using System.Threading.Tasks;
+using BrewHelper.Data.Entities;
 using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables;
 using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables.Actions;
 using Fluxor;
@@ -10,6 +11,10 @@ public partial class Fermentables
 {
     [Inject]
     private IState<FermentablesState> FermentablesState { get; set; } = default!;
+
+    private FermentablesTable FermentablesTable { get; set; } = default!;
+
+    private Fermentable? SelectedFermentable { get; set; } = null;
 
     [Inject]
     private IDispatcher Dispatcher { get; set; } = default!;
@@ -27,7 +32,12 @@ public partial class Fermentables
     protected Task CreateFermentable()
     {
         var options = new DialogOptions { CloseOnEscapeKey = true };
-        this.DialogService.Show<FermentableEditDialog>("Create Fermentable", options);
+        this.DialogService.Show<FermentableCreationDialog>("Create Fermentable", options);
         return Task.CompletedTask;
+    }
+
+    private void TableItemSelected(Fermentable fermentable)
+    {
+        this.SelectedFermentable = fermentable;
     }
 }

@@ -4,7 +4,8 @@
 <MudTable xs="12"
     ServerData="@(new Func<TableState, Task<TableData<Fermentable>>>(this.TableData))"
     Hover="true"
-    @ref="@this.Table">
+    @ref="@this.Table"
+    SelectedItemChanged="@this.SelectedItemChanged">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Fermentables</MudText>
         <MudSpacer />
@@ -21,7 +22,6 @@
         <MudTd>@context.StockAmount</MudTd>
         <MudTd Style="text-align:right">
             <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="@((e) => this.DeleteFermentable(context))"/>
-            <MudIconButton Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Color="Color.Default" Size="Size.Medium" OnClick="@((e) => this.EditFermentable(context.Id))"/>
         </MudTd>
     </RowTemplate>
     <PagerContent>
