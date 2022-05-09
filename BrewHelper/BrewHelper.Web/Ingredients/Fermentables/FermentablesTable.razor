@@ -1,0 +1,30 @@
+@using BrewHelper.Data.Entities
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<MudTable xs="12"
+    ServerData="@(new Func<TableState, Task<TableData<Fermentable>>>(this.TableData))"
+    Hover="true"
+    @ref="@this.Table"
+    SelectedItemChanged="@this.SelectedItemChanged">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Fermentables</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="@this.ReloadData" aria-label="refresh"></MudIconButton>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="Name" T="Fermentable">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Version" T="Fermentable">Version</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="StockAmount" T="Fermentable">Amount in stock</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Name</MudTd>
+        <MudTd>@context.Version</MudTd>
+        <MudTd>@context.StockAmount</MudTd>
+        <MudTd Style="text-align:right">
+            <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="@((e) => this.DeleteFermentable(context))"/>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager/>
+    </PagerContent>
+</MudTable>

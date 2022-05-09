@@ -1,0 +1,24 @@
+﻿@using BrewHelper.Data.Entities
+
+<MudTextField @bind-Value="this.Fermentable.Name" Label="Name" Required="true" Disabled="this.Fermentable.Id != 0"></MudTextField>
+<MudTextField @bind-Value="this.Fermentable.Notes" Label="Notes" Lines="5" Disabled="!this.Editable"></MudTextField>
+<MudSelect @bind-Value="this.Fermentable.Type" Label="Select type" Disabled="!this.Editable || this.InUse">
+    @foreach (FermentableType item in Enum.GetValues(typeof(FermentableType)))
+    {
+        <MudSelectItem Value="@item">@item</MudSelectItem>
+    }
+</MudSelect>
+<MudNumericField @bind-Value="this.Fermentable.StockAmount" Label="Amount in stock (g)" Min="0" Disabled="!this.Editable"></MudNumericField>
+<MudNumericField @bind-Value="this.Fermentable.Yield" Label="Yield (Percent dry yield)" Max="100" Min="0" Disabled="!this.Editable || this.InUse"></MudNumericField>
+<MudNumericField @bind-Value="this.Fermentable.Color" Label="Color of the item in Lovibond Units (SRM for liquid extracts)" Min="0" Disabled="!this.Editable || this.InUse"></MudNumericField>
+
+@code {
+    [Parameter]
+    public Fermentable Fermentable { get; set; } = default!;
+
+    [Parameter]
+    public bool Editable { get; set; } = true;
+
+    [Parameter]
+    public bool InUse { get; set; } = false;
+}

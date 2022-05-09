@@ -1,0 +1,12 @@
+@page "/Users"
+@using BrewHelper.Authentication.Users
+@attribute [AuthorizeRoles(RoleEnum = ApplicationRoles.Admin)]
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<MudGrid>
+    <MudItem xs="12">
+        <UsersTable>
+
+        </UsersTable>
+    </MudItem>
+</MudGrid>

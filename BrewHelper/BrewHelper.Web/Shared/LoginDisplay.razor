@@ -1,0 +1,31 @@
+@using BrewHelper.Authentication.DTO
+@inject TokenProvider TokenProvider
+
+<AuthorizeView>
+    <Authorized>
+        <MudMenu>
+            <ActivatorContent>
+                <MudAvatar Color="Color.Secondary" Variant="Variant.Filled">
+                    <MudIcon Color="Color.Dark" Icon="@Icons.Filled.Person" Size="Size.Medium"/>
+                </MudAvatar>
+
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem Disabled="true">Hello, @context.User.Identity?.Name!</MudMenuItem>
+                <MudMenuItem Link="Identity/Account/Manage">Profile</MudMenuItem>
+                <form method="post" action="Identity/Account/Logout?returnUrl=%2F">
+                    <button type="submit">
+                        <MudMenuItem>
+                            Log out
+                        </MudMenuItem>
+                    </button>
+                    <input name="__RequestVerificationToken" type="hidden"
+                           value="@TokenProvider.XsrfToken">
+                </form>
+            </ChildContent>
+        </MudMenu>
+    </Authorized>
+    <NotAuthorized>
+        <a href="Identity/Account/Login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>

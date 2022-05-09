@@ -1,0 +1,15 @@
+@using BrewHelper.Data.Entities
+@inherits OwningComponentBase
+
+<MudItem xs="12">
+    <MudForm @ref="this.Form">
+        @if (!this.FermentableState.Value.IsLoading && this.Fermentable != null)
+        {
+            <FermentableFormFields Fermentable="@this.Fermentable" Editable="false"></FermentableFormFields>
+        }
+        else
+        {
+            <MudProgressCircular Size="Size.Large" Indeterminate="true"/>
+        }
+    </MudForm>
+</MudItem>

@@ -1,0 +1,24 @@
+@page "/Ingredients/Fermentables"
+@attribute [Authorize]
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<MudGrid Justify="Justify.FlexStart">
+    <MudItem xs="11"></MudItem>
+    <MudItem xs="1">
+        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="this.CreateFermentable"/>
+    </MudItem>
+    <MudItem xs="12">
+        <FermentablesTable @ref="@this.FermentablesTable" SelectedItemChanged="@this.TableItemSelected"/>
+    </MudItem>
+    @if(this.SelectedFermentable != null)
+    {
+        <MudItem xs="6">
+            <MudCard>
+                <MudCardContent>
+                    <FermentableEditForm FermentableId="@this.SelectedFermentable.Id"></FermentableEditForm>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    }
+
+</MudGrid>

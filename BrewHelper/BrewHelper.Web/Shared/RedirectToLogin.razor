@@ -1,0 +1,8 @@
+@inject NavigationManager _navigation
+@code {
+    protected override void OnInitialized()
+    {
+        var uri = "Identity/Account/Login";
+        _navigation.NavigateTo(uri, true);
+    }
+}

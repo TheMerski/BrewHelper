@@ -1,0 +1,38 @@
+@inherits LayoutComponentBase
+
+<MudThemeProvider/>
+<MudDialogProvider
+    FullWidth="true"
+    MaxWidth="MaxWidth.Small"/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <MudAppBar Elevation="1" Dense="@true">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
+        <MudSpacer/>
+        <LoginDisplay/>
+    </MudAppBar>
+    <MudDrawer Elevation="2" @bind-Open="@drawerOpen">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Class="mt-1">BrewHelper</MudText>
+        </MudDrawerHeader>
+        <NavMenu/>
+    </MudDrawer>
+    <MudMainContent>
+        <MudGrid>
+            <MudItem xs="12" Style="margin: 10px;">
+                @Body
+            </MudItem>
+        </MudGrid>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    bool drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        drawerOpen = !drawerOpen;
+    }
+
+}
