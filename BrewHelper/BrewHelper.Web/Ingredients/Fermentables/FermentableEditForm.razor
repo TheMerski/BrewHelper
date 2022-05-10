@@ -2,10 +2,21 @@
 @inherits OwningComponentBase
 
 <MudItem xs="12">
-    <MudForm @ref="this.Form">
+    <MudForm @ref="this.Form" @bind-IsValid="@this.IsValid">
         @if (!this.FermentableState.Value.IsLoading && this.Fermentable != null)
         {
-            <FermentableFormFields Fermentable="@this.Fermentable" Editable="false"></FermentableFormFields>
+            <FermentableFormFields Fermentable="@this.Fermentable" Editable="@this.Edit"></FermentableFormFields>
+            <div class="d-flex align-center justify-end mt-6">
+                @if(this.Edit)
+                {
+                    <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="@(() => this.Edit = !this.Edit)" Class="mr-1">
+                        Cancel
+                    </MudButton>
+                }
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(this.Edit && !this.IsValid)" OnClick="@this.EditClick" Class="ml-1">
+                    @this.EditButtonText
+                </MudButton>
+            </div>
         }
         else
         {

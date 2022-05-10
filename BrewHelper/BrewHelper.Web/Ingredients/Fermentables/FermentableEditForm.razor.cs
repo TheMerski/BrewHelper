@@ -16,6 +16,12 @@ public partial class FermentableEditForm
 
     private Fermentable? Fermentable { get; set; } = null;
 
+    private bool IsValid { get; set; } = false;
+
+    private bool Edit { get; set; } = false;
+
+    private string EditButtonText => this.Edit ? "Save" : "Edit";
+
     [Inject]
     private IState<FermentableState> FermentableState { get; set; } = default!;
 
@@ -63,7 +69,18 @@ public partial class FermentableEditForm
         if (!this.FermentableState.Value.IsLoading)
         {
             this.Fermentable = this.FermentableState.Value.Fermentable!;
+            this.Edit = false;
             this.StateHasChanged();
         }
+    }
+
+    private void EditClick()
+    {
+        if (this.Edit && this.Fermentable != null)
+        {
+            this.Dispatcher.Dispatch(new UpdateFermentableAction(this.Fermentable));
+        }
+
+        this.Edit = !this.Edit;
     }
 }
