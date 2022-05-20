@@ -18,8 +18,6 @@ public partial class Fermentables
 
     private FermentablesTable FermentablesTable { get; set; } = default!;
 
-    private Fermentable? SelectedFermentable { get; set; } = null;
-
     [Inject]
     private IDispatcher Dispatcher { get; set; } = default!;
 
@@ -42,9 +40,11 @@ public partial class Fermentables
         return Task.CompletedTask;
     }
 
-    private void TableItemSelected(Fermentable fermentable)
+    private void TableItemSelected(TableRowClickEventArgs<Fermentable> fermentableRowClick)
     {
-        this.SelectedFermentable = fermentable;
+        var options = new DialogOptions { CloseOnEscapeKey = true, CloseButton = true };
+        var parameters = new DialogParameters { { nameof(FermentableEditDialog.FermentableId), fermentableRowClick.Item.Id } };
+        this.DialogService.Show<FermentableEditDialog>("Edit Fermentable", parameters, options);
     }
 
     private void UpdateFilters()

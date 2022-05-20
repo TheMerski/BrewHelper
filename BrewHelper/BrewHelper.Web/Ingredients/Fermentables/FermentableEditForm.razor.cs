@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
 namespace BrewHelper.Web.Ingredients.Fermentables;
+
+using System.Threading.Tasks;
+
 public partial class FermentableEditForm
 {
     [Parameter]
@@ -17,10 +20,6 @@ public partial class FermentableEditForm
     private Fermentable? Fermentable { get; set; } = null;
 
     private bool IsValid { get; set; } = false;
-
-    private bool Edit { get; set; } = false;
-
-    private string EditButtonText => this.Edit ? "Save" : "Edit";
 
     [Inject]
     private IState<FermentableState> FermentableState { get; set; } = default!;
@@ -69,18 +68,16 @@ public partial class FermentableEditForm
         if (!this.FermentableState.Value.IsLoading)
         {
             this.Fermentable = this.FermentableState.Value.Fermentable!;
-            this.Edit = false;
             this.StateHasChanged();
         }
     }
 
-    private void EditClick()
+    private async Task SaveFermentable(Fermentable callback)
     {
-        if (this.Edit && this.Fermentable != null)
+        await this.Form.Validate();
+        if (this.Fermentable != null && this.Form.IsValid)
         {
             this.Dispatcher.Dispatch(new UpdateFermentableAction(this.Fermentable));
         }
-
-        this.Edit = !this.Edit;
     }
 }

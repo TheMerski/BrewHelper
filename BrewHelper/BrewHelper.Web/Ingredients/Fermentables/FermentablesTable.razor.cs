@@ -15,7 +15,7 @@ using MudBlazor;
 public partial class FermentablesTable
 {
     [Parameter]
-    public EventCallback<Fermentable> SelectedItemChanged { get; set; }
+    public EventCallback<TableRowClickEventArgs<Fermentable>> RowItemClicked { get; set; }
 
     private MudTable<Fermentable> Table { get; set; } = default!;
 
