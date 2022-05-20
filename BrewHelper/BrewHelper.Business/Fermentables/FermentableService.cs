@@ -68,16 +68,16 @@ public class FermentableService : IFermentableService
             int latestVersion = await this.context.Fermentables.AsNoTracking().Where((f) => f.Name == fermentable.Name).MaxAsync(f => f.Version);
 
             Fermentable newFermentable = fermentable.Clone();
-            newFermentable.Id = 0;                      // Set id to 0, this will be set by EF
+            newFermentable.Id = default;                      // Set id to 0, this will be set by EF
             newFermentable.Version = latestVersion + 1; // New version is latest version + 1
 
-            this.context.Fermentables.Add(fermentable);
+            this.context.Fermentables.Add(newFermentable);
             await this.context.SaveChangesAsync();
             return fermentable;
         }
         catch (Exception e)
         {
-            this.logger.LogError("Something went wrong when creating fermentable version", new { e, fermentable });
+            this.logger.LogError(e, "Something went wrong when creating fermentable version");
             throw new Exception("Something went wrong during version creation");
         }
     }
@@ -114,12 +114,20 @@ public class FermentableService : IFermentableService
         }
     }
 
-    public async Task DeleteFermentable(Fermentable fermentable)
+    public async Task DeleteFermentable(long fermentableId)
     {
-        await this.FermentableExists(fermentable);
+        var fermentable = await this.GetFermentable(fermentableId);
 
-        this.context.Fermentables.Remove(fermentable);
-        await this.context.SaveChangesAsync();
+        try
+        {
+            this.context.Fermentables.Remove(fermentable);
+            await this.context.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError(e, "Something went wrong when deleting fermentable");
+            throw new Exception("Something went wrong during deletion");
+        }
     }
 
     /// <summary>

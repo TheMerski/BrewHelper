@@ -79,6 +79,11 @@ public partial class FermentablesTable
         return;
     }
 
+    private void DuplicateFermentable(Fermentable fermentable)
+    {
+        this.Dispatcher.Dispatch(new CreateFermentableVersionAction(fermentable));
+    }
+
     private async Task<TableData<Fermentable>> TableData(TableState state)
     {
         var fermentables = this.FermentablesState.Value.Fermentables;
