@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BrewHelper.Data.Entities;
 
+[Owned]
 public class RecipeIngredient<T>
     where T : BrewHelperEntityBase
 {

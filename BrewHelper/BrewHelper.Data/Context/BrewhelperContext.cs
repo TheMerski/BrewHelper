@@ -18,7 +18,11 @@
 
         public DbSet<Yeast> Yeasts { get; set; } = null!;
 
+        public DbSet<Water> Waters { get; set; } = null!;
+
         public DbSet<Misc> Miscs { get; set; } = null!;
+
+        public DbSet<Style> Styles { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

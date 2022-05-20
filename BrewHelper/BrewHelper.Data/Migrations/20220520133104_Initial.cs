@@ -67,21 +67,6 @@ namespace BrewHelper.Data.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    Style_Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Style_CategoryNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Style_StyleLetter = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Style_StyleGuide = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Style_Type = table.Column<int>(type: "int", nullable: false),
-                    Style_OG_Max = table.Column<double>(type: "float", nullable: false),
-                    Style_OG_Min = table.Column<double>(type: "float", nullable: false),
-                    Style_IBU_Min = table.Column<double>(type: "float", nullable: false),
-                    Style_IBU_Max = table.Column<double>(type: "float", nullable: false),
-                    Style_ColorMin = table.Column<double>(type: "float", nullable: false),
-                    Style_ColorMax = table.Column<double>(type: "float", nullable: false),
-                    Style_Id = table.Column<long>(type: "bigint", nullable: false),
-                    Style_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Style_Version = table.Column<int>(type: "int", nullable: false),
-                    Style_Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Brewer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BatchSize = table.Column<double>(type: "float", nullable: false),
                     BoilSize = table.Column<double>(type: "float", nullable: false),
@@ -98,6 +83,27 @@ namespace BrewHelper.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Recipes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Waters",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Calcium = table.Column<double>(type: "float", nullable: false),
+                    Bicarbonate = table.Column<double>(type: "float", nullable: false),
+                    Sulfate = table.Column<double>(type: "float", nullable: false),
+                    Chloride = table.Column<double>(type: "float", nullable: false),
+                    Sodium = table.Column<double>(type: "float", nullable: false),
+                    Magnesium = table.Column<double>(type: "float", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Version = table.Column<int>(type: "int", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Waters", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -229,22 +235,45 @@ namespace BrewHelper.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Styles",
+                columns: table => new
+                {
+                    RecipeId = table.Column<long>(type: "bigint", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StyleLetter = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StyleGuide = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    OG_Max = table.Column<double>(type: "float", nullable: false),
+                    OG_Min = table.Column<double>(type: "float", nullable: false),
+                    IBU_Min = table.Column<double>(type: "float", nullable: false),
+                    IBU_Max = table.Column<double>(type: "float", nullable: false),
+                    ColorMin = table.Column<double>(type: "float", nullable: false),
+                    ColorMax = table.Column<double>(type: "float", nullable: false),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Version = table.Column<int>(type: "int", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Styles", x => x.RecipeId);
+                    table.ForeignKey(
+                        name: "FK_Styles_Recipes_RecipeId",
+                        column: x => x.RecipeId,
+                        principalTable: "Recipes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RecipeIngredient<Water>",
                 columns: table => new
                 {
                     RecipeId = table.Column<long>(type: "bigint", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Ingredient_Calcium = table.Column<double>(type: "float", nullable: false),
-                    Ingredient_Bicarbonate = table.Column<double>(type: "float", nullable: false),
-                    Ingredient_Sulfate = table.Column<double>(type: "float", nullable: false),
-                    Ingredient_Chloride = table.Column<double>(type: "float", nullable: false),
-                    Ingredient_Sodium = table.Column<double>(type: "float", nullable: false),
-                    Ingredient_Magnesium = table.Column<double>(type: "float", nullable: false),
-                    Ingredient_Id = table.Column<long>(type: "bigint", nullable: false),
-                    Ingredient_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Ingredient_Version = table.Column<int>(type: "int", nullable: false),
-                    Ingredient_Notes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IngredientId = table.Column<long>(type: "bigint", nullable: false),
                     Amount = table.Column<double>(type: "float", nullable: false),
                     Time = table.Column<double>(type: "float", nullable: true)
                 },
@@ -255,6 +284,12 @@ namespace BrewHelper.Data.Migrations
                         name: "FK_RecipeIngredient<Water>_Recipes_RecipeId",
                         column: x => x.RecipeId,
                         principalTable: "Recipes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RecipeIngredient<Water>_Waters_IngredientId",
+                        column: x => x.IngredientId,
+                        principalTable: "Waters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -303,6 +338,11 @@ namespace BrewHelper.Data.Migrations
                 column: "IngredientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_RecipeIngredient<Water>_IngredientId",
+                table: "RecipeIngredient<Water>",
+                column: "IngredientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RecipeIngredient<Yeast>_IngredientId",
                 table: "RecipeIngredient<Yeast>",
                 column: "IngredientId");
@@ -329,6 +369,9 @@ namespace BrewHelper.Data.Migrations
                 name: "RecipeIngredient<Yeast>");
 
             migrationBuilder.DropTable(
+                name: "Styles");
+
+            migrationBuilder.DropTable(
                 name: "Hops");
 
             migrationBuilder.DropTable(
@@ -338,10 +381,13 @@ namespace BrewHelper.Data.Migrations
                 name: "Miscs");
 
             migrationBuilder.DropTable(
-                name: "Recipes");
+                name: "Waters");
 
             migrationBuilder.DropTable(
                 name: "Yeasts");
+
+            migrationBuilder.DropTable(
+                name: "Recipes");
         }
     }
 }

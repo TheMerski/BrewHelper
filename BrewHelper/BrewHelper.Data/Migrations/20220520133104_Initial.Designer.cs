@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BrewHelper.Data.Migrations
 {
     [DbContext(typeof(BrewhelperContext))]
-    [Migration("20220502194619_Initial")]
+    [Migration("20220520133104_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("ProductVersion", "6.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -155,6 +155,48 @@ namespace BrewHelper.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Recipes");
+                });
+
+            modelBuilder.Entity("BrewHelper.Data.Entities.Water", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<double>("Bicarbonate")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Calcium")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Chloride")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Magnesium")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Sodium")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Sulfate")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Version")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Waters");
                 });
 
             modelBuilder.Entity("BrewHelper.Data.Entities.Yeast", b =>
@@ -394,66 +436,28 @@ namespace BrewHelper.Data.Migrations
                             b1.Property<double>("Amount")
                                 .HasColumnType("float");
 
+                            b1.Property<long>("IngredientId")
+                                .HasColumnType("bigint");
+
                             b1.Property<double?>("Time")
                                 .HasColumnType("float");
 
                             b1.HasKey("RecipeId", "Id");
 
+                            b1.HasIndex("IngredientId");
+
                             b1.ToTable("RecipeIngredient<Water>");
+
+                            b1.HasOne("BrewHelper.Data.Entities.Water", "Ingredient")
+                                .WithMany()
+                                .HasForeignKey("IngredientId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
                             b1.WithOwner()
                                 .HasForeignKey("RecipeId");
 
-                            b1.OwnsOne("BrewHelper.Data.Entities.Water", "Ingredient", b2 =>
-                                {
-                                    b2.Property<long>("RecipeIngredient<Water>RecipeId")
-                                        .HasColumnType("bigint");
-
-                                    b2.Property<int>("RecipeIngredient<Water>Id")
-                                        .HasColumnType("int");
-
-                                    b2.Property<double>("Bicarbonate")
-                                        .HasColumnType("float");
-
-                                    b2.Property<double>("Calcium")
-                                        .HasColumnType("float");
-
-                                    b2.Property<double>("Chloride")
-                                        .HasColumnType("float");
-
-                                    b2.Property<long>("Id")
-                                        .HasColumnType("bigint");
-
-                                    b2.Property<double>("Magnesium")
-                                        .HasColumnType("float");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<string>("Notes")
-                                        .IsRequired()
-                                        .HasColumnType("nvarchar(max)");
-
-                                    b2.Property<double>("Sodium")
-                                        .HasColumnType("float");
-
-                                    b2.Property<double>("Sulfate")
-                                        .HasColumnType("float");
-
-                                    b2.Property<int>("Version")
-                                        .HasColumnType("int");
-
-                                    b2.HasKey("RecipeIngredient<Water>RecipeId", "RecipeIngredient<Water>Id");
-
-                                    b2.ToTable("RecipeIngredient<Water>");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("RecipeIngredient<Water>RecipeId", "RecipeIngredient<Water>Id");
-                                });
-
-                            b1.Navigation("Ingredient")
-                                .IsRequired();
+                            b1.Navigation("Ingredient");
                         });
 
                     b.OwnsMany("BrewHelper.Data.Entities.RecipeIngredient<BrewHelper.Data.Entities.Yeast>", "Yeasts", b1 =>
@@ -552,7 +556,7 @@ namespace BrewHelper.Data.Migrations
 
                             b1.HasKey("RecipeId");
 
-                            b1.ToTable("Recipes");
+                            b1.ToTable("Styles");
 
                             b1.WithOwner()
                                 .HasForeignKey("RecipeId");

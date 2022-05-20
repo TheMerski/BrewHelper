@@ -2,7 +2,6 @@ namespace BrewHelper.Data.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
-[Owned]
 public class Water : BrewHelperEntityBase
 {
     public double Calcium { get; set; }
