@@ -23,7 +23,15 @@ public class FermentableService : IFermentableService
 
     public IQueryable<Fermentable> GetFermentables()
     {
-        return this.context.Fermentables.AsSplitQuery().AsNoTracking().AsQueryable();
+        try
+        {
+            return this.context.Fermentables.AsSplitQuery().AsNoTracking().AsQueryable();
+        }
+        catch (Exception e)
+        {
+            this.logger.LogError(e, "Something went wrong getting fermentables");
+            throw new Exception("Something went wrong when getting fermentables");
+        }
     }
 
     public async Task<Fermentable> GetFermentable(long id)
@@ -31,7 +39,7 @@ public class FermentableService : IFermentableService
         var fermentable = await this.context.Fermentables.FirstOrDefaultAsync(f => f.Id == id);
         if (fermentable == null)
         {
-            this.logger.LogWarning("Fermentable could not be found", fermentable);
+            this.logger.LogWarning("Fermentable could not be found");
             throw new NotFoundException<Fermentable>();
         }
 
@@ -148,7 +156,7 @@ public class FermentableService : IFermentableService
     {
         if (!await this.context.Fermentables.AnyAsync((f) => f.Id == fermentable.Id))
         {
-            this.logger.LogWarning("Fermentable could not be found", fermentable);
+            this.logger.LogWarning("Fermentable could not be found");
             throw new NotFoundException<Fermentable>();
         }
     }

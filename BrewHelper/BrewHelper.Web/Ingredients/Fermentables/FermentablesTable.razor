@@ -21,8 +21,12 @@
         <MudTd>@context.Type</MudTd>
         <MudTd>@context.StockAmount</MudTd>
         <MudTd Style="text-align:right">
-            <MudIconButton Icon="@Icons.Material.Filled.ContentCopy" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="@((e) => this.DuplicateFermentable(context))"/>
-            <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="@((e) => this.DeleteFermentable(context))"/>
+            <MudTooltip Text="Duplicate">
+                <MudIconButton Icon="@Icons.Material.Filled.ContentCopy" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="@((e) => this.DuplicateFermentable(context))"/>
+            </MudTooltip>
+            <MudTooltip Text="Delete">
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="@((e) => this.DeleteFermentable(context))"/>
+            </MudTooltip>
         </MudTd>
     </RowTemplate>
     <PagerContent>
