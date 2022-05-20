@@ -53,11 +53,28 @@ public class FermetableEffect
     }
 
     [EffectMethod]
+    public async Task CreateFermentableVersion(CreateFermentableVersionAction action, IDispatcher dispatcher)
+    {
+        try
+        {
+            await this.fermentableService.CreateFermentableVersion(action.FermentableToCopy);
+            dispatcher.Dispatch(new SuccessMessageAction("Fermentable copied successfully"));
+            dispatcher.Dispatch(new GetFermentablesAction());
+        }
+        catch (Exception e)
+        {
+            dispatcher.Dispatch(new ErrorMessageAction(e));
+        }
+
+        return;
+    }
+
+    [EffectMethod]
     public async Task DeleteFermentable(DeleteFermentableAction action, IDispatcher dispatcher)
     {
         try
         {
-            await this.fermentableService.DeleteFermentable(action.Fermentable);
+            await this.fermentableService.DeleteFermentable(action.Fermentable.Id);
             dispatcher.Dispatch(new SuccessMessageAction("Fermentable deleted successfully"));
             dispatcher.Dispatch(new GetFermentablesAction());
         }

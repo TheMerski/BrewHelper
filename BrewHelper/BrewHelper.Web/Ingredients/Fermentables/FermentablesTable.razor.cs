@@ -7,6 +7,7 @@ using BrewHelper.Data.Entities;
 using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentable.Actions;
 using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables;
 using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables.Actions;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Filters;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -14,12 +15,15 @@ using MudBlazor;
 public partial class FermentablesTable
 {
     [Parameter]
-    public EventCallback<Fermentable> SelectedItemChanged { get; set; }
+    public EventCallback<TableRowClickEventArgs<Fermentable>> RowItemClicked { get; set; }
 
     private MudTable<Fermentable> Table { get; set; } = default!;
 
     [Inject]
     private IState<FermentablesState> FermentablesState { get; set; } = default!;
+
+    [Inject]
+    private IState<FermentablesFilterState> FermentablesFilterState { get; set; } = default!;
 
     [Inject]
     private IDispatcher Dispatcher { get; set; } = default!;
@@ -56,7 +60,7 @@ public partial class FermentablesTable
 
     private void ReloadData()
     {
-        this.Dispatcher.Dispatch(new GetFermentablesAction());
+        this.Dispatcher.Dispatch(new GetFermentablesAction(this.FermentablesFilterState.Value.Filters));
     }
 
     private async Task DeleteFermentable(Fermentable fermentable)
@@ -73,6 +77,11 @@ public partial class FermentablesTable
         }
 
         return;
+    }
+
+    private void DuplicateFermentable(Fermentable fermentable)
+    {
+        this.Dispatcher.Dispatch(new CreateFermentableVersionAction(fermentable));
     }
 
     private async Task<TableData<Fermentable>> TableData(TableState state)

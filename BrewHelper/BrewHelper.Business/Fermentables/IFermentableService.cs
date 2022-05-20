@@ -42,8 +42,8 @@ public interface IFermentableService
     /// <summary>
     /// Delete a fermentable.
     /// </summary>
-    /// <param name="fermentable">The fermentable to delete.</param>
-    public Task DeleteFermentable(Fermentable fermentable);
+    /// <param name="fermentableId">The id of the fermentable to delete.</param>
+    public Task DeleteFermentable(long fermentableId);
 
     /// <summary>
     /// Check wether a fermentable is used in a recipe.
