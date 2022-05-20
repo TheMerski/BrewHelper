@@ -77,6 +77,9 @@ namespace BrewHelper.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("StockAmount")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Version")
                         .HasColumnType("int");
 

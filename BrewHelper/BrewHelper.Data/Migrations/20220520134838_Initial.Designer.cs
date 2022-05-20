@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BrewHelper.Data.Migrations
 {
     [DbContext(typeof(BrewhelperContext))]
-    [Migration("20220520133104_Initial")]
+    [Migration("20220520134838_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,6 +78,9 @@ namespace BrewHelper.Data.Migrations
                     b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("StockAmount")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Version")
                         .HasColumnType("int");
