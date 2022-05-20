@@ -1,11 +1,17 @@
 namespace BrewHelper.Web.Ingredients.Fermentables;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BrewHelper.Data.Entities;
 using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables;
 using BrewHelper.Web.Ingredients.Fermentables.Stores.Fermentables.Actions;
 using BrewHelper.Web.Ingredients.Fermentables.Stores.Filters;
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Filters.Actions;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
+using Microsoft.VisualBasic;
 using MudBlazor;
 
 public partial class Fermentables
@@ -26,9 +32,13 @@ public partial class Fermentables
 
     private MudTextField<string> FilterQueryField { get; set; } = default!;
 
-    protected override void OnInitialized()
+    private MudSelect<FermentableType> FilterTypeField { get; set; } = default!;
+
+    private string TypeFilterText { get; set; } = string.Empty;
+
+    protected async override Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        await base.OnInitializedAsync();
 
         this.Dispatcher.Dispatch(new GetFermentablesAction());
     }
@@ -47,11 +57,28 @@ public partial class Fermentables
         this.DialogService.Show<FermentableEditDialog>("Edit Fermentable", parameters, options);
     }
 
+    private void UpdateTypesFilter(IEnumerable<FermentableType> selectedValues)
+    {
+        this.DispatchUpdateFilters(selectedValues);
+    }
+
     private void UpdateFilters()
+    {
+        this.DispatchUpdateFilters();
+    }
+
+    private void DispatchUpdateFilters(IEnumerable<FermentableType>? selectedTypes = null)
     {
         this.Dispatcher.Dispatch(new UpdateFermentablesFilterAction(new FermentablesFilters
         {
-            Query = this.FilterQueryField.Value
+            Query = this.FilterQueryField.Value,
+            Types = selectedTypes ?? this.FermentablesFilterState.Value.Filters.Types
         }));
+        this.UpdateTypeFilterText();
+    }
+
+    private void UpdateTypeFilterText()
+    {
+        this.TypeFilterText = string.Join(", ", this.FermentablesFilterState.Value.Filters.Types);
     }
 }

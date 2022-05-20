@@ -13,10 +13,12 @@
     </ToolBarContent>
     <HeaderContent>
         <MudTh><MudTableSortLabel SortLabel="Name" T="Fermentable">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="Type" T="Fermentable">Type</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortLabel="StockAmount" T="Fermentable">Amount in stock</MudTableSortLabel></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd>@context.Name</MudTd>
+        <MudTd>@context.Type</MudTd>
         <MudTd>@context.StockAmount</MudTd>
         <MudTd Style="text-align:right">
             <MudIconButton Icon="@Icons.Material.Filled.ContentCopy" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="@((e) => this.DuplicateFermentable(context))"/>

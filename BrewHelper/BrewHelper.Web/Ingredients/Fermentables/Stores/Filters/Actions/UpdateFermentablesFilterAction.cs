@@ -1,3 +1,3 @@
-﻿using BrewHelper.Web.Ingredients.Fermentables;
+﻿namespace BrewHelper.Web.Ingredients.Fermentables.Stores.Filters.Actions;
 
 public record UpdateFermentablesFilterAction(FermentablesFilters Filters);

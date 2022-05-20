@@ -1,10 +1,19 @@
 @page "/Ingredients/Fermentables"
 @attribute [Authorize]
+@using BrewHelper.Data.Entities
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <MudGrid Justify="Justify.FlexStart">
-    <MudItem xs="11">
+    <MudItem xs="8">
         <MudTextField T="string"  @ref="@this.FilterQueryField" Label="Search" DebounceInterval="500" OnDebounceIntervalElapsed="@this.UpdateFilters"></MudTextField>
+    </MudItem>
+    <MudItem xs="3">
+        <MudSelect T="FermentableType" SelectedValues="this.FermentablesFilterState.Value.Filters.Types" Text="this.TypeFilterText" SelectAll="@true" SelectedValuesChanged="this.UpdateTypesFilter" MultiSelection="@true" Label="Select type">
+            @foreach (FermentableType item in Enum.GetValues(typeof(FermentableType)))
+            {
+                <MudSelectItem Value="@item">@item</MudSelectItem>
+            }
+        </MudSelect>
     </MudItem>
     <MudItem xs="1">
         <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="this.CreateFermentable"/>

@@ -4,6 +4,8 @@ using Fluxor;
 
 namespace BrewHelper.Web.Ingredients.Fermentables.Stores.Filters;
 
+using BrewHelper.Web.Ingredients.Fermentables.Stores.Filters.Actions;
+
 public class FermentableFilterEffect
 {
     [EffectMethod]

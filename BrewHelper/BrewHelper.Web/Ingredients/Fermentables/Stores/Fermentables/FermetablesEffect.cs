@@ -26,6 +26,8 @@ public class FermetablesEffect
             {
                 fermentables = fermentables.Where((f) => f.Name.Contains(action.Filters.Query.Trim()));
             }
+
+            fermentables = fermentables.Where((f) => action.Filters.Types.Contains(f.Type));
         }
 
         dispatcher.Dispatch(new GetFermentablesResultAction(fermentables));
