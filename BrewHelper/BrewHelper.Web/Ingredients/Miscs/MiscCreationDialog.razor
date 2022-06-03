@@ -1,0 +1,12 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudForm @ref="@this.Form">
+            <MiscFormFields Misc="@this.Misc">
+            </MiscFormFields>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit" Disabled="!this.Form?.IsValid ?? true">Save</MudButton>
+    </DialogActions>
+</MudDialog>

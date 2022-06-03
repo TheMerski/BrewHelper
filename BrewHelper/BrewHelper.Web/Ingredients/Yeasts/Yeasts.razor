@@ -1,0 +1,15 @@
+@page "/Ingredients/Yeasts"
+@attribute [Authorize]
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<MudGrid Justify="Justify.FlexStart">
+    <MudItem xs="11">
+        <MudTextField T="string"  @ref="@this.FilterQueryField" Label="Search" DebounceInterval="500" OnDebounceIntervalElapsed="@this.UpdateFilters"></MudTextField>
+    </MudItem>
+    <MudItem xs="1">
+        <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" OnClick="this.CreateYeast"/>
+    </MudItem>
+    <MudItem xs="12">
+        <YeastsTable @ref="@this.YeastsTable" RowItemClicked="@this.TableItemSelected"/>
+    </MudItem>
+</MudGrid>

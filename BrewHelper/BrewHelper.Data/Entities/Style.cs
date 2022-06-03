@@ -12,7 +12,6 @@ public enum StyleType
     Cider
 }
 
-[Owned]
 public class Style : BrewHelperEntityBase
 {
     public string Category { get; set; } = default!;

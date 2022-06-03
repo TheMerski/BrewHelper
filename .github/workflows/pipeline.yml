@@ -1,0 +1,32 @@
+name: dotnet build
+
+on: 
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+  push:
+    branches:    
+      - 'master'
+      - 'releases/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['6.0.x' ]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        working-directory: ./BrewHelper
+        run: dotnet restore
+      - name: Build
+        working-directory: ./BrewHelper
+        run: dotnet build --configuration Release --no-restore
+      # - name: Test
+      #   run: dotnet test --no-restore --verbosity normal

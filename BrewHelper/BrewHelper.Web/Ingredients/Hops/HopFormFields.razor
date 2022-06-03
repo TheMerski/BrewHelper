@@ -1,0 +1,27 @@
+﻿@using BrewHelper.Data.Entities
+
+<MudTextField @bind-Value="this.Hop.Name" Label="Name" Required="true" Disabled="this.Hop.Id != 0"></MudTextField>
+<MudTextField @bind-Value="this.Hop.Notes" Label="Notes" Lines="5" Disabled="!this.Editable" DebounceInterval="@this.debounceInterval" OnDebounceIntervalElapsed="this.FieldUpdated"></MudTextField>
+<MudNumericField @bind-Value="this.Hop.StockAmount" Label="Amount in stock (g)" Min="0" Disabled="!this.Editable" DebounceInterval="@this.debounceInterval" OnDebounceIntervalElapsed="this.FieldUpdated"></MudNumericField>
+<MudNumericField @bind-Value="this.Hop.Alpha" Label="Alpha" Disabled="!this.Editable || this.InUse" DebounceInterval="@this.debounceInterval" OnDebounceIntervalElapsed="this.FieldUpdated"></MudNumericField>
+
+@code {
+    [Parameter]
+    public Hop Hop { get; set; } = default!;
+
+    [Parameter]
+    public bool Editable { get; set; } = true;
+
+    [Parameter]
+    public bool InUse { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<Hop> HopChanged { get; set; }
+
+    private long debounceInterval = 500;
+
+    private void FieldUpdated()
+    {
+        this.HopChanged.InvokeAsync(this.Hop);
+    }
+}

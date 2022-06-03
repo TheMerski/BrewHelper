@@ -1,0 +1,15 @@
+@using BrewHelper.Data.Entities
+@inherits OwningComponentBase
+
+<MudItem xs="12">
+    <MudForm @ref="this.Form" @bind-IsValid="@this.IsValid">
+        @if (!this.MiscState.Value.IsLoading && this.Misc != null)
+        {
+            <MiscFormFields Misc="@this.Misc" Editable="@true" MiscChanged="this.SaveMisc"></MiscFormFields>
+        }
+        else
+        {
+            <MudProgressCircular Size="Size.Large" Indeterminate="true"/>
+        }
+    </MudForm>
+</MudItem>
