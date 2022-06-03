@@ -17,8 +17,10 @@ jobs:
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
       - name: Install dependencies
+        working-directory: ./BrewHelper
         run: dotnet restore
       - name: Build
+        working-directory: ./BrewHelper
         run: dotnet build --configuration Release --no-restore
       # - name: Test
       #   run: dotnet test --no-restore --verbosity normal
