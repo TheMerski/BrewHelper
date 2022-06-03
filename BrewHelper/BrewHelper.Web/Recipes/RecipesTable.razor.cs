@@ -26,7 +26,7 @@ namespace BrewHelper.Web.Recipes
 
             if (!this.RecipesState.Value.IsLoading && this.RecipesState.Value == null)
             {
-                this.ReloadData();
+                ReloadData();
             }
 
             this.RecipesState.StateChanged += this.StateChanged;
