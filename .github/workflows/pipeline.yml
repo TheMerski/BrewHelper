@@ -1,6 +1,12 @@
 name: dotnet build
 
-on: [push]
+on: 
+  pull_request:
+    types: [opened, reopened]
+  push:
+    branches:    
+      - 'master'
+      - 'releases/**'
 
 jobs:
   build:
