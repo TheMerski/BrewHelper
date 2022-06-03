@@ -4,6 +4,7 @@ using BrewHelper.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BrewHelper.Data.Migrations
 {
     [DbContext(typeof(BrewhelperContext))]
-    partial class BrewhelperContextModelSnapshot : ModelSnapshot
+    [Migration("20220603141459_AddYeastStockAmount")]
+    partial class AddYeastStockAmount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,9 +105,6 @@ namespace BrewHelper.Data.Migrations
                     b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("StockAmount")
-                        .HasColumnType("bigint");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");

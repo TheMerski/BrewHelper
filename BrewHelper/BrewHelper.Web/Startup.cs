@@ -8,6 +8,7 @@ namespace BrewHelper.Web
     using BrewHelper.Authentication.Users.Interfaces;
     using BrewHelper.Business.Fermentables;
     using BrewHelper.Business.Hops;
+    using BrewHelper.Business.Miscs;
     using BrewHelper.Business.Recipes;
     using BrewHelper.Business.Yeasts;
     using BrewHelper.Data.Context;
@@ -97,6 +98,7 @@ namespace BrewHelper.Web
             services.AddScoped<IFermentableService, FermentableService>();
             services.AddScoped<IHopService, HopService>();
             services.AddScoped<IYeastService, YeastService>();
+            services.AddScoped<IMiscService, MiscService>();
 
             // Mappers
             services.AddScoped<IBeerXMLMapper, BeerXMLmapper>();
