@@ -19,36 +19,36 @@ public interface IYeastService
     public Task<Yeast> GetYeast(long id);
 
     /// <summary>
-    /// Create a hop.
+    /// Create a yeast.
     /// </summary>
-    /// <param name="hop">The hop to create.</param>
-    /// <returns>The created hop.</returns>
-    public Task<Yeast> CreateYeast(Yeast hop);
+    /// <param name="yeast">The yeast to create.</param>
+    /// <returns>The created yeast.</returns>
+    public Task<Yeast> CreateYeast(Yeast yeast);
 
     /// <summary>
-    /// Create a new version of a hop.
+    /// Create a new version of a yeast.
     /// </summary>
-    /// <param name="hop">The hop to create a new version of.</param>
-    /// <returns>The newly created hop version.</returns>
-    public Task<Yeast> CreateYeastVersion(Yeast hop);
+    /// <param name="yeast">The yeast to create a new version of.</param>
+    /// <returns>The newly created yeast version.</returns>
+    public Task<Yeast> CreateYeastVersion(Yeast yeast);
 
     /// <summary>
-    /// Update a hop.
+    /// Update a yeast.
     /// </summary>
-    /// <param name="hop">Updated hop.</param>
-    /// <returns>The updated hop.</returns>
-    public Task<Yeast> UpdateYeast(Yeast hop);
+    /// <param name="yeast">Updated yeast.</param>
+    /// <returns>The updated yeast.</returns>
+    public Task<Yeast> UpdateYeast(Yeast yeast);
 
     /// <summary>
-    /// Delete a hop.
+    /// Delete a yeast.
     /// </summary>
-    /// <param name="id">The id of the hop to delete.</param>
+    /// <param name="id">The id of the yeast to delete.</param>
     public Task DeleteYeast(long id);
 
     /// <summary>
     /// Check whether a Yeast is used in a recipe.
     /// </summary>
-    /// <param name="hop">The hop to check.</param>
-    /// <returns>True if the hop is used in a recipe.</returns>
-    public Task<bool> YeastInUse(Yeast hop);
+    /// <param name="yeast">The yeast to check.</param>
+    /// <returns>True if the yeast is used in a recipe.</returns>
+    public Task<bool> YeastInUse(Yeast yeast);
 }
