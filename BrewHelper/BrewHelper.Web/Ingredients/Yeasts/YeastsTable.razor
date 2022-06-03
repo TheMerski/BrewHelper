@@ -1,0 +1,33 @@
+@using BrewHelper.Data.Entities
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<MudTable xs="12"
+    ServerData="@(new Func<TableState, Task<TableData<Yeast>>>(this.TableData))"
+    Hover="true"
+    @ref="@this.Table"
+    OnRowClick="@this.RowItemClicked">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Yeasts</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.Refresh" OnClick="@this.ReloadData" aria-label="refresh"></MudIconButton>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh><MudTableSortLabel SortLabel="Name" T="Yeast">Name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="StockAmount" T="Yeast">Amount in stock</MudTableSortLabel></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.Name</MudTd>
+        <MudTd>@context.StockAmount</MudTd>
+        <MudTd Style="text-align:right">
+            <MudTooltip Text="Duplicate">
+                <MudIconButton Icon="@Icons.Material.Filled.ContentCopy" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="@((e) => this.DuplicateYeast(context))"/>
+            </MudTooltip>
+            <MudTooltip Text="Delete">
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Medium" OnClick="@((e) => this.DeleteYeast(context))"/>
+            </MudTooltip>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager/>
+    </PagerContent>
+</MudTable>

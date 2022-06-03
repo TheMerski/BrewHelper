@@ -1,0 +1,39 @@
+﻿@using BrewHelper.Data.Entities
+
+<MudTextField @bind-Value="this.Yeast.Name" Label="Name" Required="true" Disabled="this.Yeast.Id != 0"></MudTextField>
+<MudTextField @bind-Value="this.Yeast.Notes" Label="Notes" Lines="5" Disabled="!this.Editable" DebounceInterval="@this.debounceInterval" OnDebounceIntervalElapsed="this.FieldUpdated"></MudTextField>
+<MudNumericField @bind-Value="this.Yeast.StockAmount" Label="Amount in stock (g)" Min="0" Disabled="!this.Editable" DebounceInterval="@this.debounceInterval" OnDebounceIntervalElapsed="this.FieldUpdated"></MudNumericField>
+<MudSelect @bind-Value="this.Yeast.Type" Label="Select type" Disabled="this.Yeast.Id != 0">
+    @foreach (YeastType item in Enum.GetValues(typeof(YeastType)))
+    {
+        <MudSelectItem Value="@item">@item</MudSelectItem>
+    }
+</MudSelect>
+<MudSelect @bind-Value="this.Yeast.Form" Label="Select form" Disabled="this.Yeast.Id != 0">
+    @foreach (YeastForm item in Enum.GetValues(typeof(YeastForm)))
+    {
+        <MudSelectItem Value="@item">@item</MudSelectItem>
+    }
+</MudSelect>
+
+
+@code {
+    [Parameter]
+    public Yeast Yeast { get; set; } = default!;
+
+    [Parameter]
+    public bool Editable { get; set; } = true;
+
+    [Parameter]
+    public bool InUse { get; set; } = false;
+
+    [Parameter]
+    public EventCallback<Yeast> YeastChanged { get; set; }
+
+    private long debounceInterval = 500;
+
+    private void FieldUpdated()
+    {
+        this.YeastChanged.InvokeAsync(this.Yeast);
+    }
+}
