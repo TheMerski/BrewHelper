@@ -1,0 +1,15 @@
+@using BrewHelper.Data.Entities
+@inherits OwningComponentBase
+
+<MudItem xs="12">
+    <MudForm @ref="this.Form" @bind-IsValid="@this.IsValid">
+        @if (!this.HopState.Value.IsLoading && this.Hop != null)
+        {
+            <HopFormFields Hop="@this.Hop" Editable="@true" HopChanged="this.SaveHop"></HopFormFields>
+        }
+        else
+        {
+            <MudProgressCircular Size="Size.Large" Indeterminate="true"/>
+        }
+    </MudForm>
+</MudItem>

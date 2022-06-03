@@ -58,4 +58,13 @@
     <ItemGroup>
       <None Remove="BeerXMLSharp" />
     </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Ingredients\Hops\HopCreationDialog.razor" />
+      <AdditionalFiles Include="Ingredients\Hops\HopEditDialog.razor" />
+      <AdditionalFiles Include="Ingredients\Hops\HopEditForm.razor" />
+      <AdditionalFiles Include="Ingredients\Hops\HopFormFields.razor" />
+      <AdditionalFiles Include="Ingredients\Hops\Hops.razor" />
+      <AdditionalFiles Include="Ingredients\Hops\HopsTable.razor" />
+    </ItemGroup>
 </Project>
