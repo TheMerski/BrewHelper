@@ -2,7 +2,7 @@ name: dotnet build
 
 on: 
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, ready_for_review]
   push:
     branches:    
       - 'master'
