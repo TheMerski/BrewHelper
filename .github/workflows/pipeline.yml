@@ -1,10 +1,10 @@
 name: dotnet build
 
-on: 
+on:
   pull_request:
     types: [opened, reopened, ready_for_review]
   push:
-    branches:    
+    branches:
       - 'master'
       - 'releases/**'
 
@@ -12,16 +12,13 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet-version: ['6.0.x' ]
 
     steps:
       - uses: actions/checkout@v3
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v2
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          dotnet-version: '7.0.x'
       - name: Install dependencies
         working-directory: ./BrewHelper
         run: dotnet restore
