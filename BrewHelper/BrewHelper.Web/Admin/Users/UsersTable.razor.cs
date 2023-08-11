@@ -103,7 +103,7 @@ namespace BrewHelper.Web.Admin.Users
             };
             var dialog = this.DialogService.Show<UserRolesDialog>("User Roles", parameters);
             var result = await dialog.Result;
-            if (!result.Cancelled)
+            if (!result.Canceled)
             {
                 this.Dispatcher.Dispatch(new GetUsersAction());
             }

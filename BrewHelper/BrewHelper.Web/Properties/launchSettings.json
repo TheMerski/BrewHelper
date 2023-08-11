@@ -17,7 +17,6 @@
     },
     "BrewHelper.Web": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5002;http://localhost:4999",
       "environmentVariables": {

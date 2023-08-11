@@ -33,7 +33,7 @@ namespace BrewHelper.Authentication.Model
 
                 var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
@@ -42,7 +42,7 @@ namespace BrewHelper.Authentication.Model
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JWT:Secret"]));
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JWT:Secret"] ?? throw new InvalidOperationException("Could not find JWT secret")));
 
                 var token = new JwtSecurityToken(
                     issuer: this.configuration["JWT:ValidIssuer"],
