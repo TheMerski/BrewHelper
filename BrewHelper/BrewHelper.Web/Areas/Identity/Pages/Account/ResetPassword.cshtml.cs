@@ -75,7 +75,7 @@ namespace BrewHelper.Web.Areas.Identity.Pages.Account
                 return this.Page();
             }
 
-            var user = await this.userManager.FindByNameAsync(this.Input?.Username);
+            var user = await this.userManager.FindByNameAsync(this.Input?.Username ?? string.Empty);
             if (user == null)
             {
                 return this.NotFound($"Unable to load user.");

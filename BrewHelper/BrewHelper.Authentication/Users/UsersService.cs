@@ -66,6 +66,12 @@ namespace BrewHelper.Authentication.Users
                 {
                     // If the user is successfully created return a passwordResetToken to allow the user to create a password.
                     var createdUser = await this.userManager.FindByNameAsync(username);
+                    if (createdUser == null)
+                    {
+                        throw new Exception(
+                            $"Something went wrong creating user {username}: Could not find user after creation");
+                    }
+
                     return await this.userManager.GeneratePasswordResetTokenAsync(createdUser);
                 }
 
